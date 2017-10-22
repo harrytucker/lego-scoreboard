@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block main %}
+<div class="login-form">
+    <form action="" method="POST" name="login">
+        {{ form.hidden_tag() }}
+
+        <label class="form-label">
+            <span class="label-text">{{ form.username.label }}</span>
+            {{ form.username(class_='input input-text') }}
+        </label>
+
+        <label class="form-label">
+            <span class="label-text">{{ form.password.label }}</span>
+            {{ form.password(class_='input input-text') }}
+        </label>
+
+        <div class="form-submit">
+            <input type="submit" value="Log in" class="button submit-button">
+        </div>
+    </form>
+</div>
+{% endblock %}

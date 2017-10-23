@@ -2,11 +2,16 @@
 #
 # -----------------------------------------------------------------------------
 
-from flask import render_template
+from flask import render_template, flash, redirect, request, url_for, g
+from flask_login import login_user, logout_user, current_user, login_required
 
-from . import app
+from . import app, lm
 from .forms import LoginForm
-from .models import Team
+from .models import User, Team
+
+@app.before_request
+def before_request():
+    g.user = current_user
 
 @app.route('/')
 @app.route('/home')
@@ -15,15 +20,34 @@ def home():
     return render_template('home.html', title='Home', teams=teams)
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
+    if g.user is not None and g.user.is_authenticated:
+        return redirect(url_for('home'))
+
     form = LoginForm()
+
+    if form.validate_on_submit():
+        flash('Login requested: username=%s, password=%s',
+              request.args.username, request.args.password)
+
+        res = User.authenticate(request.args.username, request.args.password)
+
+        if isinstance(res, User):
+            flash('Logged in successfully')
+            login_user(res)
+            return redirect('/home')
+
+        flash(res)
+
     return render_template('login.html', title='Log in', form=form)
 
 
-@app.route('/logout')
+@app.route("/logout")
+@login_required
 def logout():
-    return 'Logout'
+    logout_user()
+    return redirect(url_for('home'))
 
 
 @app.route('/scoreboard')

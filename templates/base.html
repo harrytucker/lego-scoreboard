@@ -5,17 +5,80 @@
         <title>{{ title }} - 2018 FIRST Lego League Robotics Challenge</title>
     </head>
     <body>
-        <header>
-            <h1>{{ title }}</h1>
+        <header class="header">
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item-icon">
+                        <span class="nav-icon">NAV</span>
+                        <ul class="nav-items">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('scoreboard') }}">Scoreboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('tasks') }}">Tasks</a>
+                            </li>
+                            <li class="nav-item">
+                                {% if current_user.is_authenticated %}
+                                    <a class="nav-link" href="{{ url_for('logout') }}">Log out</a>
+                                {% else %}
+                                    <a class="nav-link" href="{{ url_for('login') }}">Log in</a>
+                                {% endif %}
+                            </li>
+
+                            {% if current_user.is_authenticated and
+                                (current_user.is_judge or current_user.is_admin) %}
+                                <li class="nav-item nav-sec">
+                                    <span class="nav-sec-title">Judges</span>
+                                    <ul class="nav-items nav-sec-items">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{ url_for('judges_home') }}">Home</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{ url_for('judges_score_round') }}">Score Round</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+
+                            {% if current_user.is_authenticated and current_user.is_admin %}
+                                <li class="nav-item nav-sec">
+                                    <span class="nav-sec-title">Admin</span>
+                                    <ul class="nav-items nav-sec-items">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{ url_for('admin_home') }}">Home</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{ url_for('admin_teams') }}">Teams</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="page-logo">
+                <h2 class="page-logo-title">2018 FIRST Lego League Robotics Challenge</h2>
+            </div>
+
+            <div class="page-title-wrapper">
+                <h1 class="page-title">{{ title }}</h1>
+            </div>
         </header>
-        <main>{% block main %}{% endblock %}</main>
-        <footer></footer>
+
+        <main class="main">{% block main %}{% endblock %}</main>
+
+        <footer class="footer"></footer>
 
         {% with messages = get_flashed_messages() %}
             {% if messages %}
-                <ul>
+                <ul class="messages">
                     {% for message in messages %}
-                        <li>{{ message }} </li>
+                        <li class="message">{{ message }} </li>
                     {% endfor %}
                 </ul>
             {% endif %}

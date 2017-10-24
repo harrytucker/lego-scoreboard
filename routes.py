@@ -14,14 +14,19 @@ def before_request():
     g.user = current_user
 
 
+@app.errorhandler(403)
+def page_not_found(error):
+    return render_template('errors/403.html', title='Permission denied'), 403
+
+
 @app.errorhandler(404)
 def page_not_found(error):
-    return render_template('404.html', title='Page not found'), 404
+    return render_template('errors/404.html', title='Page not found'), 404
 
 
 @app.errorhandler(500)
 def internal_server_error(error):
-    return render_template('500.html', title='Internal error'), 500
+    return render_template('errors/500.html', title='Internal error'), 500
 
 
 @app.route('/')
@@ -66,12 +71,13 @@ def logout():
 
 @app.route('/scoreboard')
 def scoreboard():
-    return 'Scoreboard'
+    return render_template('scoreboard.html', title='Scoreboard',
+                           qualifying=[], not_qualifying=[])
 
 
 @app.route('/tasks')
 def tasks():
-    return 'Tasks'
+    return render_template('tasks.html', title='Completed Tasks')
 
 
 @app.route('/judges')
@@ -79,18 +85,18 @@ def tasks():
 @login_required
 def judges_home():
     if not (current_user.is_judge or current_user.is_admin):
-        return abort(404)
+        return abort(403)
 
-    return 'Judges/Home'
+    return render_template('judges/home.html', title='Judges Home')
 
 
 @app.route('/judges/scoreround')
 @login_required
 def judges_score_round():
     if not (current_user.is_judge or current_user.is_admin):
-        return abort(404)
+        return abort(403)
 
-    return 'Judges/Score Round'
+    return render_template('judges/scoreround.html', title='Score round')
 
 
 @app.route('/admin/')
@@ -98,7 +104,7 @@ def judges_score_round():
 @login_required
 def admin_home():
     if not current_user.is_admin:
-        return abort(404)
+        return abort(403)
 
     return 'Admin/Home'
 
@@ -107,7 +113,7 @@ def admin_home():
 @login_required
 def admin_teams():
     if not current_user.is_admin:
-        return abort(404)
+        return abort(403)
 
     return 'Admin/Teams'
 
@@ -116,7 +122,7 @@ def admin_teams():
 @login_required
 def admin_teams_new():
     if not current_user.is_admin:
-        return abort(404)
+        return abort(403)
 
     return 'Admin/Teams/New'
 
@@ -125,6 +131,6 @@ def admin_teams_new():
 @login_required
 def admin_teams_edit():
     if not current_user.is_admin:
-        return abort(404)
+        return abort(403)
 
     return 'Admin/Teams/Edit'

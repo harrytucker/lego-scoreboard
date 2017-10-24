@@ -3,11 +3,11 @@
 Requirements:
 - Python 3.4+
 - Pip (should be installed with Python3.4)
-- SQLite 3 (not required, but can be helpful for debugging)
+- SQLite 3 (not required, but can be helpful for debugging database issues)
 
-Python3.3+ should provide access to the venv module for creating a virtual environment. However, some Linux distibutions tweaked the Python installation so you may need to install an additional package. Check your distibution for more details.
+Python3.3+ should provide access to the `venv` module for creating a virtual environment. However, some Linux distibutions tweaked the Python installation so you may need to install an additional package. Check your distibution for more details.
 
-Once your dependencies are installed:
+Once your dependencies are installed and this repository has been cloned:
 ```bash
 $ cd /path/to/lego
 
@@ -19,6 +19,7 @@ $ source ./venv/vin/activate
 $ pip install -r ./requirements.txt
 
 # set required environment variables
+# for windows use `set` instead of `export`
 $ export FLASK_APP=/path/to/logo/__init__.py
 # optional, helpful for debugging
 $ export FLASK_DEBUG=1
@@ -46,4 +47,26 @@ For windows, you may need to use:
 $ flask run --host=0.0.0.0
 ```
 
-##
+To halt the application, use `Ctrl+C`.
+
+## Todo
+- Implement checkpoints on tasks page.
+
+
+## Maintaince and Updates
+This application has been built with the idea that it will be passed on to future maintainers. For example, Flask was chosen because it is written in a commonly taught language and has a number of guides and help resources available.
+
+The following resources were used to create the original application which may be of use for future updates or answer questions about how certain parts work:
+
+- [The Flask Mega-Tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world)
+
+Flask also provides a number of quickstart guides for both the main Flask module and it's supported extensions. Many of the extensions wrap pre-existing modules. The following pages may also be of use when updating the code:
+
+- [Flask](http://flask.pocoo.org/) ([Quickstart](http://flask.pocoo.org/docs/0.12/quickstart/))
+- [Flask-SQLAlchemy](http://flask-sqlalchemy.pocoo.org/2.3/) ([Quickstart](http://flask-sqlalchemy.pocoo.org/2.3/quickstart/))
+- [Flask-Login](https://flask-login.readthedocs.io/en/latest/)
+- [Flask-WTF](https://flask-wtf.readthedocs.io/en/stable/) ([Quickstart](http://flask-wtf.readthedocs.io/en/stable/quickstart.html))
+- [SQLAlchemy](https://www.sqlalchemy.org/)
+- [WTForms](https://wtforms.readthedocs.io/en/latest/)
+- [Jinja2](http://jinja.pocoo.org/docs/2.9/)
+- [Click](http://click.pocoo.org/5/)

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block main %}
+<table>
+    <tr>
+        <th>Team &amp; task</th>
+        <th>Score</th>
+        <th>Timestamp</th>
+    </tr>
+
+    {% for task in tasks %}
+        <tr>
+            <td>{{ task.name }}</td>
+            <td>{{ task.score }}</td>
+            <td>{{ task.timestamp }}</td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}

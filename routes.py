@@ -6,7 +6,7 @@ from flask import render_template, flash, redirect, request, url_for, g, abort
 from flask_login import login_user, logout_user, current_user, login_required
 
 from . import app, lm
-from .forms import LoginForm
+from .forms import tasks, LoginForm, ScoreRoundForm
 from .models import User, Team
 
 @app.before_request
@@ -96,7 +96,36 @@ def judges_score_round():
     if not (current_user.is_judge or current_user.is_admin):
         return abort(403)
 
-    return render_template('judges/scoreround.html', title='Score round')
+    form = ScoreRoundForm()
+
+    form.team.choices = [('', '--Select team--'), ('-1', 'PRACTICE')]
+    form.team.choices += [(t.id, t.name) for t in Team.query.order_by('name')]
+
+    flash(dir(tasks))
+    flash(dir(tasks.__file__))
+    task_forms = [f for f in dir(tasks) if not f.startswith('_') and f[:1].isupper()]
+    form.task.choices = [('', '--Select task--')]
+
+    for f in task_forms:
+        form.task.choices.append((f.title, f.title))
+
+    if form.validate_on_submit():
+        team_id = request.form['team']
+        team = Team.get(team_id)
+        flash('team={!s}', team.name)
+
+    return render_template('judges/scoreround.html', title='Score round', form=form)
+
+
+@app.route('/judges/scoretask')
+@login_required
+def judges_score_task():
+    if not (current_user.is_judge or current_user.is_admin):
+        return abort(403)
+
+    # TODO
+
+    return 'TODO'
 
 
 @app.route('/admin/')

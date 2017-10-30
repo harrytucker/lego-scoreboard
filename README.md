@@ -2,8 +2,8 @@
 ## Setup
 Requirements:
 - Python 3.4+
-- Pip (should be installed with Python3.4)
-- SQLite 3 (not required, but can be helpful for debugging database issues)
+- Pip - Should be installed with Python3.4.
+- SQLite 3 - Not required, but can be helpful for debugging database issues. Python3 supports it out the box.
 
 Python3.3+ should provide access to the `venv` module for creating a virtual environment. However, some Linux distibutions tweaked the Python installation so you may need to install an additional package. Check your distibution for more details.
 
@@ -51,6 +51,10 @@ To halt the application, use `Ctrl+C`.
 
 ## Todo
 - Implement checkpoints on tasks page.
+- Uncomment refresh tag on scoreboard page.
+- Log errors to a file see [[1](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vii-unit-testing)].
+- Add unit testing (above and 2nd from last part).
+- Use flask-bcrypt.
 
 
 ## Maintaince and Updates

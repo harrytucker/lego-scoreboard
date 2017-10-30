@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block main %}
+<div class="score-task-form">
+    <form>
+        <!-- TODO add team id and task id as hidden fields + CSRF token field -->
+
+        <h3>{{ task_title }}</h3>
+        <div class="info">{{ task_info }}</div>
+
+        {% block form %}{% endblock %}
+
+        <div class="form-submit">
+            <input type="submit" value="Submit" class="button submit-button">
+        </div>
+    </form>
+</div>
+{% endblock %}

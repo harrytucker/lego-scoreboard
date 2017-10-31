@@ -1,374 +1,45 @@
 {% extends 'base.html' %}
 {% block main %}
 <div class="score-round-form">
-    <form>
+    <form action="{{ url_for('judges_score_round') }}" method="POST" name="scoreround">
+        {{ form.hidden_tag() }}
+
+        {% if form.team.errors or form.task.errors %}
+            <div class="error">
+                <ul>
+                    {% for error in form.team.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+
+                    {% for error in form.task.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
         <label class="form-label">
             <span class="label-text">{{ form.team.label }}</span>
-            {{ form.team }}
+
+            {% if form.team.errors %}
+                {{ form.team(class_='error') }}
+            {% else %}
+                {{ form.team }}
+            {% endif %}
         </label>
 
         <label class="form-label">
             <span class="label-text">{{ form.task.label }}</span>
-            {{ form.task }}
+
+            {% if form.task.errors %}
+                {{ form.task(class_='error') }}
+            {% else %}
+                {{ form.task }}
+            {% endif %}
         </label>
-<!--
-        <section>
-            <header>
-                <h3>M01 Shark Shipment</h3>
-                <div>Nothing can touch the Shark except the tank</div>
-            </header>
-
-            <table>
-                <tr>
-                    <td>Shark and Tank are completely in Target...</td>
-                    <td>
-                        <select id="sharkInTarget" name="sharkInTarget" onChange="javascript:checkShark()">
-                            <option value="0">None</option>
-                            <option value="7">Target One</option>
-                            <option value="10">Target Two</option>
-                        </select>
-                    </td>
-                    <td>7 or 10 possible</td>
-                </tr>
-                <tr>
-                    <td>Shark touching ONLY Tank floor (NOT wall)</td>
-                    <td>
-                        <input type="checkbox" name="sharkTouchingFloor" id="sharkTouchingFloor" value="20" disabled="true">
-                    </td>
-                    <td>20 possible</td>
-                </tr>
-                <tr>
-                    <td>Nothing touched the Shark except the Tank</td>
-                    <td>
-                        <input type="checkbox" name="nothingTouchedShark" id="nothingTouchedShark" value="1">
-                    </td>
-                    <td></td>
-                </tr>
-            </table>
-        </section>
-
-        <table class="score" width="97%" border="1" cellpadding="1">
-            <tr>
-                <th>Task</th>
-                <th>Rules</th>
-                <th>Scoring</th>
-                <th>Points</th>
-            </tr>
-
-        <tr>
-            <td class="scoreRoundCategory">&nbsp;M02 Service Dog Action</td>
-            <td colspan="3">
-                <table class="score" width="100%" cellpadding="2">
-                    <tr>
-                        <td colspan="3" class="info">(Robot must cross fence from West, between barriers)</td>
-                    </tr>
-                    <tr>
-                    <td width="75%">Warning fence is down</td>
-                    <td><input type="checkbox" name="warningFenceDown" id="warningFenceDown" value="15"/></td>
-                    <td align="right" class="scoreRoundPoints">15 possible</td>
-                    </tr>
-                    <tr>
-                    <td width="75%">Robot completely crossed fence</td>
-                    <td><input type="checkbox" name="robotCrossedFence" id="robotCrossedFence" value="1"/></td>
-                    <td align="right" class="scoreRoundPoints"></td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-
-        <tr>
-            <td class="scoreRoundCategory">&nbsp;M03 Animal Conservation</td>
-            <td colspan="3">
-                <table class="score" width="100%" cellpadding="2">
-                    <tr>
-                        <td colspan="3" class="info">(Pairs made by rotation of model)</td>
-                    </tr>
-                    <tr>
-                    <td width="75%">Pairs of identical animals completely on same side (both fields)</td>
-                    <td>
-                        <select id="animalPairs" name="animalPairs">
-                            <option value="0">0</option>
-                            <option value="20">1</option>
-                            <option value="40">2</option>
-                            <option value="60">3</option>
-                            <option value="80">4</option>
-                            <option value="100">5</option>
-                            <option value="120">6</option>
-                        </select>
-                    </td>
-                    <td align="right" class="scoreRoundPoints">20 each</td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-
-        <tr>
-            <td class="scoreRoundCategory">&nbsp;M04 Feeding</td>
-            <td colspan="3">
-                <table class="score" width="100%" cellpadding="2">
-                    <tr>
-                        <td colspan="3" class="info">(Only one colour per area)</td>
-                    </tr>
-                    <tr>
-                    <td width="75%">Pieces of food completely in animal areas</td>
-                    <td>
-                        <select id="piecesOfFood" name="piecesOfFood">
-                            <option value="0">0</option>
-                            <option value="10">1</option>
-                            <option value="20">2</option>
-                            <option value="30">3</option>
-                            <option value="40">4</option>
-                            <option value="50">5</option>
-                            <option value="60">6</option>
-                            <option value="70">7</option>
-                            <option value="80">8</option>
-                        </select>
-                    </td>
-                    <td align="right" class="scoreRoundPoints">10 each</td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-
-        <tr>
-            <td class="scoreRoundCategory">&nbsp;M05 Biomimicry</td>
-            <td colspan="3">
-                <table class="score" width="100%" cellpadding="2">
-                    <tr>
-                    <td width="75%">Wall supports complete weight of White Gecko</td>
-                    <td><input type="checkbox" name="wallSupportsGecko" id="wallSupportsGecko" value="15"/></td>
-                    <td align="right" class="scoreRoundPoints">15</td>
-                    </tr>
-                    <tr>
-                    <td width="75%">Wall supports complete weight of Robot</td>
-                    <td><input type="checkbox" name="wallSupportsRobot" id="wallSupportsRobot" value="32"/></td>
-                    <td align="right" class="scoreRoundPoints">32</td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-
-        <tr>
-            <td class="scoreRoundCategory">&nbsp;M06 Milking Automation</td>
-            <td colspan="3">
-                <table class="score" width="100%" cellpadding="2">
-                    <tr>
-                        <td colspan="3" class="info">(Movement made by red lever)</td>
-                    </tr>
-                    <tr>
-                    <td width="75%">Milk AND Manure have all rolled out</td>
-                    <td><input type="checkbox" name="milkAndManureOut" id="milkAndManureOut" value="15" onChange='javascript:checkMilking("milkAndManureOut","milkOutOnly")'/></td>
-                    <td align="right" class="scoreRoundPoints">15 or</td>
-                    </tr>
-                    <tr>
-                    <td width="75%">Milk has all rolled out but NOT Manure</td>
-                    <td><input type="checkbox" name="milkOutOnly" id="milkOutOnly" value="20"  onChange='javascript:checkMilking("milkOutOnly","milkAndManureOut")'/></td>
-                    <td align="right" class="scoreRoundPoints">20</td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-
-        <tr>
-            <td class="scoreRoundCategory">&nbsp;M07 Panda Release</td>
-            <td colspan="3">
-                <table class="score" width="100%" cellpadding="2">
-                    <tr>
-                    <td width="75%">Slider appears fully opened clockwise</td>
-                    <td><input type="checkbox" name="sliderFullyOpened" id="sliderFullyOpened" value="10"/></td>
-                    <td align="right" class="scoreRoundPoints">10</td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-
-        <tr>
-            <td class="scoreRoundCategory">&nbsp;M08 Camera Recovery</td>
-            <td colspan="3">
-                <table class="score" width="100%" cellpadding="2">
-                    <tr>
-                    <td width="75%">Camera is completely in Base</td>
-                    <td><input type="checkbox" name="cameraInBase" id="cameraInBase" value="15"/></td>
-                    <td align="right" class="scoreRoundPoints">15</td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-
-        <tr>
-            <td class="scoreRoundCategory">&nbsp;M09 Training and Research</td>
-            <td colspan="3">
-                <table class="score" width="100%" cellpadding="2">
-                    <tr>
-                        <td colspan="3" class="info">(Manure samples must be transported one at a time)</td>
-                    </tr>
-                    <tr>
-                    <td width="75%">Dog Trainer completely in Training/Research Area</td>
-                    <td><input type="checkbox" name="dogTrainerIn" id="dogTrainerIn" value="12"/></td>
-                    <td align="right" class="scoreRoundPoints">12</td>
-                    </tr>
-                    <tr>
-                    <td width="75%">Zoologist completely in Training/Research Area</td>
-                    <td><input type="checkbox" name="zoologistIn" id="zoologistIn" value="15"/></td>
-                    <td align="right" class="scoreRoundPoints">15</td>
-                    </tr>
-                    <tr>
-                    <td width="75%">Manure completely in Training/Research Area</td>
-                    <td>
-                        <select id="manureIn" name="manureIn">
-                            <option value="0">0</option>
-                            <option value="5">1</option>
-                            <option value="10">2</option>
-                            <option value="15">3</option>
-                            <option value="20">4</option>
-                            <option value="25">5</option>
-                            <option value="30">6</option>
-                            <option value="35">7</option>
-                        </select>
-                    </td>
-                    <td align="right" class="scoreRoundPoints">5 each</td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-
-        <tr>
-            <td class="scoreRoundCategory">&nbsp;M10 Beekeeping</td>
-            <td colspan="3">
-                <table class="score" width="100%" cellpadding="2">
-                    <tr>
-                    <td width="75%">Bee is on Beehive with no Honey in Beehive</td>
-                    <td><input type="checkbox" name="beeOnNoHoney" id="beeOnNoHoney" value="12" onChange='javascript:checkExclusiveOption("beeOnNoHoney","beeOnHoneyInBase")'/></td>
-                    <td align="right" class="scoreRoundPoints">12 or</td>
-                    </tr>
-                    <tr>
-                    <td width="75%">Bee is on Beehive and honey is completely in Base</td>
-                    <td><input type="checkbox" name="beeOnHoneyInBase" id="beeOnHoneyInBase" value="15" onChange='javascript:checkExclusiveOption("beeOnHoneyInBase","beeOnNoHoney")'/></td>
-                    <td align="right" class="scoreRoundPoints">15</td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-
-        <tr>
-            <td class="scoreRoundCategory">&nbsp;M11 Prosthesis</td>
-            <td colspan="3">
-                <table class="score" width="100%" cellpadding="2">
-                    <tr>
-                    <td width="75%">Prosthesis fitted to Pet, NOT held by Ref</td>
-                    <td><input type="checkbox" name="prosthesisOnPet" id="prosthesisOnPet" value="9" onChange='javascript:checkExclusiveOption("prosthesisOnPet","prosthesisOnPetInFarm")'/></td>
-                    <td align="right" class="scoreRoundPoints">9 or</td>
-                    </tr>
-                    <tr>
-                    <td width="75%">Prosthesis fitted to Pet and completely in Farm</td>
-                    <td><input type="checkbox" name="prosthesisOnPetInFarm" id="prosthesisOnPetInFarm" value="15" onChange='javascript:checkExclusiveOption("prosthesisOnPetInFarm","prosthesisOnPet")'/></td>
-                    <td align="right" class="scoreRoundPoints">15</td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-
-        <tr>
-            <td class="scoreRoundCategory">&nbsp;M12 Seal In Base</td>
-            <td colspan="3">
-                <table class="score" width="100%" cellpadding="2">
-                    <tr>
-                    <td width="75%">Seal is completely in Base, not broken</td>
-                    <td><input type="checkbox" name="sealInBase" id="sealInBase" value="1"/></td>
-                    <td align="right" class="scoreRoundPoints">1</td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-
-        <tr>
-            <td class="scoreRoundCategory">&nbsp;M13 Milk In Base</td>
-            <td colspan="3">
-                <table class="score" width="100%" cellpadding="2">
-                    <tr>
-                    <td width="75%">All three Milk are completely in Base</td>
-                    <td><input type="checkbox" name="milkInBase" id="milkInBase" value="1" onChange="javascript:checkMilkInBase()"/></td>
-                    <td align="right" class="scoreRoundPoints">1</td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-
-        <tr>
-            <td class="scoreRoundCategory">&nbsp;M14 Milk on Ramp</td>
-            <td colspan="3">
-                <table class="score" width="100%" cellpadding="2">
-                    <tr>
-                    <td width="75%">All three Milk supported by Ramp</td>
-                    <td><input type="checkbox" name="milkSupported" id="milkSupported" value="2" onChange="javascript:checkMilkRamp()"/></td>
-                    <td align="right" class="scoreRoundPoints">2</td>
-                    </tr>
-                    <tr>
-                    <td width="75%">Plus the Milk are the only things supported by and touching Ramp</td>
-                    <td><input type="checkbox" name="nothingElseTouchingRamp" id="nothingElseTouchingRamp" value="1" disabled='true' onChange="javascript:checkMilkRamp()"/></td>
-                    <td align="right" class="scoreRoundPoints">1</td>
-                    </tr>
-                    <tr>
-                    <td width="75%">Plus the Milk are all standing</td>
-                    <td><input type="checkbox" name="milkStanding" id="milkStanding" value="1" disabled='true' onChange="javascript:checkMilkRamp()"/></td>
-                    <td align="right" class="scoreRoundPoints">1</td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-
-        <tr>
-            <td class="scoreRoundCategory">&nbsp;M15 All Samples</td>
-            <td colspan="3">
-                <table class="score" width="100%" cellpadding="2">
-                    <tr>
-                    <td width="75%">All seven Manure samples completely in Training/Research Area</td>
-                    <td><input type="checkbox" name="allManureInArea" id="allManureInArea" value="5"/></td>
-                    <td align="right" class="scoreRoundPoints">5</td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-
-        <tr>
-            <td class="scoreRoundCategory">&nbsp;Penalties</td>
-            <td colspan="3">
-                <table class="score" width="100%" cellpadding="2">
-                    <tr>
-                    <td width="75%">Number of Manure samples in White Triangle Area</td>
-                    <td>
-                        <select id="manurePenalties" name="manurePenalties">
-                            <option value="0">0</option>
-                            <option value="-6">1</option>
-                            <option value="-12">2</option>
-                            <option value="-18">3</option>
-                            <option value="-24">4</option>
-                            <option value="-30">5</option>
-                        </select>
-                    </td>
-                    <td align="right" class="scoreRoundPoints">-6 each</td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-
-        <tr>
-            <td class="scoreRoundCategory">&nbsp;Yellow card</td>
-            <td colspan="3">
-                <table class="score" width="100%" cellpadding="2">
-                    <tr>
-                        <td width="75%">In case of obvious instruction/direction from teachers or other adults</td>
-                        <td><input type="checkbox" name="yellowCard" id="yellowCard" value="1" onChange="javascript:confirmYellowCard()" /></td>
-                        <td align="right" class="scoreRoundPoints">&nbsp;</td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-
-    </table> -->
 
         <div class="form-submit">
-            <input type="submit" value="Log in" class="button submit-button">
+            <input type="submit" value="Submit" class="button submit-button">
         </div>
     </form>
 </div>

@@ -20,12 +20,22 @@
 
         <label class="form-label">
             <span class="label-text">{{ form.username.label }}</span>
-            {{ form.username(class_='input input-text') }}
+
+            {% if form.username.errors %}
+                {{ form.username(class_='input input-text error') }}
+            {% else %}
+                {{ form.username(class_='input input-text') }}
+            {% endif %}
         </label>
 
         <label class="form-label">
             <span class="label-text">{{ form.password.label }}</span>
-            {{ form.password(class_='input input-text') }}
+
+            {% if form.password.errors %}
+                {{ form.password(class_='input input-text error') }}
+            {% else %}
+                {{ form.password(class_='input input-text') }}
+            {% endif %}
         </label>
 
         <div class="form-submit">

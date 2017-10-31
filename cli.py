@@ -7,8 +7,8 @@ import os
 
 import click
 
-from . import app, db
-from .models import *
+from lego import app, db
+from lego.models import *
 
 @app.cli.command('init', short_help='Initialise the application.',
     help='Initialise the application by creating the database and the default '

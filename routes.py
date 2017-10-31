@@ -5,9 +5,11 @@
 from flask import render_template, flash, redirect, request, url_for, g, abort
 from flask_login import login_user, logout_user, current_user, login_required
 
-from . import app, lm
-from .forms import tasks, LoginForm, ScoreRoundForm
-from .models import User, Team
+from lego import app, lm
+from lego.forms import LoginForm, ScoreRoundForm
+from lego.forms.tasks import TASK_FORMS, form_to_template
+from lego.models import User, Team, Practice
+
 
 @app.before_request
 def before_request():
@@ -55,7 +57,7 @@ def login():
         if isinstance(res, User):
             flash('Logged in successfully')
             login_user(res)
-            return redirect('/home')
+            return redirect(url_for('home'))
 
         flash(res)
 
@@ -90,7 +92,7 @@ def judges_home():
     return render_template('judges/home.html', title='Judges Home')
 
 
-@app.route('/judges/scoreround')
+@app.route('/judges/scoreround', methods=['GET', 'POST'])
 @login_required
 def judges_score_round():
     if not (current_user.is_judge or current_user.is_admin):
@@ -101,31 +103,67 @@ def judges_score_round():
     form.team.choices = [('', '--Select team--'), ('-1', 'PRACTICE')]
     form.team.choices += [(t.id, t.name) for t in Team.query.order_by('name')]
 
-    flash(dir(tasks))
-    flash(dir(tasks.__file__))
-    task_forms = [f for f in dir(tasks) if not f.startswith('_') and f[:1].isupper()]
-    form.task.choices = [('', '--Select task--')]
-
-    for f in task_forms:
-        form.task.choices.append((f.title, f.title))
+    flash(form.task.choices)
 
     if form.validate_on_submit():
-        team_id = request.form['team']
-        team = Team.get(team_id)
-        flash('team={!s}', team.name)
+        team_id = int(request.form['team'])
+        task_id = int(request.form['task'])
+
+        # practice_mode
+        if team_id == -1:
+            team = Practice()
+        else:
+            team = Team.query.get(team_id)
+
+        task_form = TASK_FORMS[task_id + 1]
+
+        flash('team={!s}'.format(team.name))
+        flash('task={!s}'.format(task_form.title))
+
+        return redirect(url_for('judges_score_task', task=task_id, team=team.id))
 
     return render_template('judges/scoreround.html', title='Score round', form=form)
 
 
-@app.route('/judges/scoretask')
+@app.route('/judges/scoretask', methods=['GET', 'POST'])
 @login_required
 def judges_score_task():
     if not (current_user.is_judge or current_user.is_admin):
         return abort(403)
 
-    # TODO
+    team_id = request.args.get('team')
+    task_id = request.args.get('task')
 
-    return 'TODO'
+    # not enough info from score round
+    if team_id is None or task_id is None:
+        flash('Missing team or task')
+        # return redirect(url_for('judges_score_round'))
+
+    # practice mode
+    if team_id == -1:
+        team = Practice()
+    else:
+        team = Team.query.get(team_id)
+
+    # invalid team
+    if team is None:
+        # return redirect(url_for('judges_score_round'))
+        flash('Invalid team')
+
+    try:
+        task_form = TASK_FORMS[int(task_id) + 1]()
+        task_template = form_to_template(task_form)
+        flash(task_template)
+    # invalid task id
+    except ValueError:
+        # return redirect(url_for('judges_score_round'))
+        flash('Invalid task')
+
+    #if task_form.validate_on_submit():
+    #    flash('Successfully submitted')
+
+    return render_template('judges/tasks/{0!s}.html'.format(task_template), title='Score task',
+                           form=task_form, team=team)
 
 
 @app.route('/admin/')

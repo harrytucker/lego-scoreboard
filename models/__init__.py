@@ -2,5 +2,5 @@
 #
 # -----------------------------------------------------------------------------
 
-from .user import User
-from .team import Team
+from lego.models.user import User
+from lego.models.team import Team, Practice

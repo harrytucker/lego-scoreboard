@@ -1,0 +1,12 @@
+{% extends 'scoretask_base.html' %}
+{% block form %}
+<label>
+    <span>{{ form.fence_down.label }}</span>
+    {{ form.fence_down }}
+</label>
+
+<label>
+    <span>{{ form.crossed_fence.label }}</span>
+    {{ form.crossed_fence }}
+</label>
+{% endblock %}

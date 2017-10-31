@@ -55,6 +55,26 @@ To halt the application, use `Ctrl+C`.
 - Log errors to a file see [[1](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vii-unit-testing)].
 - Add unit testing (above and 2nd from last part).
 - Use flask-bcrypt.
+- Move maintenance and updates into separate file from README.
+- Add virtualenv activation/creation script that also sets required variables.
+- Re-organise as follows:
+```
+.editorconfig
+.gitignore
+README.md
+requirements.txt
+venv/
+src/
+    __init__.py
+    cli.py
+    config_sample.py
+    routes.py
+    forms/
+    models/
+    static/
+    templates/
+    tmp/
+```
 
 
 ## Maintaince and Updates

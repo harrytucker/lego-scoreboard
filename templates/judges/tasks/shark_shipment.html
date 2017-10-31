@@ -1,5 +1,23 @@
-{% extends '../scoretask_base.html' %}
+{% extends 'scoretask_base.html' %}
 {% block form %}
+{% if form.in_target.errors or form.touching_floor.errors or form.nothing_touched.errors %}
+    <div class="error">
+        <ul>
+            {% for error in form.in_target.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+
+            {% for error in form.touching_floor.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+
+            {% for error in form.nothing_touched.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
 <label>
     <span>{{ form.in_target.label }}</span>
     {{ form.in_target }}
@@ -14,40 +32,4 @@
     <span>{{ form.nothing_touched.label }}</span>
     {{ form.nothing_touched }}
 </label>
-<!--
-<section>
-            <header>
-                <h3>M01 Shark Shipment</h3>
-                <div>Nothing can touch the Shark except the tank</div>
-            </header>
-
-            <table>
-                <tr>
-                    <td>Shark and Tank are completely in Target...</td>
-                    <td>
-                        <select id="sharkInTarget" name="sharkInTarget" onChange="javascript:checkShark()">
-                            <option value="0">None</option>
-                            <option value="7">Target One</option>
-                            <option value="10">Target Two</option>
-                        </select>
-                    </td>
-                    <td>7 or 10 possible</td>
-                </tr>
-                <tr>
-                    <td>Shark touching ONLY Tank floor (NOT wall)</td>
-                    <td>
-                        <input type="checkbox" name="sharkTouchingFloor" id="sharkTouchingFloor" value="20" disabled="true">
-                    </td>
-                    <td>20 possible</td>
-                </tr>
-                <tr>
-                    <td>Nothing touched the Shark except the Tank</td>
-                    <td>
-                        <input type="checkbox" name="nothingTouchedShark" id="nothingTouchedShark" value="1">
-                    </td>
-                    <td></td>
-                </tr>
-            </table>
-        </section>
--->
-{% form %}
+{% endblock %}

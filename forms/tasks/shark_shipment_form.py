@@ -2,12 +2,13 @@
 #
 # -----------------------------------------------------------------------------
 
-from flask_wtf import FlaskForm
 from wtforms import BooleanField, SelectField
 from wtforms.validators import DataRequired
 
+from lego.forms.tasks.base_task_form import BaseTaskForm
 
-class SharkShipmentForm(FlaskForm):
+
+class SharkShipmentForm(BaseTaskForm):
     title = 'M01 Shark Shipment'
     info = 'Nothing can touch the Shark except the tank'
 

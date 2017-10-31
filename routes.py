@@ -151,7 +151,7 @@ def judges_score_task():
         flash('Invalid team')
 
     try:
-        task_form = TASK_FORMS[int(task_id) + 1]()
+        task_form = TASK_FORMS[int(task_id) + 1](request.values)
         task_template = form_to_template(task_form)
         flash(task_template)
     # invalid task id

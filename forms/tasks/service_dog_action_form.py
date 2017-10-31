@@ -2,12 +2,13 @@
 #
 # -----------------------------------------------------------------------------
 
-from flask_wtf import FlaskForm
 from wtforms import BooleanField
 from wtforms.validators import DataRequired
 
+from lego.forms.tasks.base_task_form import BaseTaskForm
 
-class ServiceDogActionForm(FlaskForm):
+
+class ServiceDogActionForm(BaseTaskForm):
     title = 'M02 Service Dog Action'
     info = 'Robot must cross fence from West, between barriers'
 

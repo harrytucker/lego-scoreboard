@@ -4,13 +4,12 @@
     <form action="" method="POST" name="scoretask">
         {{ form.hidden_tag() }}
 
-        <!-- TODO: add team id and task id as hidden fields + CSRF token field -->
-        <!-- TODO: add yellow card checkbox -->
-
         <h3>{{ task_title }}</h3>
         <div class="info">{{ task_info }}</div>
 
         {% block form %}{% endblock %}
+
+        <!-- TODO: add yellow card checkbox -->
 
         <div class="form-submit">
             <input type="submit" value="Submit" class="button submit-button">

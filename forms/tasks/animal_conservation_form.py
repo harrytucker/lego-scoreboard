@@ -2,12 +2,13 @@
 #
 # -----------------------------------------------------------------------------
 
-from flask_wtf import FlaskForm
-from wtforms import BooleanField, SelectField
+from wtforms import SelectField
 from wtforms.validators import DataRequired
 
+from lego.forms.tasks.base_task_form import BaseTaskForm
 
-class AnimalConservationForm(FlaskForm):
+
+class AnimalConservationForm(BaseTaskForm):
     title = 'M03 Animal Conservation'
     info = 'Pairs made by rotation of model'
 

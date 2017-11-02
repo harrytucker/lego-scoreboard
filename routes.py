@@ -135,32 +135,38 @@ def judges_score_task():
     task_id = request.args.get('task')
 
     # not enough info from score round
-    if team_id is None or task_id is None:
-        flash('Missing team or task')
-        # return redirect(url_for('judges_score_round'))
+    if team_id is None:
+        flash('Team not found')
+        return redirect(url_for('judges_score_round'))
+
+    if task_id is None:
+        flash('Task not found')
+        return redirect(url_for('judges_score_round'))
 
     # practice mode
-    if team_id == -1:
+    if team_id == '-1':
+        flash('Pratice mode enabled')
         team = Practice()
     else:
         team = Team.query.get(team_id)
 
     # invalid team
     if team is None:
-        # return redirect(url_for('judges_score_round'))
-        flash('Invalid team')
+        flash('Team not found')
+        return redirect(url_for('judges_score_round'))
 
     try:
-        task_form = TASK_FORMS[int(task_id) + 1](request.values)
+        task_form = TASK_FORMS[int(task_id)](request.values)
         task_template = form_to_template(task_form)
         flash(task_template)
-    # invalid task id
     except ValueError:
-        # return redirect(url_for('judges_score_round'))
-        flash('Invalid task')
+        flash('Task not found')
+        return redirect(url_for('judges_score_round'))
 
-    #if task_form.validate_on_submit():
-    #    flash('Successfully submitted')
+
+    if task_form.validate_on_submit():
+        flash('Successfully submitted')
+        flash('Points scored: {0!s}'.format(task_form.points_scored()))
 
     return render_template('judges/tasks/{0!s}.html'.format(task_template), title='Score task',
                            form=task_form, team=team)

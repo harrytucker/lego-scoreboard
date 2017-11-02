@@ -4,15 +4,15 @@
     <div class="error">
         <ul>
             {% for error in form.in_target.errors %}
-                <li>{{ error }}</li>
+                <li>(in_target) {{ error }}</li>
             {% endfor %}
 
             {% for error in form.touching_floor.errors %}
-                <li>{{ error }}</li>
+                <li>(touching_floor) {{ error }}</li>
             {% endfor %}
 
             {% for error in form.nothing_touched.errors %}
-                <li>{{ error }}</li>
+                <li>(nothing_touched) {{ error }}</li>
             {% endfor %}
         </ul>
     </div>
@@ -20,7 +20,11 @@
 
 <label>
     <span>{{ form.in_target.label }}</span>
-    {{ form.in_target }}
+    {% if form.in_target.errors %}
+        {{ form.in_target(class_='error') }}
+    {% else %}
+        {{ form.in_target }}
+    {% endif %}
 </label>
 
 <label>

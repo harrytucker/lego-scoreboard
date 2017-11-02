@@ -4,8 +4,12 @@
     <form action="" method="POST" name="scoretask">
         {{ form.hidden_tag() }}
 
-        <h3>{{ task_title }}</h3>
-        <div class="info">{{ task_info }}</div>
+        <h3>{{ form.title }}</h3>
+        <div class="info">{{ form.info }}</div>
+        <div class="team">
+            <span>Team:</span>
+            <span>{{ team.name }}</span>
+        </div>
 
         {% block form %}{% endblock %}
 

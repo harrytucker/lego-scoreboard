@@ -21,7 +21,17 @@ class SharkShipmentForm(BaseTaskForm):
                                 ('10', 'Target Two (10 points)'),
                             ],
                             validators=[DataRequired()])
-    touching_floor = BooleanField('Shark touching ONLY Tank floor (NOT wall)',
-                                  validators=[DataRequired()])
-    nothing_touched = BooleanField('Nothing touched the Shark except the Tank',
-                                  validators=[DataRequired()])
+    touching_floor = BooleanField('Shark touching ONLY Tank floor (NOT wall)')
+    nothing_touched = BooleanField('Nothing touched the Shark except the Tank')
+
+    def points_scored(self) -> int:
+        """Calculate the points scored for the task."""
+        score = 0
+
+        if self.nothing_touched.data:
+            score = int(self.in_target.data)
+
+            if self.touching_floor.data:
+                score += 20
+
+        return score

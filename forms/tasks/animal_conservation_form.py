@@ -24,3 +24,7 @@ class AnimalConservationForm(BaseTaskForm):
                                 ('120', '6 (120 points)')
                              ],
                              validators=[DataRequired()])
+
+    def points_scored(self) -> int:
+        """Calculate the points scored for the task."""
+        return int(self.animal_pairs.data)

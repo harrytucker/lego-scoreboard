@@ -56,6 +56,9 @@ To halt the application, use `Ctrl+C`.
 - Add unit testing (above and 2nd from last part).
 - Use flask-bcrypt.
 - Move maintenance and updates into separate file from README.
+- Add error handling to all forms
+    - Print out errors at top of form
+    - Add error class to relevant field
 - Add virtualenv activation/creation script that also sets required variables.
 - Re-organise as follows:
 ```

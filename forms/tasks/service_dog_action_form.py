@@ -17,3 +17,11 @@ class ServiceDogActionForm(BaseTaskForm):
                               validators=[DataRequired()])
     crossed_fence = BooleanField('Robot completely crossed fence',
                                  validators=[DataRequired()])
+
+    def points_scored(self) -> int:
+        """Calculate the points scored for the task."""
+        if self.crossed_fence.data:
+            if self.fence_down.data:
+                return 15
+
+        return 0

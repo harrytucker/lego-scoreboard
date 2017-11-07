@@ -14,12 +14,12 @@ class M08ManholeCoversForm(BaseTaskForm):
            'it/them ever reaching Base.'
 
     # fields
-    covers_flipped = SelectField('Manhold covers flipped',
+    covers_flipped = SelectField('Manhold covers flipped:',
                                  choices=[('0', '0'),
                                           ('1', '1'),
                                           ('2', '2')])
     in_separate_targets = BooleanField('Both covers completely in '\
-                                       'separate Tripod targets')
+                                       'separate Tripod targets:')
 
 
     def points_scored(self) -> int:

@@ -2,6 +2,7 @@
 {% block form %}
 <div class="form-input">
     {{ form.covers_flipped.label(class_='form-label') }}
+
     {% if form.covers_flipped.errors %}
         {{ form.covers_flipped(class_='input-select input-error') }}
     {% else %}
@@ -11,6 +12,7 @@
 
 <div class="form-input">
     {{ form.in_separate_targets.label(class_='form-label') }}
+
     {% if form.in_separate_targets.errors %}
         {{ form.in_separate_targets(class_='input-checkbox input-error') }}
     {% else %}
@@ -21,6 +23,7 @@
 
 {% block script %}
 <script>
+// TODO: unlock bonus checkbox if `covers_flipped == 2`
 ;(function () {
     'use strict';
 

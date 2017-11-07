@@ -1,0 +1,12 @@
+{% extends 'judges/scoretask_base.html' %}
+{% block form %}
+<div class="form-input">
+    {{ form.in_target.label(class_='form-label') }}
+
+    {% if form.in_target.errors %}
+        {{ form.in_target(class_='input-select input-error') }}
+    {% else %}
+        {{ form.task_complete(class_='input-select') }}
+    {% endif %}
+</div>
+{% endblock %}

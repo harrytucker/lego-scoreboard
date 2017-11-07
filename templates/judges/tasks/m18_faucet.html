@@ -2,7 +2,6 @@
 {% block form %}
 <div class="form-input">
     {{ form.task_complete.label(class_='form-label') }}
-
     {% if form.task_complete.errors %}
         {{ form.task_complete(class_='input-radio input-error') }}
     {% else %}

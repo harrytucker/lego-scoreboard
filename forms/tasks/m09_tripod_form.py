@@ -14,13 +14,12 @@ class M09TripodForm(BaseTaskForm):
            'target, with all of its feet touching the mat.'
 
     # fields
-    in_target = SelectField('In target',
-                            coerce=int,
-                            choices=[('0', 'Not in Tripod'),
-                                     ('15', 'Partially in Tripod'),
-                                     ('20', 'Completely in Tripod')])
+    in_target = SelectField('In target:',
+                            choices=[('0', 'Not in target (0 points)'),
+                                     ('15', 'Partially in target (15 points)'),
+                                     ('20', 'Completely in target')])
 
 
     def points_scored(self) -> int:
         """Calculate the points scored for the task."""
-        return self.in_target.data
+        return int(self.in_target.data)

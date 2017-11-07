@@ -9,8 +9,19 @@ from lego.forms.tasks.base_task_form import BaseTaskForm
 
 
 class M16WaterCollectionForm(BaseTaskForm):
-    title = 'Not set'
-    info = 'Not set'
+    title = 'M16 - Water Collection'
+    info = 'Move or catch Big Water and/or Rain water (one Rain maximum; no Dirty Water) so it ' \
+           'is touching the mat in the Water Target, *without the target ever reaching the ' \
+           'white Off-Limits Line shown below. Water may be touching the target, and/or other ' \
+           'water, but not be touching nor guided by anything else. Each water model is scored ' \
+           'as an individual.'
+
+    # TODO: how to score this?
+    # At least one Rain: 10 Points
+    # Big Water: 10 Points EACH
+    # FOR BONUS: Score at least one Big Water in its target as described above WITH one on top,
+    #            which is touching nothing but other water. 30 Points
+    #            (Maximum only one Bonus can score)
 
     def points_scored(self) -> int:
         """Calculate the points scored for the task."""

@@ -12,7 +12,7 @@
         </div>
 
         {% if form.errors %}
-            <div class="error">
+            <div class="errors">
                 <ul>
                     {% for _field, errors in form.errors.items() %}
                         {% for error in errors %}
@@ -25,15 +25,15 @@
 
         {% block form %}{% endblock %}
 
-        <label class="form-label">
-            <span class="label-text">{{ form.yellow_card.label }}</span>
+        <div class="form-input">
+            {{ form.yellow_card.label }}
 
             {% if form.yellow_card.errors %}
-                {{ form.yellow_card(class_='input input-text error') }}
+                {{ form.yellow_card(class_='input-checkbox error') }}
             {% else %}
-                {{ form.yellow_card(class_='input input-text') }}
+                {{ form.yellow_card(class_='input-checkbox') }}
             {% endif %}
-        </label>
+        </div>
 
         <div class="form-submit">
             <input type="submit" value="Submit" class="button submit-button">

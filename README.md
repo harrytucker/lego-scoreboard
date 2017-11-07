@@ -60,6 +60,8 @@ To halt the application, use `Ctrl+C`.
     - Print out errors at top of form
     - Add error class to relevant field
 - Add virtualenv activation/creation script that also sets required variables.
+- Implement yellow cards.
+- Implement red cards.
 - Re-organise as follows:
 ```
 .editorconfig

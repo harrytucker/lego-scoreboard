@@ -4,37 +4,35 @@
     <form action="" method="POST" name="login">
         {{ form.hidden_tag() }}
 
-        {% if form.username.errors or form.password.errors %}
-            <div class="error">
+        {% if form.errors %}
+            <div class="errors">
                 <ul>
-                    {% for error in form.username.errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-
-                    {% for error in form.password.errors %}
-                        <li>{{ error }}</li>
+                    {% for _field, errors in form.errors.items() %}
+                        {% for error in errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
                     {% endfor %}
                 </ul>
             </div>
         {% endif %}
 
-        <label class="form-label">
-            <span class="label-text">{{ form.username.label }}</span>
+        <div class="form-input">
+            {{ form.username.label }}
 
             {% if form.username.errors %}
-                {{ form.username(class_='input input-text error') }}
+                {{ form.username(class_='input-text input-error') }}
             {% else %}
-                {{ form.username(class_='input input-text') }}
+                {{ form.username(class_='input-text') }}
             {% endif %}
-        </label>
+        </div>
 
-        <label class="form-label">
-            <span class="label-text">{{ form.password.label }}</span>
+        <div class="form-input">
+            {{ form.password.label }}
 
             {% if form.password.errors %}
-                {{ form.password(class_='input input-text error') }}
+                {{ form.password(class_='input-text input-error') }}
             {% else %}
-                {{ form.password(class_='input input-text') }}
+                {{ form.password(class_='input-text') }}
             {% endif %}
         </label>
 

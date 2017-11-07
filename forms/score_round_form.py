@@ -11,7 +11,7 @@ from lego.forms.tasks import TASK_FORMS
 
 def _task_choices() -> list:
     choices = [('-2', '--Select task--')]
-    choices += [(i + 1, t.title) for i, t in enumerate(TASK_FORMS)]
+    choices += [(i, t.title) for i, t in enumerate(TASK_FORMS)]
 
     return choices
 

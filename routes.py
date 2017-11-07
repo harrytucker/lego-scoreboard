@@ -115,10 +115,7 @@ def judges_score_round():
         else:
             team = Team.query.get(team_id)
 
-        task_form = TASK_FORMS[task_id + 1]
-
-        flash('team={!s}'.format(team.name))
-        flash('task={!s}'.format(task_form.title))
+        task_form = TASK_FORMS[task_id]
 
         return redirect(url_for('judges_score_task', task=task_id, team=team.id))
 
@@ -143,7 +140,7 @@ def judges_score_task():
         flash('Task not found')
         return redirect(url_for('judges_score_round'))
 
-    # practice mode
+    # check for practice mode
     if team_id == '-1':
         flash('Pratice mode enabled')
         team = Practice()
@@ -158,11 +155,9 @@ def judges_score_task():
     try:
         task_form = TASK_FORMS[int(task_id)](request.values)
         task_template = form_to_template(task_form)
-        flash(task_template)
     except ValueError:
         flash('Task not found')
         return redirect(url_for('judges_score_round'))
-
 
     if task_form.validate_on_submit():
         flash('Successfully submitted')

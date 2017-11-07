@@ -11,9 +11,29 @@
             <span>{{ team.name }}</span>
         </div>
 
+        {% if form.errors %}
+            <div class="error">
+                <ul>
+                    {% for _field, errors in form.errors.items() %}
+                        {% for error in errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
         {% block form %}{% endblock %}
 
-        <!-- TODO: add yellow card checkbox -->
+        <label class="form-label">
+            <span class="label-text">{{ form.yellow_card.label }}</span>
+
+            {% if form.yellow_card.errors %}
+                {{ form.yellow_card(class_='input input-text error') }}
+            {% else %}
+                {{ form.yellow_card(class_='input input-text') }}
+            {% endif %}
+        </label>
 
         <div class="form-submit">
             <input type="submit" value="Submit" class="button submit-button">

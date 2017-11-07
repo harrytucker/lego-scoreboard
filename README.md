@@ -97,3 +97,6 @@ Flask also provides a number of quickstart guides for both the main Flask module
 - [WTForms](https://wtforms.readthedocs.io/en/latest/)
 - [Jinja2](http://jinja.pocoo.org/docs/2.9/)
 - [Click](http://click.pocoo.org/5/)
+
+## Notes
+- [chellenge guide](https://firstinspiresst01.blob.core.windows.net/fll/hydro-dynamics-challenge-guide-a4.pdf)

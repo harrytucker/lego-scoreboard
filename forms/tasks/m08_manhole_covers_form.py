@@ -3,7 +3,8 @@
 # -----------------------------------------------------------------------------
 
 from wtforms import SelectField, BooleanField
-from wtforms.validators import DataRequired
+# TODO: add validators to select field?
+# from wtforms.validators import DataRequired
 
 from lego.forms.tasks.base_task_form import BaseTaskForm
 

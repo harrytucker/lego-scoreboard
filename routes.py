@@ -103,7 +103,7 @@ def judges_score_round():
     form.team.choices = [('', '--Select team--'), ('-1', 'PRACTICE')]
     form.team.choices += [(t.id, t.name) for t in Team.query.order_by('name')]
 
-    flash(form.task.choices)
+    # flash(form.task.choices)
 
     if form.validate_on_submit():
         team_id = int(request.form['team'])
@@ -155,7 +155,7 @@ def judges_score_task():
     try:
         task_form = TASK_FORMS[int(task_id)](request.values)
         task_template = form_to_template(task_form)
-    except ValueError:
+    except IndexError:
         flash('Task not found')
         return redirect(url_for('judges_score_round'))
 

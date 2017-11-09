@@ -6,7 +6,7 @@
     {% if form.in_target.errors %}
         {{ form.in_target(class_='input-select input-error') }}
     {% else %}
-        {{ form.task_complete(class_='input-select') }}
+        {{ form.in_target(class_='input-select') }}
     {% endif %}
 </div>
 {% endblock %}

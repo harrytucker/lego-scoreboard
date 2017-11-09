@@ -2,7 +2,7 @@
 #
 # -----------------------------------------------------------------------------
 
-from wtforms import Boolean, RadioField
+from wtforms import BooleanField, RadioField
 from wtforms.validators import InputRequired
 
 from lego.forms.tasks.base_task_form import BaseTaskForm

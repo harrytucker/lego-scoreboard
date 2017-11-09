@@ -11,7 +11,7 @@ from lego.forms.tasks.base_task_form import BaseTaskForm
 class M10PipeReplacementForm(BaseTaskForm):
     title = 'M10 - Pipe Replacement'
     info = 'Move a New Pipe so it is where the broken one started, in full/flat contact with ' \
-           'the mat. You may install the Optional Loop first, in Base, if you wish.)'
+           'the mat. You may install the Optional Loop first, in Base, if you wish.'
 
         # fields
     task_complete = RadioField('Task complete:',

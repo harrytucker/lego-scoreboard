@@ -9,7 +9,7 @@ from lego.forms.tasks.base_task_form import BaseTaskForm
 
 
 class M05FilterForm(BaseTaskForm):
-    title = 'Not set'
+    title = 'M05 - Filter'
     info = 'Move the Filter north until the lock latch drops.'
 
     # fields

@@ -51,3 +51,17 @@ def generate_secret_key():
     key = b64encode(os.urandom(64)).decode('utf-8')
     click.echo('Secret key: {!s}'.format(key))
 
+
+@app.cli.command('add-teams',
+    short_help='Add teams to the database from a file.')
+@click.argument('file', type=click.File())
+def add_teams(file):
+    for line in file:
+        team_name = line.strip()
+        click.echo('Adding team: {!s}'.format(team_name))
+
+        team = Team(name=team_name)
+        db.session.add(team)
+
+    db.session.commit()
+    click.echo('Teams successfully added')

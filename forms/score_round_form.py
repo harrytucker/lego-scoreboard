@@ -4,21 +4,19 @@
 
 from flask_wtf import FlaskForm
 from wtforms import SelectField
-from wtforms.validators import DataRequired
+from wtforms.validators import InputRequired
 
 from lego.forms.tasks import TASK_FORMS
 
 
 def _task_choices() -> list:
-    choices = [('-2', '--Select task--')]
+    choices = [('', '--Select task--')]
     choices += [(i, t.title) for i, t in enumerate(TASK_FORMS)]
 
     return choices
 
 
 class ScoreRoundForm(FlaskForm):
-    team = SelectField('Team', validators=[DataRequired()])
+    team = SelectField('Team', validators=[InputRequired()])
     task = SelectField('Task',
-                       coerce=int,
-                       choices=_task_choices(),
-                       validators=[DataRequired()])
+                       choices=_task_choices())

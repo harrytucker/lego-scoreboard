@@ -21,7 +21,7 @@ else
 fi
 
 echo "Setting requirement environment variables..."
-export FLASK_APP="`pwd`/__init__.py"
+export FLASK_APP="`pwd`/lego/__init__.py"
 export FLASK_DEBUG=1
 
 echo "Done"

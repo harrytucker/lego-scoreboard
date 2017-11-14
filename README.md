@@ -12,12 +12,14 @@ Python3.3+ should provide access to the `venv` module for creating a virtual env
 A script has been provided to set up the required environment for Linux distributions:
 ```
 $ git clone <repository>
-$ cd <repository>
-$ ./setup.sh
+$ cd ./<repository>
+$ . ./setup.sh
 ```
 
 Next you will need to initialise the application:
 ```
+$ cd ./lego
+
 # create config file from sample
 $ cp ./config_sample.py ./config.py
 
@@ -45,39 +47,22 @@ $ flask run --host=0.0.0.0
 To halt the application, use `Ctrl+C`.
 
 ## Todo
-- Implement checkpoints on tasks page.
-- Uncomment refresh tag on scoreboard page.
-- Log errors to a file see [[1](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vii-unit-testing)].
-- Add logging where appropriate.
-- Add unit testing (above and 2nd from last part).
-- Use flask-bcrypt for password encryption.
-- Move maintenance and updates into separate file from README.
-- Add error handling to all forms
-    - Print out errors at top of form
-    - Add error class to relevant field
-- Add virtualenv activation/creation script that also sets required variables.
-- Implement yellow cards.
-- Implement red cards.
-- Re-organise as follows:
-```
-.editorconfig
-.gitignore
-README.md
-requirements.txt
-setup.sh
-venv/
-src/
-    __init__.py
-    cli.py
-    config_sample.py
-    routes.py
-    forms/
-    logs/
-    models/
-    static/
-    templates/
-    tmp/
-```
+- [ ] Implement checkpoints on tasks page.
+- [ ] Uncomment refresh tag on scoreboard page.
+- [ ] Log errors to a file see [[1](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vii-unit-testing)].
+- [ ] Add logging where appropriate.
+- [ ] Add unit testing (above and 2nd from last part).
+- [ ] Use flask-bcrypt for password encryption.
+- [ ] Move maintenance and updates into separate file from README.
+- [ ] Add error handling to all forms
+    - [ ] Print out errors at top of form
+    - [ ] Add error class to relevant field
+- [ ] Implement yellow cards.
+- [ ] Implement red cards.
+- [ ] Save team points to the database
+    - [ ] Handle multiple attempts (up to 3)
+- [ ] Add CSS
+- [ ] Add JavaScript form helpers for rounds that have bonus points, e.g. disable checkboxes unless pre-requisites have been met.
 
 
 ## Maintaince and Updates

@@ -4,26 +4,20 @@ Requirements:
 - Python 3.4+
 - Pip - Should be installed with Python3.4.
 - SQLite 3 - Not required, but can be helpful for debugging database issues. Python3 supports it out the box.
+- gcc (SQLAlchemy is compiled from source).
 
 Python3.3+ should provide access to the `venv` module for creating a virtual environment. However, some Linux distibutions tweaked the Python installation so you may need to install an additional package. Check your distibution for more details.
 
-Once your dependencies are installed and this repository has been cloned:
-```bash
-$ cd /path/to/lego
+## Quickstart
+A script has been provided to set up the required environment for Linux distributions:
+```
+$ git clone <repository>
+$ cd <repository>
+$ ./setup.sh
+```
 
-# create virtual environment and activate it
-$ python3 -m venv ./venv
-$ source ./venv/vin/activate
-
-# install dependencies
-$ pip install -r ./requirements.txt
-
-# set required environment variables
-# for windows use `set` instead of `export`
-$ export FLASK_APP=/path/to/logo/__init__.py
-# optional, helpful for debugging
-$ export FLASK_DEBUG=1
-
+Next you will need to initialise the application:
+```
 # create config file from sample
 $ cp ./config_sample.py ./config.py
 
@@ -35,6 +29,7 @@ $ flask generate-secret-key
 # you will be prompted for user passwords here
 $ flask init
 ```
+
 
 ## Usage
 To run the application, simply run:
@@ -53,8 +48,9 @@ To halt the application, use `Ctrl+C`.
 - Implement checkpoints on tasks page.
 - Uncomment refresh tag on scoreboard page.
 - Log errors to a file see [[1](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vii-unit-testing)].
+- Add logging where appropriate.
 - Add unit testing (above and 2nd from last part).
-- Use flask-bcrypt.
+- Use flask-bcrypt for password encryption.
 - Move maintenance and updates into separate file from README.
 - Add error handling to all forms
     - Print out errors at top of form
@@ -68,6 +64,7 @@ To halt the application, use `Ctrl+C`.
 .gitignore
 README.md
 requirements.txt
+setup.sh
 venv/
 src/
     __init__.py
@@ -75,6 +72,7 @@ src/
     config_sample.py
     routes.py
     forms/
+    logs/
     models/
     static/
     templates/
@@ -101,4 +99,4 @@ Flask also provides a number of quickstart guides for both the main Flask module
 - [Click](http://click.pocoo.org/5/)
 
 ## Notes
-- [chellenge guide](https://firstinspiresst01.blob.core.windows.net/fll/hydro-dynamics-challenge-guide-a4.pdf)
+- [Challenge guide](https://firstinspiresst01.blob.core.windows.net/fll/hydro-dynamics-challenge-guide-a4.pdf)

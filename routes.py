@@ -64,7 +64,7 @@ def login():
     return render_template('login.html', title='Log in', form=form)
 
 
-@app.route("/logout")
+@app.route('/logout')
 @login_required
 def logout():
     logout_user()
@@ -83,6 +83,7 @@ def tasks():
 
 
 @app.route('/judges')
+@app.route('/judges/')
 @app.route('/judges/home')
 @login_required
 def judges_home():
@@ -99,11 +100,6 @@ def judges_score_round():
         return abort(403)
 
     form = ScoreRoundForm()
-
-    form.team.choices = [('', '--Select team--'), ('-1', 'PRACTICE')]
-    form.team.choices += [(t.id, t.name) for t in Team.query.order_by('name')]
-
-    # flash(form.task.choices)
 
     if form.validate_on_submit():
         team_id = int(request.form['team'])

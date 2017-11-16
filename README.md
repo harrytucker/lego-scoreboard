@@ -85,3 +85,4 @@ Flask also provides a number of quickstart guides for both the main Flask module
 
 ## Notes
 - [Challenge guide](https://firstinspiresst01.blob.core.windows.net/fll/hydro-dynamics-challenge-guide-a4.pdf)
+- If you see an error similar to `AttributeError: 'module' object has no attribute 'config'`, just restart the application. This happens when another error occurred and the initial application configuration gets stuck.

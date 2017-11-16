@@ -5,10 +5,10 @@
 from flask import render_template, flash, redirect, request, url_for, g, abort
 from flask_login import login_user, logout_user, current_user, login_required
 
-from lego import app, lm
+from lego import app, db, lm
 from lego.forms import LoginForm, ScoreRoundForm
 from lego.forms.tasks import TASK_FORMS, form_to_template
-from lego.models import User, Team, Practice
+from lego.models import User, Task, Team, Practice
 
 
 @app.before_request
@@ -49,13 +49,9 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        flash('Login requested: username={!s}, password={!s}' \
-              .format(username, password))
-
         res = User.authenticate(username, password)
 
         if isinstance(res, User):
-            flash('Logged in successfully')
             login_user(res)
             return redirect(url_for('home'))
 
@@ -100,6 +96,12 @@ def judges_score_round():
         return abort(403)
 
     form = ScoreRoundForm()
+
+    form.team.choices = [('', '--Select team--'), ('-1', 'PRACTICE')]
+    form.team.choices += [(str(t.id), t.name) for t in Team.query.order_by('name')]
+
+    form.task.choices = [('', '--Select task--')]
+    form.task.choices += [(str(i), t.title) for i, t in enumerate(TASK_FORMS)]
 
     if form.validate_on_submit():
         team_id = int(request.form['team'])
@@ -149,15 +151,33 @@ def judges_score_task():
         return redirect(url_for('judges_score_round'))
 
     try:
-        task_form = TASK_FORMS[int(task_id)](request.values)
+        task_id = int(task_id)
+        task_form = TASK_FORMS[task_id](request.values)
         task_template = form_to_template(task_form)
     except IndexError:
         flash('Task not found')
         return redirect(url_for('judges_score_round'))
 
+    attempts = Task.query.filter_by(task_id=task_id, team_id=team_id).all()
+    print(attempts)
+
+    if len(attempts) >= 3:
+        flash('The team has already had 3 attempts at that task')
+        return redirect(url_for('judges_score_round'))
+
     if task_form.validate_on_submit():
+        attempt = len(attempts) + 1
+        score = task_form.points_scored()
+
         flash('Successfully submitted')
-        flash('Points scored: {0!s}'.format(task_form.points_scored()))
+        flash('Points scored: {0!s}'.format(score))
+        flash('Attempt: {0!s}'.format(attempt))
+
+        task = Task(task_id=task_id, team_id=team_id, attempt=attempt, score=score)
+        db.session.add(task)
+        db.session.commit()
+
+        return redirect(url_for('judges_score_round'))
 
     return render_template('judges/tasks/{0!s}.html'.format(task_template), title='Score task',
                            form=task_form, team=team)

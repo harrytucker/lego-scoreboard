@@ -10,7 +10,8 @@ class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     task_id = db.Column(db.Integer, index=True, nullable=False)
     team_id = db.Column(db.Integer, db.ForeignKey('team.id'), nullable=False)
-    team = db.relationship('Team', backref='task', cascade='all, delete-orphan', single_parent=True)
+    team = db.relationship('Team', backref='task', cascade='all, delete-orphan',
+                           single_parent=True)
     attempt = db.Column(db.Integer, nullable=False)
     score = db.Column(db.Integer, nullable=False)
 

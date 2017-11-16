@@ -15,6 +15,7 @@ source ./venv/bin/activate
 
 if [[ ! $(pip show flask | grep "Name: Flask") ]]; then
     echo "Installing dependencies via pip..."
+    pip install pip --upgrade
     pip install -r requirements.txt
 else
     echo "Dependencies already installed. Skipping..."

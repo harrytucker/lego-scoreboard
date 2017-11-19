@@ -8,7 +8,7 @@ import os
 import click
 
 from lego import app, db
-from lego.models import *
+from lego.models import User, Team
 
 @app.cli.command('init', short_help='Initialise the application.',
     help='Initialise the application by creating the database and the default '
@@ -29,16 +29,19 @@ def init_app():
     judge_user = User(username=judge, password=judge_pword, is_judge=True)
     db.session.add(judge_user)
 
+    practice_team = Team(name='Practice', is_practice=True)
+    db.session.add(practice_team)
+
     db.session.commit()
     click.echo('Default users created.')
+    click.echo('Practice team created.')
 
 
 def _request_password(user: str, default: str):
-    pword = click.prompt('Enter password for {!s} [default: {!s}' \
-        .format(user, default), hide_input=True)
+    pword = click.prompt('Enter password for {!s}'.format(user), hide_input=True, default=default)
 
     # allow them to use the default
-    if not pword:
+    if pword == default:
         return default
 
     pword2 = click.prompt('Confirm password for {!s}'.format(user), hide_input=True)

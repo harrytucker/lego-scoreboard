@@ -7,8 +7,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 
 from lego import app, db, lm
 from lego.forms import LoginForm, ScoreRoundForm
-from lego.forms.tasks import TASK_FORMS, form_to_template
-from lego.models import User, Task, Team, Practice
+from lego.models import User, Team
 
 
 @app.before_request
@@ -89,7 +88,7 @@ def judges_home():
     return render_template('judges/home.html', title='Judges Home')
 
 
-@app.route('/judges/scoreround', methods=['GET', 'POST'])
+@app.route('/judges/score_round', methods=['GET', 'POST'])
 @login_required
 def judges_score_round():
     if not (current_user.is_judge or current_user.is_admin):
@@ -97,90 +96,42 @@ def judges_score_round():
 
     form = ScoreRoundForm()
 
-    form.team.choices = [('', '--Select team--'), ('-1', 'PRACTICE')]
+    form.team.choices = [('', '--Select team--')]
     form.team.choices += [(str(t.id), t.name) for t in Team.query.order_by('name')]
 
-    form.task.choices = [('', '--Select task--')]
-    form.task.choices += [(str(i), t.title) for i, t in enumerate(TASK_FORMS)]
-
     if form.validate_on_submit():
-        team_id = int(request.form['team'])
-        task_id = int(request.form['task'])
-
-        # practice_mode
-        if team_id == -1:
-            team = Practice()
-        else:
-            team = Team.query.get(team_id)
-
-        task_form = TASK_FORMS[task_id]
-
-        return redirect(url_for('judges_score_task', task=task_id, team=team.id))
-
-    return render_template('judges/scoreround.html', title='Score round', form=form)
-
-
-@app.route('/judges/scoretask', methods=['GET', 'POST'])
-@login_required
-def judges_score_task():
-    if not (current_user.is_judge or current_user.is_admin):
-        return abort(403)
-
-    team_id = request.args.get('team')
-    task_id = request.args.get('task')
-
-    # not enough info from score round
-    if team_id is None:
-        flash('Team not found')
-        return redirect(url_for('judges_score_round'))
-
-    if task_id is None:
-        flash('Task not found')
-        return redirect(url_for('judges_score_round'))
-
-    # check for practice mode
-    if team_id == '-1':
-        flash('Pratice mode enabled')
-        team = Practice()
-    else:
+        team_id = form.team.data
         team = Team.query.get(team_id)
+        score = form.points_scored()
 
-    # invalid team
-    if team is None:
-        flash('Team not found')
-        return redirect(url_for('judges_score_round'))
+        flash('Submitted successfully')
 
-    try:
-        task_id = int(task_id)
-        task_form = TASK_FORMS[task_id](request.values)
-        task_template = form_to_template(task_form)
-    except IndexError:
-        flash('Task not found')
-        return redirect(url_for('judges_score_round'))
+        if len(team.scored_attempts) == 3:
+            flash('Team has no more attempts remaining')
+        else:
+            if form.confirm.data == '1':
+                if score == int(form.score.data):
+                    setattr(team, 'attempt_{!s}'.format(attempt), score)
+                    db.session.commit()
 
-    attempts = Task.query.filter_by(task_id=task_id, team_id=team_id).all()
-    print(attempts)
+                    return redirect(url_for('judges_score_round'))
 
-    if len(attempts) >= 3:
-        flash('The team has already had 3 attempts at that task')
-        return redirect(url_for('judges_score_round'))
+            attempt = len(team.scored_attempts) + 1
 
-    if task_form.validate_on_submit():
-        attempt = len(attempts) + 1
-        score = task_form.points_scored()
+            if team.is_practice:
+                flash('Practice attempt')
+            else:
+                form.confirm.data = '1'
 
-        flash('Successfully submitted')
-        flash('Points scored: {0!s}'.format(score))
-        flash('Attempt: {0!s}'.format(attempt))
+            flash('Score: {!s}'.format(score))
 
-        task = Task(task_id=task_id, team_id=team_id, attempt=attempt, score=score)
-        db.session.add(task)
-        db.session.commit()
+            form.score.data = score
+            form.attempt.data = attempt
 
-        return redirect(url_for('judges_score_round'))
+            return render_template('judges/score_round.html', title='Score round',
+                                   form=form, confirm=True)
 
-    return render_template('judges/tasks/{0!s}.html'.format(task_template), title='Score task',
-                           form=task_form, team=team)
+    return render_template('judges/score_round.html', title='Score round', form=form)
 
 
 @app.route('/admin/')

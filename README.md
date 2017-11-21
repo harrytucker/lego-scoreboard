@@ -55,17 +55,18 @@ To halt the application, use `Ctrl+C`.
 - [ ] Use flask-bcrypt for password encryption.
 - [ ] Move maintenance and updates into separate file from README.
 - [ ] Add error handling to all forms
-    - [ ] Print out errors at top of form
-    - [ ] Add error class to relevant field
+    - [X] Print out errors at top of form
+    - [X] Add error class to relevant field
+    - [ ] Add styling to fields with errors
 - [ ] Implement yellow cards.
 - [ ] Implement red cards.
-- [ ] Save team points to the database
-    - [ ] Handle multiple attempts (up to 3)
-- [ ] Add CSS
+- [X] Save team points to the database
+    - [X] Handle multiple attempts (up to 3)
+- [ ] Add CSS (In progress)
 - [ ] Add JavaScript form helpers for rounds that have bonus points, e.g. disable checkboxes unless pre-requisites have been met.
 
 
-## Maintaince and Updates
+## Maintenance and Updates
 This application has been built with the idea that it will be passed on to future maintainers. For example, Flask was chosen because it is written in a commonly taught language and has a number of guides and help resources available.
 
 The following resources were used to create the original application which may be of use for future updates or answer questions about how certain parts work:

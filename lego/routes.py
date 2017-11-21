@@ -1,5 +1,8 @@
 # -----------------------------------------------------------------------------
+# Routing for the application.
 #
+# This is essentially the controllers for the application in terms of MVC,
+# but all in one.
 # -----------------------------------------------------------------------------
 
 from flask import render_template, flash, redirect, request, url_for, g, abort
@@ -103,21 +106,25 @@ def judges_score_round():
         team_id = form.team.data
         team = Team.query.get(team_id)
         score = form.points_scored()
+        attempt = len(team.scored_attempts) + 1
 
-        flash('Submitted successfully')
-
-        if len(team.scored_attempts) == 3:
+        if attempt > 3:
             flash('Team has no more attempts remaining')
         else:
             if form.confirm.data == '1':
+                # check if the score has changed before submitting, otherwise re-confirm
+                # note that this won't catch if the data changed but the overall score
+                # is the same, e.g. uncheck one task and check another
                 if score == int(form.score.data):
                     setattr(team, 'attempt_{!s}'.format(attempt), score)
                     db.session.commit()
 
+                    flash('Submitted for team: {!s}, score: {!s}, attempt: {!s}' \
+                          .format(team.name, score, attempt))
+
                     return redirect(url_for('judges_score_round'))
 
-            attempt = len(team.scored_attempts) + 1
-
+            # don't set confirm in the form if this is a practice attempt
             if team.is_practice:
                 flash('Practice attempt')
             else:

@@ -13,20 +13,21 @@ body {
 }
 
 .header {
-    margin: 0 auto;
-    padding: 20px;
+    height: 60px;
+    margin: 0 auto 20px;
+    padding: 0 20px;
     position: relative;
     width: 1000px;
 }
 
 .header .nav {
     display: inline-block;
-    height: 38px;
-    line-height: 38px;
+    height: 60px;
+    line-height: 60px;
     position: absolute;
     text-align: center;
-    top: 11px;
-    width: 38px;
+    top: 0;
+    width: 60px;
 }
 
 .header .nav:hover {
@@ -37,8 +38,7 @@ body {
     display: none;
     position: absolute;
     left: 0;
-    top: 38px;
-    width: 150px;
+    top: 60px;
     background-color: #ccc;
     text-align: left;
 }
@@ -55,12 +55,20 @@ body {
     line-height: 1rem;
 }
 
-.nav-link {
+.nav-link, .nav-sec-title {
     display: inline-block;
-    width: 150px;
-    padding: 5px 10px;
+    width: 180px;
+    padding: 15px 20px;
     text-decoration: none;
     color: inherit;
+}
+
+.nav-sec-title {
+    font-weight: bold;
+}
+
+.nav-sec-items .nav-link {
+    padding-left: 30px;
 }
 
 .nav-link:hover {
@@ -70,7 +78,8 @@ body {
 .header .page-logo {
     font-size: 2rem;
     font-weight: bold;
-    margin-bottom: 20px;
+    height: 60px;
+    line-height: 60px;
     text-align: center;
 }
 
@@ -95,13 +104,13 @@ body {
 
 .main section {
     border-bottom: 2px solid #222;
-    padding: 30px;
+    padding: 50px 30px;
 }
 
 .main section h2 {
     font-size: 1.4rem;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 .form-input > label {

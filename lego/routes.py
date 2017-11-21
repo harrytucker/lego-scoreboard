@@ -125,7 +125,14 @@ def judges_score_round():
 
             flash('Score: {!s}'.format(score))
 
-            form.score.data = score
+            # data submitted to the form overrides whatever we set as data here
+            # so we have to override that if something changed after the
+            # initial confirmation
+            if form.score.raw_data:
+                form.score.raw_data[0] = score
+            else:
+                form.score.data = score
+
             form.attempt.data = attempt
 
             return render_template('judges/score_round.html', title='Score round',

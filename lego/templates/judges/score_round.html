@@ -328,8 +328,34 @@
         {% endif %}
 
         <div class="form-submit">
-            <input type="submit" value="Submit" class="button submit-button">
+            <input type="submit" value="Calculate Score" id="calcScore" class="button submit-button">
+
+            {% if confirm %}
+                <input type="submit" value="Submit Score" id="submitScore" class="button submit-button">
+            {% endif %}
         </div>
     </form>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script type="application/javascript">
+(function ($) {
+    'use strict';
+
+    function init() {
+        var confirm = !!$('#submitScore').length,
+            $calcScore = $('#calcScore'),
+            $confirm = $('#confirm');
+
+        if (confirm) {
+            $calcScore.click(function (e) {
+                $confirm.val('0');
+            });
+        }
+    }
+
+    $(init)
+}(jQuery))
+</script>
 {% endblock %}

@@ -5,6 +5,8 @@
 # but all in one.
 # -----------------------------------------------------------------------------
 
+import os
+
 from flask import render_template, flash, redirect, request, url_for, g, abort
 from flask_login import login_user, logout_user, current_user, login_required
 
@@ -16,6 +18,27 @@ from lego.models import User, Team
 @app.before_request
 def before_request():
     g.user = current_user
+
+
+@app.context_processor
+def override_url_for():
+    return dict(url_for=dated_url_for)
+
+
+def dated_url_for(endpoint, **values):
+    """Append a cache buster to static assets.
+
+    Based on: <http://flask.pocoo.org/snippets/40/>
+    """
+    if endpoint == 'static':
+        filename = values.get('filename', None)
+
+        if filename:
+            file_path = os.path.join(app.root_path,
+                                     endpoint, filename)
+            values['q'] = int(os.stat(file_path).st_mtime)
+
+    return url_for(endpoint, **values)
 
 
 @app.errorhandler(403)
@@ -112,17 +135,16 @@ def judges_score_round():
             flash('Team has no more attempts remaining')
         else:
             if form.confirm.data == '1':
-                # check if the score has changed before submitting, otherwise re-confirm
-                # note that this won't catch if the data changed but the overall score
-                # is the same, e.g. uncheck one task and check another
-                if score == int(form.score.data):
-                    setattr(team, 'attempt_{!s}'.format(attempt), score)
-                    db.session.commit()
+                flash('Submit')
+                setattr(team, 'attempt_{!s}'.format(attempt), score)
+                db.session.commit()
 
-                    flash('Submitted for team: {!s}, score: {!s}, attempt: {!s}' \
-                          .format(team.name, score, attempt))
+                flash('Submitted for team: {!s}, score: {!s}, attempt: {!s}' \
+                      .format(team.name, score, attempt))
 
-                    return redirect(url_for('judges_score_round'))
+                return redirect(url_for('judges_score_round'))
+
+            flash('Calculate')
 
             # don't set confirm in the form if this is a practice attempt
             if team.is_practice:

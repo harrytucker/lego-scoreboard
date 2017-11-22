@@ -1,14 +1,13 @@
 # Lego Challenge
-## Setup
-Requirements:
+## Requirements
 - Python 3.4+
-- Pip - Should be installed with Python3.4.
-- SQLite 3 - Not required, but can be helpful for debugging database issues. Python3 supports it out the box.
-- gcc (SQLAlchemy is compiled from source).
+- Pip - Comes with Python 3.4+. Note that some older version no longer work so try and upgrade it to the most recent version if possible.
 
-Python3.3+ should provide access to the `venv` module for creating a virtual environment. However, some Linux distibutions tweaked the Python installation so you may need to install an additional package. Check your distibution for more details.
+Python3.3+ should provide access to the `venv` module for creating a virtual environment. However, some Linux distibutions tweaked the Python installation so you may need to install an additional
+package. Check your distibution for more details. For windows installations, it may be easier to avoid using a virtual envronment and installing the required Python dependencies globally.
 
-## Quickstart
+## Setup
+### Linux
 A script has been provided to set up the required environment for Linux distributions:
 ```
 $ git clone <repository>
@@ -32,22 +31,69 @@ $ flask generate-secret-key
 $ flask init
 ```
 
+### Windows
+For Windows users, run the following:
+```
+# Clone this repository using Git Bash or other Git tool
+git clone <repository>
 
-## Usage
+# Using cmd.exe
+cd <path\to\repository>
+
+# Experimental script for installing dependencies
+setup
+
+# Or manually install dependencies
+pip install -r requirements.txt
+set FLASK_APP=<path\to\repository>\lego\__init__.py
+set FLASK_DEBUG=1
+```
+
+Once you have installed the dependencies, copy `<path\to\repository>\lego\config.sample.py` to `<path\to\repository>\lego\config.py` and run the following:
+```
+# generate a secret key
+# copy this value into SECRET_KEY in your config.py
+flask generate-secret-key
+
+# create database and default users
+# you will be prompted for user passwords here
+flask init
+```
+
+## Using the Appication
+### Initialisation
+Once you have installed the dependencies, copy `<path\to\repository>\lego\config.sample.py` to `<path\to\repository>\lego\config.py` and run the following:
+```
+# generate a secret key
+# copy this value into SECRET_KEY in your config.py
+flask generate-secret-key
+
+# create database and default users
+# you will be prompted for user passwords here
+flask init
+```
+
+### Adding Teams
+To add the teams for the day to the database, run:
+```
+$ flask add-teams <path/to/teams.txt>
+```
+An example teams.txt file can be found at `teams_example.txt`. There should be one team per line.
+
+### Run the Application
 To run the application, simply run:
-```bash
+```
 $ flask run
 ```
 
 For windows, you may need to use:
-```bash
+```
 $ flask run --host=0.0.0.0
 ```
 
 To halt the application, use `Ctrl+C`.
 
 ## Todo
-- [ ] Implement checkpoints on tasks page.
 - [ ] Uncomment refresh tag on scoreboard page.
 - [ ] Log errors to a file see [[1](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vii-unit-testing)].
 - [ ] Add logging where appropriate.
@@ -64,26 +110,5 @@ To halt the application, use `Ctrl+C`.
     - [X] Handle multiple attempts (up to 3)
 - [ ] Add CSS (In progress)
 - [ ] Add JavaScript form helpers for rounds that have bonus points, e.g. disable checkboxes unless pre-requisites have been met.
+- [ ] Add other tasks to complete here.
 
-
-## Maintenance and Updates
-This application has been built with the idea that it will be passed on to future maintainers. For example, Flask was chosen because it is written in a commonly taught language and has a number of guides and help resources available.
-
-The following resources were used to create the original application which may be of use for future updates or answer questions about how certain parts work:
-
-- [The Flask Mega-Tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world)
-
-Flask also provides a number of quickstart guides for both the main Flask module and it's supported extensions. Many of the extensions wrap pre-existing modules. The following pages may also be of use when updating the code:
-
-- [Flask](http://flask.pocoo.org/) ([Quickstart](http://flask.pocoo.org/docs/0.12/quickstart/))
-- [Flask-SQLAlchemy](http://flask-sqlalchemy.pocoo.org/2.3/) ([Quickstart](http://flask-sqlalchemy.pocoo.org/2.3/quickstart/))
-- [Flask-Login](https://flask-login.readthedocs.io/en/latest/)
-- [Flask-WTF](https://flask-wtf.readthedocs.io/en/stable/) ([Quickstart](http://flask-wtf.readthedocs.io/en/stable/quickstart.html))
-- [SQLAlchemy](https://www.sqlalchemy.org/)
-- [WTForms](https://wtforms.readthedocs.io/en/latest/)
-- [Jinja2](http://jinja.pocoo.org/docs/2.9/)
-- [Click](http://click.pocoo.org/5/)
-
-## Notes
-- [Challenge guide](https://firstinspiresst01.blob.core.windows.net/fll/hydro-dynamics-challenge-guide-a4.pdf)
-- If you see an error similar to `AttributeError: 'module' object has no attribute 'config'`, just restart the application. This happens when another error occurred and the initial application configuration gets stuck.

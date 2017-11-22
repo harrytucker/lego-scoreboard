@@ -11,6 +11,7 @@ class Team(db.Model):
     __tablename__ = 'team'
 
     id = db.Column(db.Integer, primary_key=True)
+    number = db.Column(db.Integer, unique=True, nullable=False)
     name = db.Column(db.String(80), index=True, unique=True, nullable=False)
     is_practice = db.Column(db.Boolean, default=False, nullable=False)
     attempt_1 = db.Column(db.Integer, nullable=True)

@@ -29,7 +29,7 @@ def init_app():
     judge_user = User(username=judge, password=judge_pword, is_judge=True)
     db.session.add(judge_user)
 
-    practice_team = Team(name='Practice', is_practice=True)
+    practice_team = Team(number=-1, name='Practice', is_practice=True)
     db.session.add(practice_team)
 
     db.session.commit()
@@ -66,14 +66,24 @@ def generate_secret_key():
 @click.argument('file', type=click.File())
 def add_teams(file):
     for line in file:
-        team_name = line.strip()
+        line = line.strip()
 
-        if not team_name:
+        if not line:
             continue
 
-        click.echo('Adding team: {!s}'.format(team_name))
+        number, name = line.split(',', 2)
+        name = name.strip()
 
-        team = Team(name=team_name)
+        try:
+            number = int(number.strip())
+            assert number > 0
+        except (ValueError, AssertionError):
+            click.echo('Invalid number: {!s}'.format(number))
+            return
+
+        click.echo('Adding team: {!s}, number: {!s}'.format(name, number))
+
+        team = Team(number=number, name=name)
         db.session.add(team)
 
     db.session.commit()

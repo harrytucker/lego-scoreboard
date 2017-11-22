@@ -5,6 +5,7 @@
 # but all in one.
 # -----------------------------------------------------------------------------
 
+from functools import cmp_to_key
 import os
 
 from flask import render_template, flash, redirect, request, url_for, g, abort
@@ -94,8 +95,25 @@ def logout():
 
 @app.route('/scoreboard')
 def scoreboard():
-    return render_template('scoreboard.html', title='Scoreboard',
-                           qualifying=[], not_qualifying=[])
+    teams = Team.query.all()
+
+    def compare(team_1, team_2):
+        if team_1.highest_score > team_2.highest_score:
+            return 1
+
+        if team_1.highest_score < team_2.highest_score:
+            return -1
+
+        return 0
+
+    teams = sorted(teams, key=cmp_to_key(compare))
+
+    top = teams[:8]
+    second = teams[8:16]
+    third = teams[16:]
+
+    return render_template('scoreboard_bristol.html', title='Scoreboard',
+                           top_eight=top, second_eight=second, third_eight=third)
 
 
 @app.route('/tasks')

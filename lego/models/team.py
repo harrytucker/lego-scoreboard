@@ -38,3 +38,7 @@ class Team(db.Model):
             ret.append(self.attempt_3)
 
         return ret
+
+    @hybrid_property
+    def highest_score(self):
+        return max(self.attempt_1 or 0, self.attempt_2 or 0, self.attempt_3 or 0)

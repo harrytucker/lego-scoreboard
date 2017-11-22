@@ -62,7 +62,8 @@ def generate_secret_key():
 
 
 @app.cli.command('add-teams',
-    short_help='Add teams to the database from a file. The file should contain one team per line.')
+    short_help='Add teams to the database from a file.',
+    help='Add teams to the database from a file. The file should contain one team per line.')
 @click.argument('file', type=click.File())
 def add_teams(file):
     for line in file:
@@ -81,10 +82,20 @@ def add_teams(file):
             click.echo('Invalid number: {!s}'.format(number))
             return
 
-        click.echo('Adding team: {!s}, number: {!s}'.format(name, number))
+        click.echo('Adding team: {!s} (number: {!s}).'.format(name, number))
 
         team = Team(number=number, name=name)
         db.session.add(team)
 
     db.session.commit()
-    click.echo('Teams successfully added')
+    click.echo('Teams successfully added.')
+
+@app.cli.command('reset-teams',
+    short_help='Remove all teams from the database.')
+def reset_teams():
+    click.echo('All teams will be deleted from the database.')
+
+    if click.confirm('Do you wish to continue?', abort=True):
+        db.session.query(Team).delete()
+        db.session.commit()
+        click.echo('Teams deleted.')

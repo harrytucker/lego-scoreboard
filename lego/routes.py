@@ -147,7 +147,7 @@ def judges_score_round():
     form = ScoreRoundForm()
 
     form.team.choices = [('', '--Select team--')]
-    form.team.choices += [(str(t.id), t.name) for t in Team.query.order_by('name')]
+    form.team.choices += [(str(t.id), t.name) for t in Team.query.filter_by(active = True).order_by('name')]
 
     if form.validate_on_submit():
         team_id = form.team.data

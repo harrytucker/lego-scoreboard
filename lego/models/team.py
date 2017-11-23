@@ -13,6 +13,7 @@ class Team(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     number = db.Column(db.Integer, unique=True, nullable=False)
     name = db.Column(db.String(80), index=True, unique=True, nullable=False)
+    active = db.Column(db.Boolean, default=True, nullable=False)
     is_practice = db.Column(db.Boolean, default=False, nullable=False)
     attempt_1 = db.Column(db.Integer, nullable=True)
     attempt_2 = db.Column(db.Integer, nullable=True)

@@ -139,9 +139,20 @@ strong {
 }
 
 .input-select,
-.input-number {
+.input-number,
+.input-text {
     font-size: 1rem;
     padding: 5px;
+}
+
+.input-text,
+.input-select {
+    border: 1px solid #aaa;
+}
+
+.input-text:hover,
+.input-select:hover {
+    border: 1px solid #777;
 }
 
 .input-radio input {
@@ -156,6 +167,16 @@ strong {
 .input-checkbox {
     height: 16px;
     width: 16px;
+}
+
+.input-select.input-error,
+.input-text.input-error {
+    background-color: #ffdede;
+}
+
+.input-select.input-error:focus,
+.input-text.input-error {
+    outline-color: #ed2939
 }
 
 .form-submit {

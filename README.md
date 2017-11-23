@@ -100,17 +100,27 @@ To halt the application, use `Ctrl+C`.
 - [ ] Add unit testing (above and 2nd from last part).
 - [ ] Use flask-bcrypt for password encryption.
 - [ ] Move maintenance and updates into separate file from README.
-- [ ] Add error handling to all forms
+- [X] Add error handling to all forms
     - [X] Print out errors at top of form
     - [X] Add error class to relevant field
-    - [ ] Add styling to fields with errors
+    - [X] Add styling to fields with errors
 - [ ] Implement yellow cards.
 - [ ] Implement red cards.
-- [X] Save team points to the database
-    - [X] Handle multiple attempts (up to 3)
-- [ ] Add CSS (In progress)
+- [X] Save team points to the database.
+    - [X] Handle multiple attempts (up to 3).
+- [ ] Add CSS (In progress).
     - [X] Pad/Highlight nav icon only rather than entire nav list.
     - [ ] Use columns for scoreboard rather than floats.
+    - [ ] Center fields on login form.
 - [ ] Add JavaScript form helpers for rounds that have bonus points, e.g. disable checkboxes unless pre-requisites have been met.
+- [ ] Admin pages.
+    - [ ] Correct team name.
+    - [ ] Correct team number.
+    - [ ] Adjust score.
+    - [ ] Remove score.
+- [ ] Finish implementing stages.
+    - [ ] Persist current stage to a file.
+    - [ ] Load stage from file on app start-up.
+    - [ ] Add mechanism for increasing the stage through the UI (while the app is running).
 - [ ] Add other tasks to complete here.
 

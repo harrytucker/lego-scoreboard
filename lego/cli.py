@@ -36,6 +36,22 @@ def init_app():
     click.echo('Default users created.')
     click.echo('Practice team created.')
 
+    stage_file_path = os.path.join(os.path.dirname(__file__), 'tmp', '.stage')
+
+    try:
+        with open(stage_file_path) as fh:
+            stage = int(fh.read().strip())
+    except IOError:
+        click.echo('No stage found, setting to: round.')
+        with open(stage_file_path, 'w') as fh:
+            fh.write('0')
+            stage = 0
+
+    stages = ('round', 'quarter_final', 'semi_final', 'final')
+    stage = stages[stage]
+
+    click.echo('Stage: {!s}'.format(stage))
+
 
 def _request_password(user: str, default: str):
     pword = click.prompt('Enter password for {!s}'.format(user), hide_input=True, default=default)

@@ -95,7 +95,7 @@ def logout():
 
 @app.route('/scoreboard')
 def scoreboard():
-    teams = Team.query.all()
+    teams = Team.query.filter_by(active=True, is_practice=False).all()
 
     def compare(team_1, team_2):
         if team_1.highest_score > team_2.highest_score:
@@ -108,12 +108,18 @@ def scoreboard():
 
     teams = sorted(teams, key=cmp_to_key(compare))
 
-    top = teams[:8]
-    second = teams[8:16]
-    third = teams[16:]
+    # TODO: fix this to be round 1
+    if True:
+        top = teams[:8]
+        second = teams[8:16]
+        third = teams[16:]
 
-    return render_template('scoreboard_bristol_round_1.html', title='Scoreboard',
-                           top_eight=top, second_eight=second, third_eight=third)
+        return render_template('scoreboard_bristol.html', title='Scoreboard', round=True,
+                               top_eight=top, second_eight=second, third_eight=third)
+
+    # TODO: Quarter finals (6 teams, 1 attept)
+    # TODO: Semi finals (4 teams, 1 attempt)
+    # TODO: Finals (2 teams, 2 attempts)
 
 
 @app.route('/tasks')

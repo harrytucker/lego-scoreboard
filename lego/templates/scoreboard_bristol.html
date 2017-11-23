@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<!-- <meta http-equiv="refresh" content="30"> -->
+{% endblock %}
+
+{% block main %}
+<table class="center">
+    <tr>
+        <th>Rank</th>
+        <th>Team Name</th>
+
+        {% if round %}
+            <th>Round 1</th>
+            <th>Round 2</th>
+            <th>Round 3</th>
+
+        {% elif quarter_final or semi_final %}
+            <th>Score</th>
+
+        {% elif final %}
+            <th>Round 1</th>
+            <th>Round 2</th>
+        {% endif %}
+    </tr>
+    {% for team in top_eight %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ team.name }}</td>
+
+            {% if round %}
+                {% for attempt in team.attempts %}
+                    {% if not attempt %}
+                        <td>-</td>
+                    {% elif attempt == team.highest_score %}
+                        <td>
+                            <strong>{{ attempt }}</strong>
+                        </td>
+                    {% else %}
+                        <td>{{ attempt }}</td>
+                    {% endif %}
+                {% endfor %}
+
+            {% elif quarter_final or semi_final %}
+                {% if not team.attempt_1 %}
+                        <td>-</td>
+                {% else %}
+                    <td>{{ team.attempt_1 }}</td>
+                {% endif %}
+
+            {% elif final %}
+                {% for attempt in (team.attempt_1, team.attempt_2) %}
+                    {% if not attempt %}
+                        <td>-</td>
+                    {% elif attempt == team.highest_score %}
+                        <td>
+                            <strong>{{ attempt }}</strong>
+                        </td>
+                    {% else %}
+                        <td>{{ attempt }}</td>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </tr>
+    {% endfor %}
+</table>
+
+{% if round %}
+    <table class="left">
+        <tr>
+            <th>Rank</th>
+            <th>Team Name</th>
+            <th>Round 1</th>
+            <th>Round 2</th>
+            <th>Round 3</th>
+        </tr>
+
+        {% for team in second_eight %}
+            <tr>
+                <td>{{ loop.index + 8 }}</td>
+                <td>{{ team.name }}</td>
+
+                {% for attempt in team.attempts %}
+                    {% if not attempt %}
+                        <td>-</td>
+                    {% elif attempt == team.highest_score %}
+                        <td>
+                            <strong>{{ attempt }}</strong>
+                        </td>
+                    {% else %}
+                        <td>{{ attempt }}</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+
+    <table class="right">
+        <tr>
+            <th>Rank</th>
+            <th>Team Name</th>
+            <th>Round 1</th>
+            <th>Round 2</th>
+            <th>Round 3</th>
+        </tr>
+
+        {% for team in third_eight %}
+            <tr>
+                <td>{{ loop.index + 16 }}</td>
+                <td>{{ team.name }}</td>
+
+                {% for attempt in team.attempts %}
+                    {% if not attempt %}
+                        <td>-</td>
+                    {% elif attempt == team.highest_score %}
+                        <td>
+                            <strong>{{ attempt }}</strong>
+                        </td>
+                    {% else %}
+                        <td>{{ attempt }}</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+{% endif %}
+{% endblock %}

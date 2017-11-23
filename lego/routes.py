@@ -99,10 +99,10 @@ def scoreboard():
 
     def compare(team_1, team_2):
         if team_1.highest_score > team_2.highest_score:
-            return 1
+            return -1
 
         if team_1.highest_score < team_2.highest_score:
-            return -1
+            return 1
 
         return 0
 
@@ -112,7 +112,7 @@ def scoreboard():
     second = teams[8:16]
     third = teams[16:]
 
-    return render_template('scoreboard_bristol.html', title='Scoreboard',
+    return render_template('scoreboard_bristol_round_1.html', title='Scoreboard',
                            top_eight=top, second_eight=second, third_eight=third)
 
 

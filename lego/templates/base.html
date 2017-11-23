@@ -5,6 +5,7 @@
         <title>{{ title }} - 2018 FIRST Lego League Robotics Challenge</title>
 
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='reset.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 
         {% block head %}{% endblock %}
@@ -13,8 +14,10 @@
         <header class="header">
             <nav class="nav">
                 <ul class="nav-list">
-                    <li class="nav-item-icon">
-                        <span class="nav-icon">NAV</span>
+                    <li class="nav-item-list">
+                        <span class="nav-icon">
+                            <i class="fa fa-bars"></i>
+                        </span>
                         <ul class="nav-items">
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url_for('home') }}">Home</a>

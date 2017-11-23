@@ -216,7 +216,7 @@ class ScoreRoundForm(FlaskForm):
         m16_score = int(self.m16_part_1.data)
         m16_score += int(self.m16_part_2.data)
         if int(self.m16_part_2.data) == 20:
-            m16_score += int(self.m16_binus.value if self.m16_bonus.data else 0)
+            m16_score += int(self.m16_bonus.value if self.m16_bonus.data else 0)
         score += m16_score
 
         m17_score = int(self.m17_complete.data)

@@ -109,6 +109,8 @@ To halt the application, use `Ctrl+C`.
 - [X] Save team points to the database
     - [X] Handle multiple attempts (up to 3)
 - [ ] Add CSS (In progress)
+    - [X] Pad/Highlight nav icon only rather than entire nav list.
+    - [ ] Use columns for scoreboard rather than floats.
 - [ ] Add JavaScript form helpers for rounds that have bonus points, e.g. disable checkboxes unless pre-requisites have been met.
 - [ ] Add other tasks to complete here.
 

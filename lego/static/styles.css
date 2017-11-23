@@ -12,6 +12,10 @@ body {
     line-height: 20px;
 }
 
+strong {
+    font-weight: bold;
+}
+
 .header {
     height: 60px;
     margin: 0 auto 20px;
@@ -22,16 +26,22 @@ body {
 
 .header .nav {
     display: inline-block;
+    position: absolute;
+    top: 0;
+}
+
+.header .nav .nav-icon {
+    color: #222;
+    display: inline-block;
+    font-size: 1.5rem;
     height: 60px;
     line-height: 60px;
-    position: absolute;
     text-align: center;
-    top: 0;
     width: 60px;
 }
 
-.header .nav:hover {
-    background-color: #ccc;
+.header .nav:hover .nav-icon {
+    background-color: #ddd;
 }
 
 .header .nav .nav-items {
@@ -39,7 +49,7 @@ body {
     position: absolute;
     left: 0;
     top: 60px;
-    background-color: #ccc;
+    background-color: #ddd;
     text-align: left;
 }
 
@@ -72,7 +82,7 @@ body {
 }
 
 .nav-link:hover {
-    background-color: #aaa;
+    background-color: #bbb;
 }
 
 .header .page-logo {
@@ -167,6 +177,7 @@ body {
 table {
     border: 1px solid #555;
     border-collapse: collapse;
+    margin-bottom: 30px;
 }
 
 table tr:nth-child(odd) {
@@ -184,4 +195,17 @@ table th {
     background-color: #bbb;
     font-weight: bold;
     text-align: center;
+}
+
+table.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+table.left {
+    float: left;
+}
+
+table.right {
+    float: right;
 }

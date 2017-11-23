@@ -95,9 +95,9 @@ To halt the application, use `Ctrl+C`.
 
 ## Todo
 - [ ] Uncomment refresh tag on scoreboard page.
-- [ ] Log errors to a file see [[1](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vii-unit-testing)].
+- [X] Log errors to a file.
 - [ ] Add logging where appropriate.
-- [ ] Add unit testing (above and 2nd from last part).
+- [ ] Add unit testing ([[1](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vii-unit-testing)] and 2nd from last part).
 - [ ] Use flask-bcrypt for password encryption.
 - [ ] Move maintenance and updates into separate file from README.
 - [X] Add error handling to all forms
@@ -114,6 +114,7 @@ To halt the application, use `Ctrl+C`.
     - [ ] Center fields on login form.
 - [ ] Add JavaScript form helpers for rounds that have bonus points, e.g. disable checkboxes unless pre-requisites have been met.
 - [ ] Admin pages.
+    - [X] Add routes
     - [ ] Correct team name.
     - [ ] Correct team number.
     - [ ] Adjust score.
@@ -123,8 +124,6 @@ To halt the application, use `Ctrl+C`.
     - [ ] Load stage from file on app start-up.
     - [ ] Add mechanism for increasing the stage through the UI (while the app is running).
 - [ ] Dump db to file when moving stages to ensure nothing is lost.
-    - [How to create and restore a backup from SqlAlchemy?
-
-](https://stackoverflow.com/questions/2786664/how-to-create-and-restore-a-backup-from-sqlalchemy)
+    - [How to create and restore a backup from SqlAlchemy?](https://stackoverflow.com/questions/2786664/how-to-create-and-restore-a-backup-from-sqlalchemy)
 - [ ] Add other tasks to complete here.
 

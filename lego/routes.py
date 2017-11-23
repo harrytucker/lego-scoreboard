@@ -42,6 +42,17 @@ def dated_url_for(endpoint, **values):
     return url_for(endpoint, **values)
 
 
+@app.after_request
+def after_request(response):
+    app.logger.info('%s %s %s %s %s',
+                    request.remote_addr,
+                    request.method,
+                    request.scheme,
+                    request.full_path,
+                    response.status)
+    return response
+
+
 @app.errorhandler(403)
 def page_not_found(error):
     return render_template('errors/403.html', title='Permission denied'), 403
@@ -52,8 +63,9 @@ def page_not_found(error):
     return render_template('errors/404.html', title='Page not found'), 404
 
 
-@app.errorhandler(500)
-def internal_server_error(error):
+@app.errorhandler(Exception)
+def internal_server_error(exc):
+    app.logger.exception(exc)
     return render_template('errors/500.html', title='Internal error'), 500
 
 
@@ -107,9 +119,9 @@ def scoreboard():
         return 0
 
     teams = sorted(teams, key=cmp_to_key(compare))
+    stage = 0
 
-    # TODO: fix this to be round 1
-    if True:
+    if stage == 0:
         top = teams[:8]
         second = teams[8:16]
         third = teams[16:]
@@ -117,25 +129,20 @@ def scoreboard():
         return render_template('scoreboard_bristol.html', title='Scoreboard', round=True,
                                top_eight=top, second_eight=second, third_eight=third)
 
-    # TODO: Quarter finals (6 teams, 1 attept)
-    # TODO: Semi finals (4 teams, 1 attempt)
-    # TODO: Finals (2 teams, 2 attempts)
+    # quarter finals
+    if stage == 2:
+        return render_template('scoreboard_bristol.html', title='Scoreboard - Quarter Final',
+                               quarter_final=True, top_eight=teams)
 
+    # semi final
+    if stage == 3:
+        return render_template('scoreboard_bristol.html', title='Scoreboard - Semi Final',
+                               semi_final=True, top_eight=teams)
 
-@app.route('/tasks')
-def tasks():
-    return render_template('tasks.html', title='Completed Tasks')
-
-
-@app.route('/judges')
-@app.route('/judges/')
-@app.route('/judges/home')
-@login_required
-def judges_home():
-    if not (current_user.is_judge or current_user.is_admin):
-        return abort(403)
-
-    return render_template('judges/home.html', title='Judges Home')
+    # final
+    if stage == 4:
+        return render_template('scoreboard_bristol.html', title='Scoreboard - Final',
+                               final=True, top_eight=teams)
 
 
 @app.route('/judges/score_round', methods=['GET', 'POST'])
@@ -146,8 +153,9 @@ def judges_score_round():
 
     form = ScoreRoundForm()
 
+    teams = Team.query.filter_by(active=True).order_by('id')
     form.team.choices = [('', '--Select team--')]
-    form.team.choices += [(str(t.id), t.name) for t in Team.query.filter_by(active = True).order_by('name')]
+    form.team.choices += [(str(t.id), t.name) for t in teams]
 
     if form.validate_on_submit():
         team_id = form.team.data
@@ -222,10 +230,36 @@ def admin_teams_new():
     return 'Admin/Teams/New'
 
 
-@app.route('/admin/teams/<name>/edit')
+@app.route('/admin/teams/edit')
 @login_required
 def admin_teams_edit():
     if not current_user.is_admin:
         return abort(403)
 
     return 'Admin/Teams/Edit'
+
+@app.route('/admin/teams/score')
+@login_required
+def admins_teams_score():
+    if not current_user.is_admin:
+        return abort(403)
+
+    return 'Admin/Teams/Score'
+
+
+@app.route('/admin/teams/score/edit')
+@login_required
+def admins_teams_score():
+    if not current_user.is_admin:
+        return abort(403)
+
+    return 'Admin/Teams/Score/Edit'
+
+
+@app.route('/admin/teams/score/reset')
+@login_required
+def admins_teams_score():
+    if not current_user.is_admin:
+        return abort(403)
+
+    return 'Admin/Teams/Score/Reset'

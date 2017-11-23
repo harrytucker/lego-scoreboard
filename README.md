@@ -122,5 +122,9 @@ To halt the application, use `Ctrl+C`.
     - [ ] Persist current stage to a file.
     - [ ] Load stage from file on app start-up.
     - [ ] Add mechanism for increasing the stage through the UI (while the app is running).
+- [ ] Dump db to file when moving stages to ensure nothing is lost.
+    - [How to create and restore a backup from SqlAlchemy?
+
+](https://stackoverflow.com/questions/2786664/how-to-create-and-restore-a-backup-from-sqlalchemy)
 - [ ] Add other tasks to complete here.
 

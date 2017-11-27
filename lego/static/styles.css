@@ -242,3 +242,17 @@ table.left {
 table.right {
     float: right;
 }
+
+.login-form .form-input {
+    text-align: center;
+}
+
+.login-form .form-input label,
+.login-form .form-input .input-text {
+    margin: 0 auto 10px;
+    width: 200px;
+}
+
+.login-form .form-input label {
+    text-align: left;
+}

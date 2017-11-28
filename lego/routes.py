@@ -232,46 +232,46 @@ def judges_score_round():
 
 
 @app.route('/admin/')
-@app.route('/admin/display_teams')
+@app.route('/admin/home')
 @login_required
-def admin_display_teams():
+def admin_home():
     if not current_user.is_admin:
         return abort(403)
 
-    return render_template('admin/display_teams.html', title='Teams')
+    return render_template('admin/home.html', title='Display Teams')
 
 
-@app.route('/admin/new_team')
+@app.route('/admin/team/new')
 @login_required
-def admin_new_team():
+def admin_team_new():
     if not current_user.is_admin:
         return abort(403)
 
-    return render_template('admin/new_team.html', title='Add New Team')
+    return render_template('admin/team/new.html', title='Add New Team')
 
 
-@app.route('/admin/edit_team')
+@app.route('/admin/team/details/edit')
 @login_required
-def admin_edit_team_details():
+def admin_team_details_edit():
     if not current_user.is_admin:
         return abort(403)
 
-    return render_template('admin/edit_team_details.html', title='Edit a Team Details')
+    return render_template('admin/team/details/edit.html', title='Edit a Team Details')
 
 
-@app.route('/admin/edit_team_score')
+@app.route('/admin/team/score/edit')
 @login_required
-def admin_edit_team_score():
+def admin_team_score_edit():
     if not current_user.is_admin:
         return abort(403)
 
-    return render_template('admin/edit_team_score.html', title='Edit a Team Score')
+    return render_template('admin/team/score/edit.html', title='Edit a Team Score')
 
 
-@app.route('/admin/reset_team_score.html')
+@app.route('/admin/team/score/reset')
 @login_required
-def admins_reset_team_score():
+def admin_team_score_reset():
     if not current_user.is_admin:
         return abort(403)
 
-    return render_template('admin/reset_team_score.html', title='Reset a Team Score')
+    return render_template('admin/team/score/reset.html', title='Reset a Team Score')

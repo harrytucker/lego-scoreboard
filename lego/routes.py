@@ -7,6 +7,8 @@
 
 from functools import cmp_to_key
 import os
+import re
+import unicodedata
 
 from flask import render_template, flash, redirect, request, url_for, g, abort
 from flask_login import login_user, logout_user, current_user, login_required
@@ -51,6 +53,33 @@ def after_request(response):
                     request.full_path,
                     response.status)
     return response
+
+
+@app.template_filter('slugify')
+def slugify(value: str):
+    """Normalizes string, converts to lowercase, removes non-alpha characters,
+    and converts spaces to hyphens.
+
+    Based on: <https://gist.github.com/berlotto/6295018>.
+    """
+    strip_re = re.compile(r'[^\w\s-]')
+    hyphenate_re = re.compile(r'[-\s]+')
+
+    app.logger.info('[slugify] value: %s (%s)', str(value), type(value))
+    normalised_value = str(unicodedata.normalize('NFKD', value))
+    app.logger.info('[slugify] normalised value: %s (%s)', str(normalised_value), type(normalised_value))
+    strip_value = strip_re.sub('', str(normalised_value)).strip().lower()
+    app.logger.info('[slugify] strip value: %s (%s)', str(strip_value), type(strip_value))
+    hyphenate_value = hyphenate_re.sub('-', strip_value)
+
+    return hyphenate_value
+
+
+@app.template_filter('slugify')
+def _slugify(string):
+    if not string:
+        return ""
+    return slugify(string)
 
 
 @app.errorhandler(403)

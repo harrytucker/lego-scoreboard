@@ -243,16 +243,20 @@ table.right {
     float: right;
 }
 
+.edit-team-form .form-input,
 .login-form .form-input {
     text-align: center;
 }
 
+.edit-team-form .form-input label,
+.edit-team-form .form-input .input-text,
 .login-form .form-input label,
 .login-form .form-input .input-text {
     margin: 0 auto 10px;
     width: 200px;
 }
 
+.edit-team-form .form-input label,
 .login-form .form-input label {
     text-align: left;
 }

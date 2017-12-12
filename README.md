@@ -115,8 +115,8 @@ To halt the application, use `Ctrl+C`.
 - [ ] Add JavaScript form helpers for rounds that have bonus points, e.g. disable checkboxes unless pre-requisites have been met.
 - [ ] Admin pages.
     - [X] Add routes
-    - [ ] Correct team name.
-    - [ ] Correct team number.
+    - [X] Correct team name.
+    - [X] Correct team number.
     - [ ] Adjust score.
     - [ ] Remove score.
 - [ ] Finish implementing stages.

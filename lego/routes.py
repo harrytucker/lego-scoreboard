@@ -12,9 +12,10 @@ import unicodedata
 
 from flask import render_template, flash, redirect, request, url_for, g, abort
 from flask_login import login_user, logout_user, current_user, login_required
+from sqlalchemy.exc import IntegrityError
 
 from lego import app, db, lm
-from lego.forms import LoginForm, ScoreRoundForm
+from lego.forms import LoginForm, ScoreRoundForm, EditTeamForm
 from lego.models import User, Team
 
 
@@ -244,10 +245,12 @@ def admin_team():
     if not current_user.is_admin:
         return abort(403)
 
-    return render_template('admin/team.html', title='Display Teams')
+    teams = Team.query.filter_by(is_practice=False).order_by(Team.id)
+
+    return render_template('admin/team.html', title='Teams', teams=teams)
 
 
-@app.route('/admin/team/new')
+@app.route('/admin/team/new', methods=['GET', 'POST'])
 @login_required
 def admin_team_new():
     if not current_user.is_admin:
@@ -256,27 +259,50 @@ def admin_team_new():
     return render_template('admin/team_new.html', title='Add New Team')
 
 
-@app.route('/admin/team/details/edit')
+@app.route('/admin/team/<int:id>/edit', methods=['GET', 'POST'])
 @login_required
-def admin_team_details_edit():
+def admin_team_edit(id: int):
     if not current_user.is_admin:
         return abort(403)
 
-    return render_template('admin/team_details_edit.html', title='Edit a Team Details')
+    team = Team.query.filter_by(id=id).first()
+    form = EditTeamForm()
+
+    if form.validate_on_submit():
+        try:
+            team.number = form.number.data
+            team.name = form.name.data
+            db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
+            flash('The name or number requested is already in use. Please use another one.')
+        except Exception as e:
+            db.session.rollback()
+            flash('An unknown error occurred. See the error logs for more information.')
+        else:
+            flash('Team details successfully updated')
+            return redirect(url_for('admin_team'))
 
 
-@app.route('/admin/team/score/edit')
+    form.id.data = team.id
+    form.name.data = team.name
+    form.number.data = team.number
+
+    return render_template('admin/team_edit.html', title='Edit Team', form=form)
+
+
+@app.route('/admin/team/<int:id>/score/edit', methods=['GET', 'POST'])
 @login_required
-def admin_team_score_edit():
+def admin_team_score_edit(id: int):
     if not current_user.is_admin:
         return abort(403)
 
     return render_template('admin/team_score_edit.html', title='Edit a Team Score')
 
 
-@app.route('/admin/team/score/reset')
+@app.route('/admin/team/<int:id>/score/reset', methods=['GET', 'POST'])
 @login_required
-def admin_team_score_reset():
+def admin_team_score_reset(id: int):
     if not current_user.is_admin:
         return abort(403)
 

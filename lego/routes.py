@@ -62,6 +62,9 @@ def slugify(value: str):
 
     Based on: <https://gist.github.com/berlotto/6295018>.
     """
+    if not value:
+        return ''
+
     strip_re = re.compile(r'[^\w\s-]')
     hyphenate_re = re.compile(r'[-\s]+')
 
@@ -73,13 +76,6 @@ def slugify(value: str):
     hyphenate_value = hyphenate_re.sub('-', strip_value)
 
     return hyphenate_value
-
-
-@app.template_filter('slugify')
-def _slugify(string):
-    if not string:
-        return ""
-    return slugify(string)
 
 
 @app.errorhandler(403)
@@ -150,28 +146,38 @@ def scoreboard():
     teams = sorted(teams, key=cmp_to_key(compare))
     stage = 0
 
+    # TODO: swap the blow with this
+    # if app.config['LEGO_APP_TYPE'] in ('bristol', 'uk'):
+    #     template = 'scoreboard_{!s}.html'.format(app.config['LEGO_APP_TYPE'])
+
+    if app.config['LEGO_APP_TYPE'] == 'bristol':
+        template = 'scoreboard_bristol.html'
+    else:
+        raise Exception('Unsupported value for LEGO_APP_TYPE: {!s}' \
+                        .format(app.config['LEGO_APP_TYPE']))
+
     if stage == 0:
         top = teams[:8]
         second = teams[8:16]
         third = teams[16:]
 
         return render_template('scoreboard_bristol.html', title='Scoreboard', round=True,
-                               top_eight=top, second_eight=second, third_eight=third)
+                               first=top, second=second, third=third)
 
     # quarter finals
     if stage == 2:
         return render_template('scoreboard_bristol.html', title='Scoreboard - Quarter Final',
-                               quarter_final=True, top_eight=teams)
+                               quarter_final=True, first=teams)
 
     # semi final
     if stage == 3:
         return render_template('scoreboard_bristol.html', title='Scoreboard - Semi Final',
-                               semi_final=True, top_eight=teams)
+                               semi_final=True, first=teams)
 
     # final
     if stage == 4:
         return render_template('scoreboard_bristol.html', title='Scoreboard - Final',
-                               final=True, top_eight=teams)
+                               final=True, first=teams)
 
 
 @app.route('/judges/score_round', methods=['GET', 'POST'])

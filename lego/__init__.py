@@ -1,16 +1,23 @@
-# -----------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------------------
 #
-# -----------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------------------
 
 import logging
 from logging.handlers import RotatingFileHandler
 import os
+import sys
 
 from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 
-import lego.config as config
+# use a helpful error message here as it can be a bit confusing otherwise
+try:
+    import lego.config as config
+except ImportError:
+    logging.error('Could not import config module. Please ensure you have copied '
+                  'config.sample.py to config.py as detailed in the setup instructions.')
+    sys.exit(1)
 
 app = Flask(__name__)
 app.config.from_object(config)

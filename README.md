@@ -111,7 +111,7 @@ To halt the application, use `Ctrl+C`.
 - [ ] Add CSS (In progress).
     - [X] Pad/Highlight nav icon only rather than entire nav list.
     - [ ] Use columns for scoreboard rather than floats.
-    - [ ] Center fields on login form.
+    - [X] Center fields on login form.
 - [ ] Add JavaScript form helpers for rounds that have bonus points, e.g. disable checkboxes unless pre-requisites have been met.
 - [ ] Admin pages.
     - [X] Add routes
@@ -125,5 +125,37 @@ To halt the application, use `Ctrl+C`.
     - [ ] Add mechanism for increasing the stage through the UI (while the app is running).
 - [ ] Dump db to file when moving stages to ensure nothing is lost.
     - [How to create and restore a backup from SqlAlchemy?](https://stackoverflow.com/questions/2786664/how-to-create-and-restore-a-backup-from-sqlalchemy)
+- [ ] Implement Bristol scoreboard.
+    - First round: 24 teams (3 tables of 8) with 3 attempts each.
+    - Quarter final: 6 teams. Top vs. bottom, next top vs. next bottom, two middle teams:
+        - Team 1 -> Table A
+        - Team 2 -> Table C
+        - Team 3 -> Table E
+        - Team 4 -> Table F
+        - Team 5 -> Table D
+        - Team 6 -> Table B
+    - Semi final: 4 teams.
+        - Team 1 -> Table A
+        - Team 2 -> Table C
+        - Team 3 -> Table D
+        - Team 4 -> Table B
+    - Final: 2 teams (2 rounds).
+        - Team 1 -> Table A
+        - Team 2 -> Table B
+        - (Then swap for 2nd round).
+- [ ] Implement UK final scoreboard.
+    - Current top 10 teams at top.
+    - Cycle through remaining teams in batches of 10.
+    - Keep current state for each refresh using a cache: [Caching](http://flask.pocoo.org/docs/0.12/patterns/caching/).
+    - Top 8 teams progress, then 4, then 2 (knock out).
+        - Team 1 -> Table A
+        - Team 2 -> Table C
+        - Team 3 -> Table E
+        - Team 4 -> Table G
+        - Team 5 -> Table H
+        - Team 6 -> Table F
+        - Team 7 -> Table D
+        - Team 8 -> Table B
+        - (And so on...)
 - [ ] Add other tasks to complete here.
 

@@ -23,7 +23,7 @@
             <th>Round 2</th>
         {% endif %}
     </tr>
-    {% for team in top_eight %}
+    {% for team in first %}
         <tr>
             <td>{{ loop.index }}</td>
             <td>{{ team.name }}</td>
@@ -75,7 +75,7 @@
             <th>Round 3</th>
         </tr>
 
-        {% for team in second_eight %}
+        {% for team in second %}
             <tr>
                 <td>{{ loop.index + 8 }}</td>
                 <td>{{ team.name }}</td>
@@ -104,7 +104,7 @@
             <th>Round 3</th>
         </tr>
 
-        {% for team in third_eight %}
+        {% for team in third %}
             <tr>
                 <td>{{ loop.index + 16 }}</td>
                 <td>{{ team.name }}</td>

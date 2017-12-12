@@ -1,4 +1,31 @@
 {% extends 'base.html' %}
 {% block main %}
-Display Teams
+<table style="margin: 0 auto;">
+    <thead>
+        <tr>
+            <th>Number</th>
+            <th>Name</th>
+            <th>Edit details</th>
+            <th>Edit score</th>
+            <th>Reset score</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for t in teams %}
+            <tr>
+                <td>{{ t.number }}</td>
+                <td>{{ t.name }}</td>
+                <td>
+                    <a href="{{ url_for('admin_team_edit', id=t.id) }}">Edit details</a>
+                </td>
+                <td>
+                    <a href="{{ url_for('admin_team_score_edit', id=t.id) }}">Edit score</a>
+                </td>
+                <td>
+                    <a href="{{ url_for('admin_team_score_reset', id=t.id) }}">Reset score</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock %}

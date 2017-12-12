@@ -1,11 +1,18 @@
 # -----------------------------------------------------------------------------
-#
+# Configuration for the Lego Challenge application.
 # -----------------------------------------------------------------------------
 
 import os.path as path
 
+# Default settings - you should not need to alter these
 WTF_CSRF_ENABLED = True
-SECRET_KEY = 'your-secret-key'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + \
     path.join(path.dirname(path.abspath(__file__)), 'tmp', 'lego.db')
+
+# Generate using `flask generate-secret-key`
+SECRET_KEY = 'your-secret-key'
+
+# One of: bristol, uk
+# Only bristol is currently supported
+LEGO_APP_TYPE = 'bristol'

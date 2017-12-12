@@ -50,10 +50,19 @@
                                     <span class="nav-sec-title">Admin</span>
                                     <ul class="nav-items nav-sec-items">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{ url_for('admin_home') }}">Home</a>
+                                            <a class="nav-link" href="{{ url_for('admin_team') }}">Display Teams</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{ url_for('admin_teams') }}">Teams</a>
+                                            <a class="nav-link" href="{{ url_for('admin_team_new') }}">Add New Team</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{ url_for('admin_team_details_edit') }}">Edit Team Details</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{ url_for('admin_team_score_edit') }}">Edit Team Score</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{ url_for('admin_team_score_reset') }}">Reset Team Score</a>
                                         </li>
                                     </ul>
                                 </li>

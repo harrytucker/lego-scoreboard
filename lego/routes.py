@@ -238,63 +238,46 @@ def judges_score_round():
 
 
 @app.route('/admin/')
-@app.route('/admin/home')
+@app.route('/admin/team')
 @login_required
-def admin_home():
+def admin_team():
     if not current_user.is_admin:
         return abort(403)
 
-    return 'Admin/Home'
+    return render_template('admin/team.html', title='Display Teams')
 
 
-@app.route('/admin/teams/')
+@app.route('/admin/team/new')
 @login_required
-def admin_teams():
+def admin_team_new():
     if not current_user.is_admin:
         return abort(403)
 
-    return 'Admin/Teams'
+    return render_template('admin/team_new.html', title='Add New Team')
 
 
-@app.route('/admin/teams/new')
+@app.route('/admin/team/details/edit')
 @login_required
-def admin_teams_new():
+def admin_team_details_edit():
     if not current_user.is_admin:
         return abort(403)
 
-    return 'Admin/Teams/New'
+    return render_template('admin/team_details_edit.html', title='Edit a Team Details')
 
 
-@app.route('/admin/teams/edit')
+@app.route('/admin/team/score/edit')
 @login_required
-def admin_teams_edit():
+def admin_team_score_edit():
     if not current_user.is_admin:
         return abort(403)
 
-    return 'Admin/Teams/Edit'
+    return render_template('admin/team_score_edit.html', title='Edit a Team Score')
 
-@app.route('/admin/teams/score')
+
+@app.route('/admin/team/score/reset')
 @login_required
-def admins_teams_score():
+def admin_team_score_reset():
     if not current_user.is_admin:
         return abort(403)
 
-    return 'Admin/Teams/Score'
-
-
-@app.route('/admin/teams/score/edit')
-@login_required
-def admins_teams_score_edit():
-    if not current_user.is_admin:
-        return abort(403)
-
-    return 'Admin/Teams/Score/Edit'
-
-
-@app.route('/admin/teams/score/reset')
-@login_required
-def admins_teams_score_reset():
-    if not current_user.is_admin:
-        return abort(403)
-
-    return 'Admin/Teams/Score/Reset'
+    return render_template('admin/team_score_reset.html', title='Reset a Team Score')

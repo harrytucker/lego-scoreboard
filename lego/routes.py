@@ -15,7 +15,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 from sqlalchemy.exc import IntegrityError
 
 from lego import app, db, lm
-from lego.forms import LoginForm, ScoreRoundForm, EditTeamForm
+from lego.forms import LoginForm, ScoreRoundForm, EditTeamForm, StageForm
 from lego.models import User, Team
 
 
@@ -312,4 +312,19 @@ def admin_stage():
     if not current_user.is_admin:
         return abort(403)
 
-    return render_template('admin/stage.html', title='Manage Stage')
+    stages = ('First Round', 'Quarter Final', 'Semi Final', 'Final')
+    current_stage = stages[app.load_stage()]
+    form = StageForm()
+
+    if form.validate_on_submit():
+        new_stage = form.stage.data
+        cur_file_path = os.path.dirname(os.path.abspath(__file__))
+
+        with open(os.path.join(cur_file_path, 'tmp', '.stage',), 'w') as fh:
+            fh.write(new_stage)
+
+        flash('Stage updated to: {!s}'.format(stages[int(new_stage)]))
+        return redirect(url_for('admin_stage'))
+
+    return render_template('admin/stage.html', title='Manage Stage', form=form,
+                           current_stage=current_stage)

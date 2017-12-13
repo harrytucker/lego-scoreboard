@@ -313,18 +313,64 @@ def admin_stage():
         return abort(403)
 
     stages = ('First Round', 'Quarter Final', 'Semi Final', 'Final')
-    current_stage = stages[app.load_stage()]
+
+    stage = app.load_stage()
+    current_stage = stages[stage]
+
     form = StageForm()
 
     if form.validate_on_submit():
-        new_stage = form.stage.data
+        new_stage = int(form.stage.data)
         cur_file_path = os.path.dirname(os.path.abspath(__file__))
 
-        with open(os.path.join(cur_file_path, 'tmp', '.stage',), 'w') as fh:
-            fh.write(new_stage)
+        if new_stage <= stage:
+            flash('Unable to go back a stage.')
+        else:
+            set_active_teams(new_stage)
 
-        flash('Stage updated to: {!s}'.format(stages[int(new_stage)]))
-        return redirect(url_for('admin_stage'))
+            with open(os.path.join(cur_file_path, 'tmp', '.stage'), 'w') as fh:
+                fh.write(str(new_stage))
+
+            flash('Stage updated to: {!s}'.format(stages[int(new_stage)]))
+            return redirect(url_for('admin_stage'))
 
     return render_template('admin/stage.html', title='Manage Stage', form=form,
                            current_stage=current_stage)
+
+
+def set_active_teams(stage):
+    def compare(team_1, team_2):
+        if team_1.highest_score > team_2.highest_score:
+            return -1
+
+        if team_1.highest_score < team_2.highest_score:
+            return 1
+
+        return 0
+
+    teams = Team.query.filter_by(active=True, is_practice=False).all()
+    teams = sorted(teams, key=cmp_to_key(compare))
+
+    if app.config['LEGO_APP_TYPE'] == 'bristol':
+        for i, team in enumerate(teams):
+            if stage == 1 and i >= 6:
+                team.active = False
+
+            if stage == 2 and i >= 4:
+                team.active = False
+
+            if stage == 3 and i >= 2:
+                team.active = False
+
+    elif app.config['LEGO_APP_TYPE'] == 'uk':
+        for i, team in enumerate(teams):
+            if stage == 1 and i >= 8:
+                team.active = False
+
+            if stage == 2 and i >= 4:
+                team.active = False
+
+            if stage == 3 and i >= 2:
+                team.active = False
+
+    db.session.commit()

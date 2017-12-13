@@ -145,9 +145,9 @@ def scoreboard():
         return 0
 
     teams = sorted(teams, key=cmp_to_key(compare))
-    stage = 0
+    stage = app.load_stage()
 
-    # TODO: swap the blow with this
+    # TODO: swap the below with this
     # if app.config['LEGO_APP_TYPE'] in ('bristol', 'uk'):
     #     template = 'scoreboard_{!s}.html'.format(app.config['LEGO_APP_TYPE'])
 
@@ -166,17 +166,17 @@ def scoreboard():
                                first=top, second=second, third=third)
 
     # quarter finals
-    if stage == 2:
+    if stage == 1:
         return render_template('scoreboard_bristol.html', title='Scoreboard - Quarter Final',
                                quarter_final=True, first=teams)
 
     # semi final
-    if stage == 3:
+    if stage == 2:
         return render_template('scoreboard_bristol.html', title='Scoreboard - Semi Final',
                                semi_final=True, first=teams)
 
     # final
-    if stage == 4:
+    if stage == 3:
         return render_template('scoreboard_bristol.html', title='Scoreboard - Final',
                                final=True, first=teams)
 
@@ -237,8 +237,6 @@ def judges_score_round():
 
     return render_template('judges/score_round.html', title='Score round', form=form)
 
-
-@app.route('/admin/')
 @app.route('/admin/team')
 @login_required
 def admin_team():
@@ -307,3 +305,11 @@ def admin_team_score_reset(id: int):
         return abort(403)
 
     return render_template('admin/team_score_reset.html', title='Reset a Team Score')
+
+
+@app.route('/admin/stage', methods=['GET', 'POST'])
+def admin_stage():
+    if not current_user.is_admin:
+        return abort(403)
+
+    return render_template('admin/stage.html', title='Manage Stage')

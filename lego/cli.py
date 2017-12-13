@@ -36,7 +36,7 @@ def init_app():
     click.echo('Default users created.')
     click.echo('Practice team created.')
 
-    stage_file_path = os.path.join(os.path.dirname(__file__), 'tmp', '.stage')
+    stage_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tmp', '.stage')
 
     try:
         with open(stage_file_path) as fh:

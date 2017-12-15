@@ -1,5 +1,7 @@
 # -----------------------------------------------------------------------------
+# A form for editing team names and numbers.
 #
+# To be used by Admin accounts.
 # -----------------------------------------------------------------------------
 
 from flask_wtf import FlaskForm

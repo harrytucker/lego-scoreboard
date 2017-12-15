@@ -197,43 +197,38 @@ def judges_score_round():
         team_id = form.team.data
         team = Team.query.get(team_id)
         score = form.points_scored()
-        attempt = len(team.scored_attempts) + 1
 
-        if attempt > 3:
-            flash('Team has no more attempts remaining')
-        else:
-            if form.confirm.data == '1':
-                flash('Submit')
-                setattr(team, 'attempt_{!s}'.format(attempt), score)
+        if form.confirm.data == '1':
+            try:
+                team.set_score(score)
+            except Exception as exc:
+                flash(str(exc))
+            else:
                 db.session.commit()
 
-                flash('Submitted for team: {!s}, score: {!s}, attempt: {!s}' \
-                      .format(team.name, score, attempt))
+                flash('Submitted for team: {!s}, score: {!s}.' \
+                      .format(team.name, score))
 
                 return redirect(url_for('judges_score_round'))
 
-            flash('Calculate')
+        # don't set confirm in the form if this is a practice attempt
+        if team.is_practice:
+            flash('Practice attempt')
+        else:
+            form.confirm.data = '1'
 
-            # don't set confirm in the form if this is a practice attempt
-            if team.is_practice:
-                flash('Practice attempt')
-            else:
-                form.confirm.data = '1'
+        flash('Score: {!s}'.format(score))
 
-            flash('Score: {!s}'.format(score))
+        # data submitted to the form overrides whatever we set as data here
+        # so we have to override that if something changed after the
+        # initial confirmation
+        if form.score.raw_data:
+            form.score.raw_data[0] = score
+        else:
+            form.score.data = score
 
-            # data submitted to the form overrides whatever we set as data here
-            # so we have to override that if something changed after the
-            # initial confirmation
-            if form.score.raw_data:
-                form.score.raw_data[0] = score
-            else:
-                form.score.data = score
-
-            form.attempt.data = attempt
-
-            return render_template('judges/score_round.html', title='Score round',
-                                   form=form, confirm=True)
+        return render_template('judges/score_round.html', title='Score round',
+                               form=form, confirm=True)
 
     return render_template('judges/score_round.html', title='Score round', form=form)
 

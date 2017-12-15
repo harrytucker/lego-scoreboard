@@ -33,20 +33,47 @@ class Team(db.Model):
         return [self.final_1, self.final_2]
 
 
-    @hybrid_property
-    def scored_attempts(self):
-        ret = []
+    def set_score(self, score):
+        stage = app.load_stage()
+        app.logger.debug('Stage: %s', stage)
+        app.logger.debug('Team: %s', str(self.__dict__))
 
-        if self.round_1 is not None:
-            ret.append(self.round_1)
+        # first round
+        if stage == 0:
+            if self.round_1 is None:
+                self.round_1 = score
+            elif self.round_2 is None:
+                self.round_2 = score
+            elif self.round_3 is None:
+                self.round_3 = score
+            else:
+                raise Exception('All attempts have been made for this stage.')
 
-        if self.round_2 is not None:
-            ret.append(self.round_2)
+        # quarter finals
+        elif stage == 1:
+            if self.quarter is None:
+                self.quarter = score
+            else:
+                raise Exception('All attempts have been made for this stage.')
 
-        if self.round_3 is not None:
-            ret.append(self.round_3)
+        # semi finals
+        elif stage == 2:
+            if self.semi is None:
+                self.semi = score
+            else:
+                raise Exception('All attempts have been made for this stage.')
 
-        return ret
+        # finals
+        elif stage == 3:
+            if self.final_1 is None:
+                self.final_1 = score
+            elif self.final_2 is None:
+                self.final_2 = score
+            else:
+                raise Exception('All attempts have been made for this stage.')
+
+        else:
+            raise Exception('Invalid value for stage.')
 
     @hybrid_property
     def highest_score(self):

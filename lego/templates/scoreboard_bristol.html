@@ -8,6 +8,7 @@
 <table class="center">
     <tr>
         <th>Rank</th>
+        <th>Team Number</th>
         <th>Team Name</th>
 
         {% if round %}
@@ -41,6 +42,7 @@
     {% for team in first %}
         <tr>
             <td>{{ loop.index }}</td>
+            <td>{{ team.number }}</td>
             <td>{{ team.name }}</td>
 
             {% if round %}

@@ -1,5 +1,7 @@
 # -----------------------------------------------------------------------------
+# The form used for scoring the active round.
 #
+# Needs to be updated each year with the new tasks.
 # -----------------------------------------------------------------------------
 
 from flask_wtf import FlaskForm
@@ -49,7 +51,6 @@ class ScoreRoundForm(FlaskForm):
     yellow_card = BooleanField('Yellow card')
     confirm = HiddenField(default='0')
     score = IntegerField('Total score', validators=[Optional()])
-    attempt = HiddenField()
 
     m01_complete = RadioField('Broken Pipe completely in Base.',
                               choices=[('20', 'Yes (20 points)'),

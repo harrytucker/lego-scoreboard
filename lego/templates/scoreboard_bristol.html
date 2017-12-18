@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<!-- <meta http-equiv="refresh" content="30"> -->
+<meta http-equiv="refresh" content="30">
 {% endblock %}
 
 {% block main %}
 <table class="center">
     <tr>
         <th>Rank</th>
+        <th>Team Number</th>
         <th>Team Name</th>
 
         {% if round %}
@@ -15,17 +16,33 @@
             <th>Round 2</th>
             <th>Round 3</th>
 
-        {% elif quarter_final or semi_final %}
-            <th>Score</th>
+        {% elif quarter_final %}
+            <th>Round 1</th>
+            <th>Round 2</th>
+            <th>Round 3</th>
+            <th>Quarter final</th>
+
+        {% elif semi_final %}
+            <th>Round 1</th>
+            <th>Round 2</th>
+            <th>Round 3</th>
+            <th>Quarter final</th>
+            <th>Semi final</th>
 
         {% elif final %}
             <th>Round 1</th>
             <th>Round 2</th>
+            <th>Round 3</th>
+            <th>Quarter final</th>
+            <th>Semi final</th>
+            <th>Final 1</th>
+            <th>Final 2</th>
         {% endif %}
     </tr>
     {% for team in first %}
         <tr>
             <td>{{ loop.index }}</td>
+            <td>{{ team.number }}</td>
             <td>{{ team.name }}</td>
 
             {% if round %}
@@ -41,23 +58,49 @@
                     {% endif %}
                 {% endfor %}
 
-            {% elif quarter_final or semi_final %}
-                {% if not team.attempt_1 %}
-                        <td>-</td>
+            {% elif quarter_final %}
+                <td>{{ team.round_1 }}</td>
+                <td>{{ team.round_2 }}</td>
+                <td>{{ team.round_3 }}</td>
+
+                {% if not team.quarter %}
+                    <td>-</td>
                 {% else %}
-                    <td>{{ team.attempt_1 }}</td>
+                    <td>
+                        <strong>{{ team.quarter }}</strong>
+                    </td>
+                {% endif %}
+
+            {% elif semi_final %}
+                <td>{{ team.round_1 }}</td>
+                <td>{{ team.round_2 }}</td>
+                <td>{{ team.round_3 }}</td>
+                <td>{{ team.quarter }}</td>
+
+                {% if not team.semi %}
+                    <td>-</td>
+                {% else %}
+                    <td>
+                        <strong>{{ team.semi }}</strong>
+                    </td>
                 {% endif %}
 
             {% elif final %}
-                {% for attempt in (team.attempt_1, team.attempt_2) %}
+                <td>{{ team.round_1 }}</td>
+                <td>{{ team.round_2 }}</td>
+                <td>{{ team.round_3 }}</td>
+                <td>{{ team.quarter }}</td>
+                <td>{{ team.semi }}</td>
+
+                {% for attempt in team.finals %}
                     {% if not attempt %}
                         <td>-</td>
-                    {% elif attempt == team.highest_score %}
+                    {% elif attempt == team.highest_final %}
                         <td>
                             <strong>{{ attempt }}</strong>
                         </td>
                     {% else %}
-                        <td>{{ attempt }}</td>
+                        <td>{{attempt }}</td>
                     {% endif %}
                 {% endfor %}
             {% endif %}

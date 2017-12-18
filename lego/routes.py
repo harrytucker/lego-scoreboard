@@ -15,7 +15,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 from sqlalchemy.exc import IntegrityError
 
 from lego import app, db, lm
-from lego.forms import LoginForm, ScoreRoundForm, EditTeamForm
+from lego.forms import LoginForm, ScoreRoundForm, EditTeamForm, StageForm
 from lego.models import User, Team
 
 
@@ -145,9 +145,9 @@ def scoreboard():
         return 0
 
     teams = sorted(teams, key=cmp_to_key(compare))
-    stage = 0
+    stage = app.load_stage()
 
-    # TODO: swap the blow with this
+    # TODO: swap the below with this
     # if app.config['LEGO_APP_TYPE'] in ('bristol', 'uk'):
     #     template = 'scoreboard_{!s}.html'.format(app.config['LEGO_APP_TYPE'])
 
@@ -166,17 +166,17 @@ def scoreboard():
                                first=top, second=second, third=third)
 
     # quarter finals
-    if stage == 2:
+    if stage == 1:
         return render_template('scoreboard_bristol.html', title='Scoreboard - Quarter Final',
                                quarter_final=True, first=teams)
 
     # semi final
-    if stage == 3:
+    if stage == 2:
         return render_template('scoreboard_bristol.html', title='Scoreboard - Semi Final',
                                semi_final=True, first=teams)
 
     # final
-    if stage == 4:
+    if stage == 3:
         return render_template('scoreboard_bristol.html', title='Scoreboard - Final',
                                final=True, first=teams)
 
@@ -197,48 +197,41 @@ def judges_score_round():
         team_id = form.team.data
         team = Team.query.get(team_id)
         score = form.points_scored()
-        attempt = len(team.scored_attempts) + 1
 
-        if attempt > 3:
-            flash('Team has no more attempts remaining')
-        else:
-            if form.confirm.data == '1':
-                flash('Submit')
-                setattr(team, 'attempt_{!s}'.format(attempt), score)
+        if form.confirm.data == '1':
+            try:
+                team.set_score(score)
+            except Exception as exc:
+                flash(str(exc))
+            else:
                 db.session.commit()
 
-                flash('Submitted for team: {!s}, score: {!s}, attempt: {!s}' \
-                      .format(team.name, score, attempt))
+                flash('Submitted for team: {!s}, score: {!s}.' \
+                      .format(team.name, score))
 
                 return redirect(url_for('judges_score_round'))
 
-            flash('Calculate')
+        # don't set confirm in the form if this is a practice attempt
+        if team.is_practice:
+            flash('Practice attempt')
+        else:
+            form.confirm.data = '1'
 
-            # don't set confirm in the form if this is a practice attempt
-            if team.is_practice:
-                flash('Practice attempt')
-            else:
-                form.confirm.data = '1'
+        flash('Score: {!s}'.format(score))
 
-            flash('Score: {!s}'.format(score))
+        # data submitted to the form overrides whatever we set as data here
+        # so we have to override that if something changed after the
+        # initial confirmation
+        if form.score.raw_data:
+            form.score.raw_data[0] = score
+        else:
+            form.score.data = score
 
-            # data submitted to the form overrides whatever we set as data here
-            # so we have to override that if something changed after the
-            # initial confirmation
-            if form.score.raw_data:
-                form.score.raw_data[0] = score
-            else:
-                form.score.data = score
-
-            form.attempt.data = attempt
-
-            return render_template('judges/score_round.html', title='Score round',
-                                   form=form, confirm=True)
+        return render_template('judges/score_round.html', title='Score round',
+                               form=form, confirm=True)
 
     return render_template('judges/score_round.html', title='Score round', form=form)
 
-
-@app.route('/admin/')
 @app.route('/admin/team')
 @login_required
 def admin_team():
@@ -307,3 +300,72 @@ def admin_team_score_reset(id: int):
         return abort(403)
 
     return render_template('admin/team_score_reset.html', title='Reset a Team Score')
+
+
+@app.route('/admin/stage', methods=['GET', 'POST'])
+def admin_stage():
+    if not current_user.is_admin:
+        return abort(403)
+
+    stages = ('First Round', 'Quarter Final', 'Semi Final', 'Final')
+
+    stage = app.load_stage()
+    current_stage = stages[stage]
+
+    form = StageForm()
+
+    if form.validate_on_submit():
+        new_stage = int(form.stage.data)
+        cur_file_path = os.path.dirname(os.path.abspath(__file__))
+
+        if new_stage <= stage:
+            flash('Unable to go back a stage.')
+        else:
+            set_active_teams(new_stage)
+
+            with open(os.path.join(cur_file_path, 'tmp', '.stage'), 'w') as fh:
+                fh.write(str(new_stage))
+
+            flash('Stage updated to: {!s}'.format(stages[int(new_stage)]))
+            return redirect(url_for('admin_stage'))
+
+    return render_template('admin/stage.html', title='Manage Stage', form=form,
+                           current_stage=current_stage)
+
+
+def set_active_teams(stage):
+    def compare(team_1, team_2):
+        if team_1.highest_score > team_2.highest_score:
+            return -1
+
+        if team_1.highest_score < team_2.highest_score:
+            return 1
+
+        return 0
+
+    teams = Team.query.filter_by(active=True, is_practice=False).all()
+    teams = sorted(teams, key=cmp_to_key(compare))
+
+    if app.config['LEGO_APP_TYPE'] == 'bristol':
+        for i, team in enumerate(teams):
+            if stage == 1 and i >= 6:
+                team.active = False
+
+            if stage == 2 and i >= 4:
+                team.active = False
+
+            if stage == 3 and i >= 2:
+                team.active = False
+
+    elif app.config['LEGO_APP_TYPE'] == 'uk':
+        for i, team in enumerate(teams):
+            if stage == 1 and i >= 8:
+                team.active = False
+
+            if stage == 2 and i >= 4:
+                team.active = False
+
+            if stage == 3 and i >= 2:
+                team.active = False
+
+    db.session.commit()

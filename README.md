@@ -94,12 +94,12 @@ $ flask run --host=0.0.0.0
 To halt the application, use `Ctrl+C`.
 
 ## Todo
-- [ ] Uncomment refresh tag on scoreboard page.
 - [X] Log errors to a file.
 - [ ] Add logging where appropriate.
 - [ ] Add unit testing ([[1](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vii-unit-testing)] and 2nd from last part).
-- [ ] Use flask-bcrypt for password encryption.
-- [ ] Move maintenance and updates into separate file from README.
+- [ ] Create proper manual (see questions in emails plus other relevant data/hacks that may be required).
+- [ ] Add simulation mode for quickly filling out data to simulate the event.
+- [ ] Fix score round to handle quarter final/semi final/final.
 - [X] Add error handling to all forms
     - [X] Print out errors at top of form
     - [X] Add error class to relevant field
@@ -119,13 +119,11 @@ To halt the application, use `Ctrl+C`.
     - [X] Correct team number.
     - [ ] Adjust score.
     - [ ] Remove score.
-- [ ] Finish implementing stages.
-    - [ ] Persist current stage to a file.
-    - [ ] Load stage from file on app start-up.
-    - [ ] Add mechanism for increasing the stage through the UI (while the app is running).
-- [ ] Dump db to file when moving stages to ensure nothing is lost.
-    - [How to create and restore a backup from SqlAlchemy?](https://stackoverflow.com/questions/2786664/how-to-create-and-restore-a-backup-from-sqlalchemy)
-- [ ] Implement Bristol scoreboard.
+- [X] Finish implementing stages.
+    - [X] Persist current stage to a file.
+    - [X] Load stage from file on app start-up.
+    - [X] Add mechanism for increasing the stage through the UI (while the app is running).
+- [X] Implement Bristol scoreboard.
     - First round: 24 teams (3 tables of 8) with 3 attempts each.
     - Quarter final: 6 teams. Top vs. bottom, next top vs. next bottom, two middle teams:
         - Team 1 -> Table A
@@ -158,4 +156,3 @@ To halt the application, use `Ctrl+C`.
         - Team 8 -> Table B
         - (And so on...)
 - [ ] Add other tasks to complete here.
-

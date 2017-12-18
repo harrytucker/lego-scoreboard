@@ -117,8 +117,8 @@ To halt the application, use `Ctrl+C`.
     - [X] Add routes
     - [X] Correct team name.
     - [X] Correct team number.
-    - [ ] Adjust score.
-    - [ ] Remove score.
+    - [X] Adjust score.
+    - [X] Remove score.
 - [X] Finish implementing stages.
     - [X] Persist current stage to a file.
     - [X] Load stage from file on app start-up.

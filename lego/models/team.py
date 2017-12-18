@@ -89,3 +89,70 @@ class Team(db.Model):
 
         return max(self.final_1 or 0, self.final_2 or 0)
 
+    def edit_round_score(self, round, score):
+        def edit_round_1():
+            self.round_1 = score
+
+        def edit_round_2():
+            self.round_2 = score
+
+        def edit_round_3():
+            self.round_3 = score
+
+        def edit_quarter():
+            self.quarter = score
+
+        def edit_semi():
+            self.semi = score
+
+        def edit_final_1():
+            self.round_1 = score
+
+        def edit_final_2():
+            self.round_1 = score
+
+        options = {
+            1 : edit_round_1,
+            2 : edit_round_2,
+            3 : edit_round_3,
+            4 : edit_quarter,
+            5 : edit_semi,
+            6 : edit_final_1,
+            7 : edit_final_2
+        }
+
+        options[round]()
+
+    def reset_round_score(self, round):
+        def reset_round_1():
+            self.round_1 = None
+
+        def reset_round_2():
+            self.round_2 = None
+
+        def reset_round_3():
+            self.round_3 = None
+
+        def reset_quarter():
+            self.quarter = None
+
+        def reset_semi():
+            self.semi = None
+
+        def reset_final_1():
+            self.round_1 = None
+
+        def reset_final_2():
+            self.round_1 = None
+
+        options = {
+            1 : reset_round_1,
+            2 : reset_round_2,
+            3 : reset_round_3,
+            4 : reset_quarter,
+            5 : reset_semi,
+            6 : reset_final_1,
+            7 : reset_final_2
+        }
+
+        options[round]()

@@ -31,7 +31,20 @@ As an example, the 2018 guide can be found [here](https://firstinspiresst01.blob
 - Error and debug logs can be found in the `lego/logs/` directory. If the error is not output to the GUI or commandline, it will be output in at least one of the log files.
 
 ## Tips
-- To view the database in it's raw form, `sqlite3` can be used. To do so, simply run `sqlite3 /app/lego/tmp/lego.db`. The sqlite3 specific commands that can be run can be found using `.help`. SQL queries work in much the same way as other dialects which can be found in various guides available online. Examples of queries you may want to run are:
+- To view the database in it's raw form, `sqlite3` can be used (requires SQLite 3 to be installed first). To do so, simply run `sqlite3 /app/lego/tmp/lego.db`. The sqlite3 specific commands that can be run can be found using `.help`. SQL queries work in much the same way as other dialects which can be found in various guides available online. Examples of queries you may want to run are:
     - Updating the user passwords: These are stored in plaintext, so can be changed with a simple `UPDATE` statement.
     - Debugging an operation: simply run `.dump` to get the full database output. More granular queries can be created using a `SELECT` statement.
 - The current stage is persisted to a file and cannot be moved backwards through the GUI. However, it can be manually edited if necessary and should be a value of 0-3 representing the first round through to the final. Note that if you do manually go back a stage then you will need to set the `active` column manually for the relevant teams, e.g. `UPDATE team SET active=1 WHERE is_practice=0;`.
+
+## Configuration
+- explain config file
+- what settings can be changed
+
+## Database
+- layout
+- how to use sqlite3
+- common commands
+
+## Stages
+- how it works
+- manually moving the stage backwards

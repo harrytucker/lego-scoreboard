@@ -15,7 +15,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 from sqlalchemy.exc import IntegrityError
 
 from lego import app, db, lm
-from lego.forms import LoginForm, ScoreRoundForm, EditTeamForm, StageForm
+from lego.forms import LoginForm, ScoreRoundForm, EditTeamForm, EditTeamScoreForm, ResetTeamScoreForm, StageForm
 from lego.models import User, Team
 
 
@@ -271,7 +271,7 @@ def admin_team_edit(id: int):
             flash('The name or number requested is already in use. Please use another one.')
         except Exception as e:
             db.session.rollback()
-            flash('An unknown error occurred. See the error logs for more information.')
+            flash('An unknown error occurred. See the error logs for more information')
         else:
             flash('Team details successfully updated')
             return redirect(url_for('admin_team'))
@@ -290,8 +290,25 @@ def admin_team_score_edit(id: int):
     if not current_user.is_admin:
         return abort(403)
 
-    return render_template('admin/team_score_edit.html', title='Edit a Team Score')
+    team = Team.query.filter_by(id=id).first()
+    form = EditTeamScoreForm()
 
+    if form.validate_on_submit():
+        try:
+            team.edit_round_score(int(form.stage.data), form.score.data)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            flash('An unknown error occurred. See the error logs for more information')
+            print(e)
+        else:
+            flash('Team score successfully updated')
+            return redirect(url_for('admin_team'))
+
+    form.id.data = team.id
+    form.score.data = 0
+
+    return render_template('admin/team_score_edit.html', title='Edit Team Score', form=form)
 
 @app.route('/admin/team/<int:id>/score/reset', methods=['GET', 'POST'])
 @login_required
@@ -299,7 +316,24 @@ def admin_team_score_reset(id: int):
     if not current_user.is_admin:
         return abort(403)
 
-    return render_template('admin/team_score_reset.html', title='Reset a Team Score')
+    team = Team.query.filter_by(id=id).first()
+    form = ResetTeamScoreForm()
+
+    if form.validate_on_submit():
+        try:
+            team.reset_round_score(int(form.stage.data))
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            flash('An unknown error occurred. See the error logs for more information')
+            print(e)
+        else:
+            flash('Team score successfully updated')
+            return redirect(url_for('admin_team'))
+
+    form.id.data = team.id
+
+    return render_template('admin/team_score_reset.html', title='Reset Team Score', form=form)
 
 
 @app.route('/admin/stage', methods=['GET', 'POST'])

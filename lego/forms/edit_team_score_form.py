@@ -13,10 +13,10 @@ class EditTeamScoreForm(FlaskForm):
                         choices=[('1', 'Round 1'),
                                  ('2', 'Round 2'),
                                  ('3', 'Round 3'),
-                                 ('4', 'Quarter-final'),
-                                 ('5', 'Semi-final'),
-                                 ('6', 'Final - first game'),
-                                 ('7', 'Final - second game')],
+                                 ('4', 'Quarter Final'),
+                                 ('5', 'Semi Final'),
+                                 ('6', 'Final 1'),
+                                 ('7', 'Final 2')],
                         default='1',
                         validators=[DataRequired()])
     score = IntegerField('Score', validators=[DataRequired(), NumberRange(min=0)])

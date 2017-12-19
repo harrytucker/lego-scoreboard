@@ -69,11 +69,8 @@ def slugify(value: str):
     strip_re = re.compile(r'[^\w\s-]')
     hyphenate_re = re.compile(r'[-\s]+')
 
-    app.logger.info('[slugify] value: %s (%s)', str(value), type(value))
     normalised_value = str(unicodedata.normalize('NFKD', value))
-    app.logger.info('[slugify] normalised value: %s (%s)', str(normalised_value), type(normalised_value))
     strip_value = strip_re.sub('', str(normalised_value)).strip().lower()
-    app.logger.info('[slugify] strip value: %s (%s)', str(strip_value), type(strip_value))
     hyphenate_value = hyphenate_re.sub('-', strip_value)
 
     return hyphenate_value
@@ -93,13 +90,6 @@ def page_not_found(error):
 def internal_server_error(exc):
     app.logger.exception(exc)
     return render_template('errors/500.html', title='Internal error'), 500
-
-
-@app.route('/')
-@app.route('/home')
-def home():
-    teams = Team.query.all()
-    return render_template('home.html', title='Home', teams=teams)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -131,6 +121,8 @@ def logout():
     return redirect(url_for('home'))
 
 
+@app.route('/')
+@app.route('/home')
 @app.route('/scoreboard')
 def scoreboard():
     teams = Team.query.filter_by(active=True, is_practice=False).all()
@@ -266,11 +258,13 @@ def admin_team_edit(id: int):
             team.number = form.number.data
             team.name = form.name.data
             db.session.commit()
-        except IntegrityError:
+        except IntegrityError as e:
             db.session.rollback()
+            app.logger.exception(e)
             flash('The name or number requested is already in use. Please use another one.')
         except Exception as e:
             db.session.rollback()
+            app.logger.exception(e)
             flash('An unknown error occurred. See the error logs for more information')
         else:
             flash('Team details successfully updated')
@@ -299,8 +293,8 @@ def admin_team_score_edit(id: int):
             db.session.commit()
         except Exception as e:
             db.session.rollback()
+            app.logger.exception(e)
             flash('An unknown error occurred. See the error logs for more information')
-            print(e)
         else:
             flash('Team score successfully updated')
             return redirect(url_for('admin_team'))
@@ -326,7 +320,7 @@ def admin_team_score_reset(id: int):
         except Exception as e:
             db.session.rollback()
             flash('An unknown error occurred. See the error logs for more information')
-            print(e)
+            app.logger.exception(e)
         else:
             flash('Team score successfully updated')
             return redirect(url_for('admin_team'))

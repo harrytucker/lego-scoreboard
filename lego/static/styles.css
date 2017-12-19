@@ -246,6 +246,7 @@ table.right {
 .reset-team-score-form .form-input,
 .edit-team-score-form .form-input,
 .edit-team-form .form-input,
+.stage-form .form-input,
 .login-form .form-input {
     text-align: center;
 }
@@ -257,6 +258,8 @@ table.right {
 .edit-team-score-form .form-input .input-number,
 .edit-team-form .form-input label,
 .edit-team-form .form-input .input-text,
+.stage-form .form-input label,
+.stage-form .form-input .input-select,
 .login-form .form-input label,
 .login-form .form-input .input-text {
     margin: 0 auto 10px;
@@ -266,6 +269,13 @@ table.right {
 .reset-team-score-form .form-input label,
 .edit-team-score-form .form-input label,
 .edit-team-form .form-input label,
+.stage-form .form-input label,
 .login-form .form-input label {
     text-align: left;
+}
+
+.manage-stage .current-stage {
+    font-weight: bold;
+    text-align: center;
+    margin: 30px 0 20px;
 }

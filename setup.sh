@@ -21,7 +21,10 @@ else
     echo "Dependencies already installed. Skipping..."
 fi
 
-echo "Setting requirement environment variables..."
+echo "Setting required environment variables..."
+
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 export FLASK_APP="`pwd`/lego/__init__.py"
 export FLASK_DEBUG=1
 

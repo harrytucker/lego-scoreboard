@@ -316,6 +316,20 @@
             </div>
         </section>
 
+        <section>
+            <h2>{{ form.penalties_title }}</h2>
+
+            <div class="form-input">
+                {{ form.penalties_chosen.label }}
+
+                {% if form.penalties_chosen.errors %}
+                    {{ form.penalties_chosen(class_='input-select input-error') }}
+                {% else %}
+                    {{ form.penalties_chosen(class_='input-select') }}
+                {% endif %}
+            </div>
+        </section>
+
         {% if confirm %}
             <section>
                 <h2>Confirm score</h2>

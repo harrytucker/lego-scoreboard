@@ -1,4 +1,44 @@
 {% extends 'base.html' %}
 {% block main %}
-Add New Team
+<div class="new-team-form">
+    <form action="" method="POST" name="team_new">
+        {{ form.hidden_tag() }}
+
+        {% if form.errors %}
+            <div class="errors">
+                <ul>
+                    {% for _field, errors in form.errors.items() %}
+                        {% for error in errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <div class="form-input">
+            {{ form.number.label }}
+
+            {% if form.number.errors %}
+                {{ form.number(class_='input-text input-error') }}
+            {% else %}
+                {{ form.number(class_='input-text') }}
+            {% endif %}
+        </div>
+
+        <div class="form-input">
+            {{ form.name.label }}
+
+            {% if form.name.errors %}
+                {{ form.name(class_='input-text input-error') }}
+            {% else %}
+                {{ form.name(class_='input-text') }}
+            {% endif %}
+        </div>
+
+        <div class="form-submit">
+            <input type="submit" value="Submit" class="button submit-button">
+        </div>
+    </form>
+</div>
 {% endblock %}

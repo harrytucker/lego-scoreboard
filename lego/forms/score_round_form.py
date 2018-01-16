@@ -170,7 +170,7 @@ class ScoreRoundForm(FlaskForm):
                                       ('50', '5 (50 points)')],
                              validators=[Optional()])
     m16_bonus = BonusField('One scoring Big Water an top of second scoring Big Water, touching '
-                           'nothing but other water.',
+                           'nothing but other water (30 points).',
                            value='30')
 
     m17_complete = RadioField('Slingshot completely in its target area.',
@@ -230,7 +230,7 @@ class ScoreRoundForm(FlaskForm):
 
         m16_score = int(self.m16_part_1.data)
         m16_score += int(self.m16_part_2.data)
-        if int(self.m16_part_2.data) == 20:
+        if int(self.m16_part_2.data) >= 20:
             m16_score += int(self.m16_bonus.value if self.m16_bonus.data else 0)
         score += m16_score
 

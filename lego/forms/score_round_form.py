@@ -45,6 +45,7 @@ class ScoreRoundForm(FlaskForm):
     m16_title = 'M16 - Water Collection'
     m17_title = 'M17 - Slingshot'
     m18_title = 'M18 - Faucet'
+    penalties_title = 'Penalties'
 
     # fields
     team = SelectField('Team:', validators=[InputRequired(message='Please select a team.')])
@@ -163,7 +164,10 @@ class ScoreRoundForm(FlaskForm):
     m16_part_2 = SelectField('Big Water in Water Collection Area.',
                              choices=[('0', '0 (0 points)'),
                                       ('10', '1 (10 points)'),
-                                      ('20', '2 (20 points)')],
+                                      ('20', '2 (20 points)'),
+                                      ('30', '3 (30 points)'),
+                                      ('40', '4 (40 points)'),
+                                      ('50', '5 (50 points)')],
                              validators=[Optional()])
     m16_bonus = BonusField('One scoring Big Water an top of second scoring Big Water, touching '
                            'nothing but other water.',
@@ -183,6 +187,16 @@ class ScoreRoundForm(FlaskForm):
                                        ('0', 'No (0 points)')],
                               default='0',
                               validators=[InputRequired('Please make a choice for M18')])
+
+    penalties_chosen = SelectField('Number of penalties',
+                             choices=[('0', '0 (0 points)'),
+                                      ('5', '1 (-5 points)'),
+                                      ('10', '2 (-10 points)'),
+                                      ('15', '3 (-15 points)'),
+                                      ('20', '4 (-20 points)'),
+                                      ('25', '5 (-25 points)'),
+                                      ('30', '6 (-30 points)')],
+                             validators=[Optional()])
 
     def points_scored(self) -> int:
         """Calculate the points scored for this round."""
@@ -226,5 +240,9 @@ class ScoreRoundForm(FlaskForm):
         score += m17_score
 
         score += int(self.m18_complete.data)
+        score -= int(self.penalties_chosen.data)
+
+        if score < 0:
+            score = 0
 
         return score

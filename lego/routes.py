@@ -15,7 +15,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 from sqlalchemy.exc import IntegrityError
 
 from lego import app, db, lm
-from lego.forms import LoginForm, ScoreRoundForm, EditTeamForm, EditTeamScoreForm, ResetTeamScoreForm, StageForm
+from lego.forms import LoginForm, ScoreRoundForm, EditTeamForm, NewTeamForm, EditTeamScoreForm, ResetTeamScoreForm, StageForm
 from lego.models import User, Team
 
 
@@ -123,6 +123,10 @@ def logout():
 
 @app.route('/')
 @app.route('/home')
+def home():
+    teams = Team.query.all()
+    return render_template('home.html', title='Home', teams=teams)
+
 @app.route('/scoreboard')
 def scoreboard():
     teams = Team.query.filter_by(active=True, is_practice=False).all()
@@ -219,10 +223,10 @@ def judges_score_round():
         else:
             form.score.data = score
 
-        return render_template('judges/score_round.html', title='Score round',
+        return render_template('judges/score_round.html', title='Score Round',
                                form=form, confirm=True)
 
-    return render_template('judges/score_round.html', title='Score round', form=form)
+    return render_template('judges/score_round.html', title='Score Round', form=form)
 
 @app.route('/admin/team')
 @login_required
@@ -233,15 +237,6 @@ def admin_team():
     teams = Team.query.filter_by(is_practice=False).order_by(Team.id)
 
     return render_template('admin/team.html', title='Teams', teams=teams)
-
-
-@app.route('/admin/team/new', methods=['GET', 'POST'])
-@login_required
-def admin_team_new():
-    if not current_user.is_admin:
-        return abort(403)
-
-    return render_template('admin/team_new.html', title='Add New Team')
 
 
 @app.route('/admin/team/<int:id>/edit', methods=['GET', 'POST'])
@@ -277,6 +272,32 @@ def admin_team_edit(id: int):
 
     return render_template('admin/team_edit.html', title='Edit Team', form=form)
 
+@app.route('/admin/team/new', methods=['GET', 'POST'])
+@login_required
+def admin_team_new():
+    if not current_user.is_admin:
+        return abort(403)
+
+    form = NewTeamForm()
+
+    if form.validate_on_submit():
+        try:
+            team = Team(number=form.number.data, name=form.name.data)
+            db.session.add(team)
+            db.session.commit()
+        except IntegrityError as e:
+            db.session.rollback()
+            app.logger.exception(e)
+            flash('The name or number requested is already in use. Please use another one.')
+        except Exception as e:
+            db.session.rollback()
+            app.logger.exception(e)
+            flash('An unknown error occurred. See the error logs for more information')
+        else:
+            flash('Team details successfully updated')
+            return redirect(url_for('admin_team'))
+
+    return render_template('admin/team_new.html', title='New Team', form=form)
 
 @app.route('/admin/team/<int:id>/score/edit', methods=['GET', 'POST'])
 @login_required

@@ -1,0 +1,20 @@
+1,  Sherfield Slayers
+2,  Wetherbots
+3,  Tech Heds
+4,  KESdroid
+5,  LV Hackers
+6,  Pet-a-Byte
+7,  Blue Streak
+8,  Seaside Scientists
+9,  The Fentons
+10, L2O
+11, PaTeS
+12, Backflip Foxes
+13, Warminster Avengers
+14, Batteries not included
+15, Bastian's Boys
+16, Hugo's Heroes
+17, Tom's Terrors
+18, Megabites
+19, Bobots
+20, Bohunt Brainiacs

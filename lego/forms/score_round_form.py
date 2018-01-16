@@ -188,7 +188,7 @@ class ScoreRoundForm(FlaskForm):
                               default='0',
                               validators=[InputRequired('Please make a choice for M18')])
 
-    penalties_chosen = SelectField('Big Water in Water Collection Area.',
+    penalties_chosen = SelectField('Number of penalties',
                              choices=[('0', '0 (0 points)'),
                                       ('5', '1 (-5 points)'),
                                       ('10', '2 (-10 points)'),

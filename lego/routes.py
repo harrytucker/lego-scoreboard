@@ -165,6 +165,42 @@ def scoreboard():
     teams = Team.query.filter_by(active=True, is_practice=False).all()
 
     def compare(team_1, team_2):
+        stage = app.load_stage()
+        if stage == 0:
+            attempt_1 = [a if a is not None else 0 for a in team_1.attempts]
+            attempt_2 = [a if a is not None else 0 for a in team_2.attempts]
+
+            attempt_1.sort(reverse=True)
+            attempt_2.sort(reverse=True)
+
+            for score_1, score_2 in zip(attempt_1, attempt_2):
+                if score_1 > score_2:
+                    return -1
+                elif score_1 < score_2:
+                    return 1
+
+            return 0
+
+        if stage == 3:
+            if team_1.final_total > team_2.final_total:
+                return -1
+            elif team_1.final_total < team_2.final_total:
+                return 1
+            else:
+                final_scores_1 = [a if a is not None else 0 for a in team_1.finals]
+                final_scores_2 = [a if a is not None else 0 for a in team_2.finals]
+
+                final_scores_1.sort(reverse=True)
+                final_scores_2.sort(reverse=True)
+
+                for score_1, score_2 in zip(final_scores_1, final_scores_2):
+                    if score_1 > score_2:
+                        return -1
+                    elif score_1 < score_2:
+                        return 1
+                        
+                return 0
+
         if team_1.highest_score > team_2.highest_score:
             return -1
 

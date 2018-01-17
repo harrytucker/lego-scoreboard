@@ -124,7 +124,7 @@ def logout():
 @app.route('/')
 @app.route('/home')
 def home():
-    teams = Team.query.all()
+    teams = Team.query.filter_by(is_practice=False).all()
     return render_template('home.html', title='Home', teams=teams)
 
 
@@ -229,6 +229,16 @@ def scoreboard():
         return render_template('scoreboard_bristol.html', title='Scoreboard - Final',
                                final=True, first=teams)
 
+
+@app.route('/judges/')
+@app.route('/judges')
+@login_required
+def judges_home():
+    if not (current_user.is_judge or current_user.is_admin):
+        return abort(403)
+
+    teams = Team.query.filter_by(is_practice=False).order_by('id')
+    return render_template('judges/home.html', title='Judges - Home', teams=teams)
 
 @app.route('/judges/score_round', methods=['GET', 'POST'])
 @login_required

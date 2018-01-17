@@ -113,10 +113,8 @@ set FLASK_DEBUG=0
 - [ ] Add unit testing ([[1](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vii-unit-testing)] and 2nd from last part).
 - [ ] Create proper manual (see questions in emails plus other relevant data/hacks that may be required).
 - [ ] Add simulation mode for quickly filling out data to simulate the event.
-- [ ] Implement yellow cards.
-- [ ] Implement red cards.
-- [ ] Add CSS (In progress).
-    - [ ] Use columns for scoreboard rather than floats.
+- [X] Add CSS (In progress).
+    - [X] Use columns for scoreboard rather than floats.
 - [ ] Add JavaScript form helpers for rounds that have bonus points, e.g. disable checkboxes unless pre-requisites have been met.
 - [X] Implement Bristol scoreboard.
     - First round: 24 teams (3 tables of 8) with 3 attempts each.
@@ -150,5 +148,5 @@ set FLASK_DEBUG=0
         - Team 7 -> Table D
         - Team 8 -> Table B
         - (And so on...)
-- [ ] Implement something for telling teams where to go for quarter/semi/finals.
+- [X] Implement something for telling teams where to go for quarter/semi/finals.
 - [ ] Add other tasks to complete here.

@@ -1,13 +1,26 @@
 {% extends 'base.html' %}
 {% block main %}
-<h2>Teams</h2>
-<ul>
-    {% if teams %}
-        {% for t in teams %}
-            <li>{{ t.name }}</li>
-        {% endfor %}
-    {% else %}
-        <li>No teams found</li>
-    {% endif %}
-</ul>
+<table class="center">
+    <thead>
+        <tr>
+            <th>Number</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% if teams %}
+            {% for t in teams %}
+                <tr>
+                    <td>{{ t.number }}</td>
+                    <td>{{ t.name }}</td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="2">No teams found</td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
 {% endblock %}

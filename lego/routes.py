@@ -127,6 +127,39 @@ def home():
     teams = Team.query.all()
     return render_template('home.html', title='Home', teams=teams)
 
+
+@app.route('/tables')
+def tables():
+    stage = app.load_stage()
+
+    if stage == 0:
+        flash('Current stage is invalid for this page')
+        return render_template('tables.html', title='Tables', teams=[])
+
+    teams = Team.query.filter_by(active=True, is_practice=False).all()
+
+    def compare(team_1, team_2):
+        if team_1.highest_score > team_2.highest_score:
+            return -1
+
+        if team_1.highest_score < team_2.highest_score:
+            return 1
+
+        return 0
+
+    teams = sorted(teams, key=cmp_to_key(compare))
+
+    if stage == 1:
+        tables = ['A', 'C', 'E', 'F', 'D', 'B']
+    elif stage == 2:
+        tables = ['A', 'C', 'D', 'B']
+    elif stage == 3:
+        tables = ['A', 'B']
+
+    return render_template('tables.html', title='Tables', teams=teams, tables=tables)
+
+
+
 @app.route('/scoreboard')
 def scoreboard():
     teams = Team.query.filter_by(active=True, is_practice=False).all()
@@ -154,9 +187,29 @@ def scoreboard():
                         .format(app.config['LEGO_APP_TYPE']))
 
     if stage == 0:
-        top = teams[:8]
-        second = teams[8:16]
-        third = teams[16:]
+        quotient = len(teams) // 3
+        remainder = len(teams) % 3
+
+        # remainder == 0
+        if not remainder:
+            top = teams[:quotient]
+            second = teams[quotient:(quotient * 2)]
+            third = teams[(quotient * 2):]
+
+        elif remainder == 1:
+            top = teams[:(quotient + 1)]
+            second = teams[quotient + 1:(quotient * 2) + 1]
+            third = teams[(quotient * 2) + 1:]
+
+        # remainder == 2
+        else:
+            top = teams[:(quotient)]
+            second = teams[quotient:(quotient * 2) + 1]
+            third = teams[(quotient * 2) + 1:]
+
+        app.logger.info('top: %s', str(top))
+        app.logger.info('second: %s', str(second))
+        app.logger.info('third: %s', str(third))
 
         return render_template('scoreboard_bristol.html', title='Scoreboard', round=True,
                                first=top, second=second, third=third)

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block main %}
+<table class="center">
+    <thead>
+        <tr>
+            <th>Number</th>
+            <th>Name</th>
+            <th>Table</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for team in teams %}
+            <tr>
+                <td>{{ team.number }}</td>
+                <td>{{ team.name }}</td>
+                <td>{{ tables[loop.index - 1] }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

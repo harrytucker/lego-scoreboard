@@ -34,6 +34,24 @@ class Team(db.Model):
     def finals(self):
         return [self.final_1, self.final_2]
 
+    @hybrid_property
+    def final_total(self):
+        return sum([self.final_1 or 0, self.final_2 or 0])
+
+    @hybrid_property
+    def highest_score(self):
+        stage = app.load_stage()
+        if stage == 0:
+            return max(self.round_1 or 0, self.round_2 or 0, self.round_3 or 0)
+
+        if stage == 1:
+            return self.quarter or 0
+
+        if stage == 2:
+            return self.semi or 0
+
+        return max(self.final_1 or 0, self.final_2 or 0)
+
 
     def set_score(self, score):
         stage = app.load_stage()
@@ -76,21 +94,6 @@ class Team(db.Model):
 
         else:
             raise Exception('Invalid value for stage.')
-
-
-    @hybrid_property
-    def highest_score(self):
-        stage = app.load_stage()
-        if stage == 0:
-            return max(self.round_1 or 0, self.round_2 or 0, self.round_3 or 0)
-
-        if stage == 1:
-            return self.quarter or 0
-
-        if stage == 2:
-            return self.semi or 0
-
-        return max(self.final_1 or 0, self.final_2 or 0)
 
 
     def edit_round_score(self, round, score):

@@ -37,6 +37,7 @@
             <th>Semi final</th>
             <th>Final 1</th>
             <th>Final 2</th>
+            <th>Final total</th>
         {% endif %}
     </tr>
     {% for team in first %}
@@ -47,7 +48,7 @@
 
             {% if round %}
                 {% for attempt in team.attempts %}
-                    {% if not attempt %}
+                    {% if attempt is none%}
                         <td>-</td>
                     {% elif attempt == team.highest_score %}
                         <td>
@@ -93,7 +94,7 @@
                 <td>{{ team.semi }}</td>
 
                 {% for attempt in team.finals %}
-                    {% if not attempt %}
+                    {% if attempt is none %}
                         <td>-</td>
                     {% elif attempt == team.highest_final %}
                         <td>
@@ -103,6 +104,8 @@
                         <td>{{attempt }}</td>
                     {% endif %}
                 {% endfor %}
+
+                <td>{{ team.final_total }}</td>
             {% endif %}
         </tr>
     {% endfor %}
@@ -127,7 +130,7 @@
                     <td>{{ team.name }}</td>
 
                     {% for attempt in team.attempts %}
-                        {% if not attempt %}
+                        {% if attempt is none %}
                             <td>-</td>
                         {% elif attempt == team.highest_score %}
                             <td>
@@ -158,7 +161,7 @@
                     <td>{{ team.name }}</td>
 
                     {% for attempt in team.attempts %}
-                        {% if not attempt %}
+                        {% if attempt is none %}
                             <td>-</td>
                         {% elif attempt == team.highest_score %}
                             <td>

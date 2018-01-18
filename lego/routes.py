@@ -76,6 +76,52 @@ def slugify(value: str):
     return hyphenate_value
 
 
+def compare_teams(team_1, team_2):
+    stage = app.load_stage()
+    if stage == 0:
+        attempt_1 = [a if a is not None else 0 for a in team_1.attempts]
+        attempt_2 = [a if a is not None else 0 for a in team_2.attempts]
+
+        attempt_1.sort(reverse=True)
+        attempt_2.sort(reverse=True)
+
+        for score_1, score_2 in zip(attempt_1, attempt_2):
+            if score_1 > score_2:
+                return -1
+            elif score_1 < score_2:
+                return 1
+
+        return 0
+
+    if stage == 3:
+        if team_1.final_total > team_2.final_total:
+            return -1
+        elif team_1.final_total < team_2.final_total:
+            return 1
+        else:
+            final_scores_1 = [a if a is not None else 0 for a in team_1.finals]
+            final_scores_2 = [a if a is not None else 0 for a in team_2.finals]
+
+            final_scores_1.sort(reverse=True)
+            final_scores_2.sort(reverse=True)
+
+            for score_1, score_2 in zip(final_scores_1, final_scores_2):
+                if score_1 > score_2:
+                    return -1
+                elif score_1 < score_2:
+                    return 1
+                    
+            return 0
+
+    if team_1.highest_score > team_2.highest_score:
+        return -1
+
+    if team_1.highest_score < team_2.highest_score:
+        return 1
+
+    return 0
+
+
 @app.errorhandler(403)
 def page_not_found(error):
     return render_template('errors/403.html', title='Permission denied'), 403
@@ -137,17 +183,7 @@ def tables():
         return render_template('tables.html', title='Tables', teams=[])
 
     teams = Team.query.filter_by(active=True, is_practice=False).all()
-
-    def compare(team_1, team_2):
-        if team_1.highest_score > team_2.highest_score:
-            return -1
-
-        if team_1.highest_score < team_2.highest_score:
-            return 1
-
-        return 0
-
-    teams = sorted(teams, key=cmp_to_key(compare))
+    teams = sorted(teams, key=cmp_to_key(compare_teams))
 
     if stage == 1:
         tables = ['A', 'C', 'E', 'F', 'D', 'B']
@@ -163,53 +199,7 @@ def tables():
 @app.route('/scoreboard')
 def scoreboard():
     teams = Team.query.filter_by(active=True, is_practice=False).all()
-
-    def compare(team_1, team_2):
-        stage = app.load_stage()
-        if stage == 0:
-            attempt_1 = [a if a is not None else 0 for a in team_1.attempts]
-            attempt_2 = [a if a is not None else 0 for a in team_2.attempts]
-
-            attempt_1.sort(reverse=True)
-            attempt_2.sort(reverse=True)
-
-            for score_1, score_2 in zip(attempt_1, attempt_2):
-                if score_1 > score_2:
-                    return -1
-                elif score_1 < score_2:
-                    return 1
-
-            return 0
-
-        if stage == 3:
-            if team_1.final_total > team_2.final_total:
-                return -1
-            elif team_1.final_total < team_2.final_total:
-                return 1
-            else:
-                final_scores_1 = [a if a is not None else 0 for a in team_1.finals]
-                final_scores_2 = [a if a is not None else 0 for a in team_2.finals]
-
-                final_scores_1.sort(reverse=True)
-                final_scores_2.sort(reverse=True)
-
-                for score_1, score_2 in zip(final_scores_1, final_scores_2):
-                    if score_1 > score_2:
-                        return -1
-                    elif score_1 < score_2:
-                        return 1
-                        
-                return 0
-
-        if team_1.highest_score > team_2.highest_score:
-            return -1
-
-        if team_1.highest_score < team_2.highest_score:
-            return 1
-
-        return 0
-
-    teams = sorted(teams, key=cmp_to_key(compare))
+    teams = sorted(teams, key=cmp_to_key(compare_teams))
     stage = app.load_stage()
 
     # TODO: swap the below with this
@@ -482,17 +472,8 @@ def admin_stage():
 
 
 def set_active_teams(stage):
-    def compare(team_1, team_2):
-        if team_1.highest_score > team_2.highest_score:
-            return -1
-
-        if team_1.highest_score < team_2.highest_score:
-            return 1
-
-        return 0
-
     teams = Team.query.filter_by(active=True, is_practice=False).all()
-    teams = sorted(teams, key=cmp_to_key(compare))
+    teams = sorted(teams, key=cmp_to_key(compare_teams))
 
     if app.config['LEGO_APP_TYPE'] == 'bristol':
         for i, team in enumerate(teams):

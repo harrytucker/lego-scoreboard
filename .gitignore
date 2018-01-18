@@ -3,4 +3,7 @@ venv
 config.py
 lego.db
 *.log
+*.log.*
 .stage
+teams_day1.txt
+teams_day2.txt

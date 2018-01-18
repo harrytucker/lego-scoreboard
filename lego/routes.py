@@ -170,7 +170,7 @@ def logout():
 @app.route('/')
 @app.route('/home')
 def home():
-    teams = Team.query.filter_by(is_practice=False).all()
+    teams = Team.query.filter_by(is_practice=False).order_by('number ASC').all()
     return render_template('home.html', title='Home', teams=teams)
 
 
@@ -182,7 +182,7 @@ def tables():
         flash('Current stage is invalid for this page')
         return render_template('tables.html', title='Tables', teams=[])
 
-    teams = Team.query.filter_by(active=True, is_practice=False).all()
+    teams = Team.query.filter_by(active=True, is_practice=False).order_by('number ASC').all()
     teams = sorted(teams, key=cmp_to_key(compare_teams))
 
     if stage == 1:
@@ -198,7 +198,7 @@ def tables():
 
 @app.route('/scoreboard')
 def scoreboard():
-    teams = Team.query.filter_by(active=True, is_practice=False).all()
+    teams = Team.query.filter_by(active=True, is_practice=False).order_by('number ASC').all()
     teams = sorted(teams, key=cmp_to_key(compare_teams))
     stage = app.load_stage()
 
@@ -263,7 +263,7 @@ def judges_home():
     if not (current_user.is_judge or current_user.is_admin):
         return abort(403)
 
-    teams = Team.query.filter_by(is_practice=False).order_by('id')
+    teams = Team.query.filter_by(is_practice=False).order_by('number')
     return render_template('judges/home.html', title='Judges - Home', teams=teams)
 
 @app.route('/judges/score_round', methods=['GET', 'POST'])
@@ -274,7 +274,7 @@ def judges_score_round():
 
     form = ScoreRoundForm()
 
-    teams = Team.query.filter_by(active=True).order_by('id')
+    teams = Team.query.filter_by(active=True).order_by('number')
     form.team.choices = [('', '--Select team--')]
     form.team.choices += [(str(t.id), t.name) for t in teams]
 
@@ -323,7 +323,7 @@ def admin_team():
     if not current_user.is_admin:
         return abort(403)
 
-    teams = Team.query.filter_by(is_practice=False).order_by(Team.id)
+    teams = Team.query.filter_by(is_practice=False).order_by('number')
 
     return render_template('admin/team.html', title='Teams', teams=teams)
 
@@ -472,7 +472,7 @@ def admin_stage():
 
 
 def set_active_teams(stage):
-    teams = Team.query.filter_by(active=True, is_practice=False).all()
+    teams = Team.query.filter_by(active=True, is_practice=False).order_by('number ASC').all()
     teams = sorted(teams, key=cmp_to_key(compare_teams))
 
     if app.config['LEGO_APP_TYPE'] == 'bristol':

@@ -77,47 +77,11 @@ def slugify(value: str):
 
 
 def compare_teams(team_1, team_2):
-    stage = app.load_stage()
-    if stage == 0:
-        attempt_1 = [a if a is not None else 0 for a in team_1.attempts]
-        attempt_2 = [a if a is not None else 0 for a in team_2.attempts]
-
-        attempt_1.sort(reverse=True)
-        attempt_2.sort(reverse=True)
-
-        for score_1, score_2 in zip(attempt_1, attempt_2):
-            if score_1 > score_2:
-                return -1
-            elif score_1 < score_2:
-                return 1
-
-        return 0
-
-    if stage == 3:
-        if team_1.final_total > team_2.final_total:
-            return -1
-        elif team_1.final_total < team_2.final_total:
-            return 1
-        else:
-            final_scores_1 = [a if a is not None else 0 for a in team_1.finals]
-            final_scores_2 = [a if a is not None else 0 for a in team_2.finals]
-
-            final_scores_1.sort(reverse=True)
-            final_scores_2.sort(reverse=True)
-
-            for score_1, score_2 in zip(final_scores_1, final_scores_2):
-                if score_1 > score_2:
-                    return -1
-                elif score_1 < score_2:
-                    return 1
-                    
-            return 0
-
-    if team_1.highest_score > team_2.highest_score:
-        return -1
-
-    if team_1.highest_score < team_2.highest_score:
+    if team_1 > team_2:
         return 1
+
+    if team_1 < team_2:
+        return -1
 
     return 0
 
@@ -182,7 +146,7 @@ def tables():
         flash('Current stage is invalid for this page')
         return render_template('tables.html', title='Tables', teams=[])
 
-    teams = Team.query.filter_by(active=True, is_practice=False).order_by('number ASC').all()
+    teams = Team.query.filter_by(active=True, is_practice=False).all()
     teams = sorted(teams, key=cmp_to_key(compare_teams))
 
     if stage == 1:
@@ -198,7 +162,7 @@ def tables():
 
 @app.route('/scoreboard')
 def scoreboard():
-    teams = Team.query.filter_by(active=True, is_practice=False).order_by('number ASC').all()
+    teams = Team.query.filter_by(active=True, is_practice=False).all()
     teams = sorted(teams, key=cmp_to_key(compare_teams))
     stage = app.load_stage()
 
@@ -233,26 +197,22 @@ def scoreboard():
             second = teams[quotient:(quotient * 2) + 1]
             third = teams[(quotient * 2) + 1:]
 
-        app.logger.info('top: %s', str(top))
-        app.logger.info('second: %s', str(second))
-        app.logger.info('third: %s', str(third))
-
         return render_template('scoreboard_bristol.html', title='Scoreboard', round=True,
                                first=top, second=second, third=third)
 
     # quarter finals
     if stage == 1:
-        return render_template('scoreboard_bristol.html', title='Scoreboard - Quarter Final',
+        return render_template('scoreboard_bristol.html', title='Scoreboard',
                                quarter_final=True, first=teams)
 
     # semi final
     if stage == 2:
-        return render_template('scoreboard_bristol.html', title='Scoreboard - Semi Final',
+        return render_template('scoreboard_bristol.html', title='Scoreboard',
                                semi_final=True, first=teams)
 
     # final
     if stage == 3:
-        return render_template('scoreboard_bristol.html', title='Scoreboard - Final',
+        return render_template('scoreboard_bristol.html', title='Scoreboard',
                                final=True, first=teams)
 
 
@@ -274,7 +234,7 @@ def judges_score_round():
 
     form = ScoreRoundForm()
 
-    teams = Team.query.filter_by(active=True).order_by('number')
+    teams = Team.query.filter_by(active=True).order_by('number').all()
     form.team.choices = [('', '--Select team--')]
     form.team.choices += [(str(t.id), t.name) for t in teams]
 
@@ -354,7 +314,6 @@ def admin_team_edit(id: int):
             flash('Team details successfully updated')
             return redirect(url_for('admin_team'))
 
-
     form.id.data = team.id
     form.name.data = team.name
     form.number.data = team.number
@@ -399,7 +358,7 @@ def admin_team_score_edit(id: int):
 
     if form.validate_on_submit():
         try:
-            team.edit_round_score(int(form.stage.data), form.score.data)
+            team.edit_round_score(form.stage.data, form.score.data)
             db.session.commit()
         except Exception as e:
             db.session.rollback()
@@ -425,7 +384,7 @@ def admin_team_score_reset(id: int):
 
     if form.validate_on_submit():
         try:
-            team.reset_round_score(int(form.stage.data))
+            team.reset_round_score(form.stage.data)
             db.session.commit()
         except Exception as e:
             db.session.rollback()
@@ -445,7 +404,7 @@ def admin_stage():
     if not current_user.is_admin:
         return abort(403)
 
-    stages = ('First Round', 'Quarter Final', 'Semi Final', 'Final')
+    stages = ('First Round', 'Second Round', 'Quarter Final', 'Semi Final', 'Final')
 
     stage = app.load_stage()
     current_stage = stages[stage]
@@ -458,6 +417,8 @@ def admin_stage():
 
         if new_stage <= stage:
             flash('Unable to go back a stage.')
+        if app.config['LEGO_APP_TYPE'] == 'bristol' and new_stage == 1:
+            flask('Round 2 only available during UK Final.')
         else:
             set_active_teams(new_stage)
 
@@ -472,29 +433,32 @@ def admin_stage():
 
 
 def set_active_teams(stage):
-    teams = Team.query.filter_by(active=True, is_practice=False).order_by('number ASC').all()
+    teams = Team.query.filter_by(active=True, is_practice=False).all()
     teams = sorted(teams, key=cmp_to_key(compare_teams))
 
     if app.config['LEGO_APP_TYPE'] == 'bristol':
         for i, team in enumerate(teams):
-            if stage == 1 and i >= 6:
+            if stage == 2 and i >= 6:
                 team.active = False
 
-            if stage == 2 and i >= 4:
+            if stage == 3 and i >= 4:
                 team.active = False
 
-            if stage == 3 and i >= 2:
+            if stage == 4 and i >= 2:
                 team.active = False
 
     elif app.config['LEGO_APP_TYPE'] == 'uk':
         for i, team in enumerate(teams):
-            if stage == 1 and i >= 8:
+            if stage == 1 and i >= 12:
                 team.active = False
 
-            if stage == 2 and i >= 4:
+            if stage == 2 and i >= 8:
                 team.active = False
 
-            if stage == 3 and i >= 2:
+            if stage == 3 and i >= 4:
+                team.active = False
+
+            if stage == 4 and i >= 2:
                 team.active = False
 
     db.session.commit()

@@ -115,3 +115,10 @@ def reset_teams():
         db.session.query(Team).delete()
         db.session.commit()
         click.echo('Teams deleted.')
+
+
+@app.cli.command('list-teams',
+    short_help='List all teams from the database.')
+def list_teams():
+    click.echo('Not yet implemented')
+    pass

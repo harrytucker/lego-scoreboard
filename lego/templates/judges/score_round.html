@@ -17,6 +17,14 @@
             </section>
         {% endif %}
 
+        <div class="form-submit top">
+            <input type="submit" value="Calculate Score" id="calcScore" class="button submit-button calc-score">
+
+            {% if confirm %}
+                <input type="submit" value="Submit Score" id="submitScore" class="button submit-button submit-score">
+            {% endif %}
+        </div>
+
         <section>
             <div class="form-input">
                 {{ form.team.label(class_='inline') }}
@@ -342,10 +350,10 @@
         {% endif %}
 
         <div class="form-submit">
-            <input type="submit" value="Calculate Score" id="calcScore" class="button submit-button">
+            <input type="submit" value="Calculate Score" id="calcScore" class="button submit-button calc-score">
 
             {% if confirm %}
-                <input type="submit" value="Submit Score" id="submitScore" class="button submit-button">
+                <input type="submit" value="Submit Score" id="submitScore" class="button submit-button submit-score">
             {% endif %}
         </div>
     </form>
@@ -358,8 +366,8 @@
     'use strict';
 
     function init() {
-        var confirm = !!$('#submitScore').length,
-            $calcScore = $('#calcScore'),
+        var confirm = !!$('.submit-score').length,
+            $calcScore = $('.calc-score'),
             $confirm = $('#confirm');
 
         if (confirm) {

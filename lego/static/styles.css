@@ -196,6 +196,10 @@ strong {
     text-align: center;
 }
 
+.form-submit.top {
+    margin-bottom: 0;
+}
+
 .button {
     padding: 8px 20px;
     border: 0;

@@ -12,13 +12,14 @@ from wtforms.validators import DataRequired, NumberRange
 class EditTeamScoreForm(FlaskForm):
     id = HiddenField('Id', validators=[DataRequired()])
     stage = SelectField('Stage',
-                        choices=[('1', 'Round 1'),
-                                 ('2', 'Round 2'),
-                                 ('3', 'Round 3'),
-                                 ('4', 'Quarter Final'),
-                                 ('5', 'Semi Final'),
-                                 ('6', 'Final 1'),
-                                 ('7', 'Final 2')],
-                        default='1',
+                        choices=[('attempt_1', 'Round 1 - Attempt 1'),
+                                 ('attempt_2', 'Round 1 - Attempt 2'),
+                                 ('attempt_3', 'Round 1 - Attempt 3'),
+                                 ('round_2', 'Round 2'),
+                                 ('quarter', 'Quarter Final'),
+                                 ('semi', 'Semi Final'),
+                                 ('final_1', 'Final 1'),
+                                 ('final_2', 'Final 2')],
+                        default='attempt_1',
                         validators=[DataRequired()])
     score = IntegerField('Score', validators=[DataRequired(), NumberRange(min=0)])

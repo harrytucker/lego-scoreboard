@@ -2,6 +2,10 @@
 :: Setup script for Lego Challenge site.
 :: ------------------------------------------------------------------------------------------------
 
+@ECHO Python and pip versions:
+python --version
+pip --version
+
 @ECHO Installing dependencies via pip...
 pip install pip --upgrade
 pip install -r requirements

@@ -27,14 +27,14 @@ As an example, the 2018 guide can be found [here](https://firstinspiresst01.blob
 
 ## Common Issues
 - A simple way to check the setup has been performed correctly is to run `flask --help`. If everything is fine, you will see multiple commands listed in addition to the standard `flask run` and `flask shell`. If you do not see these, run `flask shell` and the error should be returned.
-- If you see an error similar to `AttributeError: 'module' object has no attribute 'config'` on a page when the application is running, simply restart the application. This can happen when an exception occurs such as an ImportError of SyntaxError and the application gets stuck.
+- If you see an error similar to `AttributeError: 'module' object has no attribute 'config'` on a page when the application is running, simply restart the application. This can happen when an exception occurs such as an ImportError or SyntaxError and the application gets stuck.
 - Error and debug logs can be found in the `lego/logs/` directory. If the error is not output to the GUI or commandline, it will be output in at least one of the log files.
 
 ## Tips
 - To view the database in it's raw form, `sqlite3` can be used (requires SQLite 3 to be installed first). To do so, simply run `sqlite3 /app/lego/tmp/lego.db`. The sqlite3 specific commands that can be run can be found using `.help`. SQL queries work in much the same way as other dialects which can be found in various guides available online. Examples of queries you may want to run are:
     - Updating the user passwords: These are stored in plaintext, so can be changed with a simple `UPDATE` statement.
     - Debugging an operation: simply run `.dump` to get the full database output. More granular queries can be created using a `SELECT` statement.
-- The current stage is persisted to a file and cannot be moved backwards through the GUI. However, it can be manually edited if necessary and should be a value of 0-4 representing the first round through to the final. Note that if you do manually go back a stage then you will need to set the `active` column manually for the relevant teams, e.g. `UPDATE team SET active=1 WHERE is_practice=0;`.
+- The current stage is persisted to a file and cannot be moved backwards through the GUI. However, it can be manually edited if necessary and should be a value of 0-4 representing the first round through to the final. Note that if you do manually go back a stage then you will need to set the `active` column manually for the relevant teams. Formmore informaion, see the Stages section.
 
 ## Configuration
 A sample configuration file can be found at `config.sample.py` which should be copied to `config.py` for local modifications. The following configuration options are currently in use:
@@ -46,7 +46,9 @@ A sample configuration file can be found at `config.sample.py` which should be c
 - `LEGO_APP_TYPE`: The application type. Supports `'bristol'`, for use in the Bristol final, and `'uk'`, for use in the UK final. the main differences are the customisations to the scoreboard due to the different format of the finals and number of teams.
 
 ## Database
-The database layout is as follows:
+The database layout is below. the metadat key is:
+- `PK`: Primary key.
+- `U`: Unique value. This may be enforced by the aplication or the database.
 
 ### User
 
@@ -87,7 +89,7 @@ The base flask CLI has been extended with a number of commands specific to this 
 - `reset-teams`
 
 ## Stages
-a stage identfies the current place in the competition. It can take one of 5 values, represented as the following numbers internally:
+A stage identfies the current place in the competition. It can take one of 5 values, represented as the following numbers internally:
 
 0. Round 1
 1. Round 2 (UK Final only)

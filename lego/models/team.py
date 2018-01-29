@@ -43,24 +43,24 @@ class Team(db.Model):
                 return False
 
         if stage >= 3:
-            if self.semi < other.semi:
+            if (self.semi or -1) < (other.semi or -1):
                 return True
 
-            if self.semi > other.semi:
+            if (self.semi or -1) > (other.semi or -1):
                 return False
 
         if stage >= 2:
-            if self.quarter < other.quarter:
+            if (self.quarter or -1) < (other.quarter or -1):
                 return True
 
-            if self.quarter > other.quarter:
+            if (self.quarter or -1) > (other.quarter or -1):
                 return False
 
         if stage >= 1:
-            if self.round_2 < other.round_2:
+            if (self.round_2 or -1) < (other.round_2 or -1):
                 return True
 
-            if self.round_2 > other.round_2:
+            if (self.round_2 or -1) > (other.round_2 or -1):
                 return False
 
         if stage >= 0:
@@ -93,24 +93,24 @@ class Team(db.Model):
                 return False
 
         if stage >= 3:
-            if self.semi > other.semi:
+            if (self.semi or -1) > (other.semi or -1):
                 return True
 
-            if self.semi < other.semi:
+            if (self.semi or -1) < (other.semi or -1):
                 return False
 
         if stage >= 2:
-            if self.quarter > other.quarter:
+            if (self.quarter or -1) > (other.quarter or -1):
                 return True
 
-            if self.quarter < other.quarter:
+            if (self.quarter or -1) < (other.quarter or -1):
                 return False
 
         if stage >= 1:
-            if self.round_2 > other.round_2:
+            if (self.round_2 or -1) > (other.round_2 or -1):
                 return True
 
-            if self.round_2 < other.round_2:
+            if (self.round_2 or -1) < (other.round_2 or -1):
                 return False
 
         if stage >= 0:

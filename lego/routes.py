@@ -15,7 +15,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 from sqlalchemy.exc import IntegrityError
 
 from lego import app, db, lm
-from lego.forms import LoginForm, ScoreRoundForm, EditTeamForm, NewTeamForm, EditTeamScoreForm, ResetTeamScoreForm, StageForm
+from lego.forms import LoginForm, ScoreRoundForm, EditTeamForm, NewTeamForm, EditTeamScoreForm, ResetTeamScoreForm, StageForm, generate_manage_active_teams_form
 from lego.models import User, Team
 
 
@@ -462,3 +462,21 @@ def set_active_teams(stage):
                 team.active = False
 
     db.session.commit()
+
+
+@app.route('/admin/manage_active_teams', methods=['GET', 'POST'])
+def admin_manage_active_teams():
+    if not current_user.is_admin:
+        return abort(403)
+
+    form = generate_manage_active_teams_form()
+
+    if form.validate_on_submit():
+        for t in form.teams:
+            is_active = form[str(t.id) + '_active'].data
+            t.active = is_active
+
+        db.session.commit()
+
+    return render_template('admin/manage_active_teams.html', title='Manage Active Teams',
+                           form=form)

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block main %}
+<div class="manage-active-teams-form">
+    <form action="" method="POST" name="manage-active-teams">
+        {{ form.hidden_tag() }}
+
+        {% if form.errors %}
+            <div class="errors">
+                <ul>
+                    {% for _field, errors in form.errors.items() %}
+                        {% for error in errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <table class="center">
+            <thead>
+                <tr>
+                    <th>Number</th>
+                    <th>Name</th>
+                    <th>Active</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for team in form.teams %}
+                    <tr>
+                        <td>{{ team.number }}</td>
+                        <td>{{ team.name }}</td>
+                        <td>{{ form[team.id|string + '_active'](_class='input-checkbox') }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="form-submit">
+            <input type="submit" value="Submit" class="button submit-button">
+        </div>
+    </form>
+</div>
+
+{% endblock %}

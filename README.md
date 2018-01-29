@@ -84,20 +84,19 @@ $ flask run
 ```
 This will run the application on port 5000 of localhost, e.g. `http://localhost:5000`.
 
-You can modify the command to run on all assigned IP addresses:
-```
-$ flask run --host=0.0.0.0
-```
-This usage is usually required to run and access the application on Windows.
+There are a number of options to customise the running of the application further:
+- `--host=<ip address>` - Alters the IP address the appication runs on. This is essential for usage outside of the standard localhost. The most common usage will be `--host=0.0.0.0` which connects the application to all network interfaces allowing it to be accessed from other computers. With this active, all oanother computer needs to connect is your IP address and the port the application is running on, e.g. `1.2.3.4:5000`.
+- `--port=<port?` - Configures the port the application runs on. Useful for setting the port to `80` to allow the port to be left off the address as `80` is the standard port for HTTP.
 
-You can also change the used port to `80` to avoid specifying it in the browser:
+More options can be found by usng `flask run --help`. Alternatively a script to start the application with common options pre-set can be found at `run.sh`:
+
 ```
-$ flask run --host=0.0.0.0 --port=80
+$ ./run.sh &
 ```
 
-To halt the application, use `Ctrl+C`.
+To halt the application, use `Ctrl+C`. If you are using the provided `run.sh` script, use `fg` and then `Ctrl+C`.
 
-If you wish to run the application for a long period of time, e.g. for the competition, using `screen` or running the application as a background process by appending `&` to the command may be more useful.
+If you wish to run the application for a long period of time, e.g. for the competition, using `screen` or running the application as a background process by appending `&` to the command may be more useful. Note that `&` is used in the example invocation of `run.sh` above.
 
 Additionally, disabling debug mode by running the following will reduce the verbosity of the output to stdout. This is initialised to 1 by the setup scripts.
 ```
@@ -148,5 +147,6 @@ set FLASK_DEBUG=0
         - Team 7 -> Table D
         - Team 8 -> Table B
         - (And so on...)
-- [X] Implement something for telling teams where to go for quarter/semi/finals.
+- [ ] Add page for managing active teams.
+- [ ] Add CLI for listing teams.
 - [ ] Add other tasks to complete here.

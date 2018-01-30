@@ -1,0 +1,96 @@
+.scoreboard {
+    background-color: #fff;
+    color: #111;
+}
+
+.scoreboard .page-header {
+    display: none;
+}
+
+.scoreboard .table-wrapper {
+    width: 1000px;
+    margin: 0 auto;
+    border: 5px solid #205886;
+    border-radius: 20px;
+    background-color: #3287cd;
+}
+
+.scoreboard table,
+.scoreboard table th,
+.scoreboard table td {
+    border: 0;
+}
+
+.scoreboard thead th {
+    font-weight: normal;
+}
+
+.scoreboard table tbody td {
+    background-color: #eee;
+    color: #111;
+}
+
+.scoreboard table {
+    border-spacing: 0 5px;
+}
+
+.scoreboard table thead th,
+.scoreboard table thead tr {
+    background-color: transparent;
+    color: #fff;
+}
+
+.scoreboard table { border-collapse: separate; }
+.scoreboard tbody tr td:first-child {
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+.scoreboard tbody tr td:last-child {
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+
+.scoreboard table tbody td:nth-child(2) {
+    text-transform: uppercase;
+}
+
+.scoreboard table thead th:nth-child(2),
+.scoreboard table tbody td:nth-child(2) {
+    min-width: 300px;
+    text-align: left;
+}
+
+.scoreboard table thead {
+    text-transform: uppercase;
+}
+
+.scoreboard .images {
+    margin-top: 60px;
+    text-align: center;
+}
+
+.pagination {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.pagination ul,
+.pagination li,
+.pagination a {
+    display: inline-block;
+    color: #fff;
+}
+
+.pagination a {
+    padding: 0 10px;
+}
+
+.pagination li::after {
+    content: '|';
+}
+
+.pagination li:last-child::after {
+    content: none;
+}

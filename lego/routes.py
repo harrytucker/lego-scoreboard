@@ -160,60 +160,65 @@ def tables():
 
 
 
-@app.route('/scoreboard')
-def scoreboard():
+@app.route('/scoreboard/', defaults={'offset': 0})
+@app.route('/scoreboard/<int:offset>')
+def scoreboard(offset):
     teams = Team.query.filter_by(active=True, is_practice=False).all()
     teams = sorted(teams, key=cmp_to_key(compare_teams))
     stage = app.load_stage()
+    params = {
+        'title': 'Scoreboard',
+        'stage': stage,
+        'offset': offset,
+        'end': len(teams)
+    }
 
-    # TODO: swap the below with this
-    # if app.config['LEGO_APP_TYPE'] in ('bristol', 'uk'):
-    #     template = 'scoreboard_{!s}.html'.format(app.config['LEGO_APP_TYPE'])
-
-    if app.config['LEGO_APP_TYPE'] == 'bristol':
-        template = 'scoreboard_bristol.html'
+    if app.config['LEGO_APP_TYPE'] in ('bristol', 'uk'):
+        template = 'scoreboard_{!s}.html'.format(app.config['LEGO_APP_TYPE'])
     else:
         raise Exception('Unsupported value for LEGO_APP_TYPE: {!s}' \
                         .format(app.config['LEGO_APP_TYPE']))
 
+    stages = ('round_1', 'round_2', 'quarter_final', 'semi_final', 'final')
+    for i, s in enumerate(stages):
+        if stage >= i:
+            params[s] = True
+
     if stage == 0:
-        quotient = len(teams) // 3
-        remainder = len(teams) % 3
+        if app.config['LEGO_APP_TYPE'] == 'bristol':
+            quotient = len(teams) // 3
+            remainder = len(teams) % 3
 
-        # remainder == 0
-        if not remainder:
-            top = teams[:quotient]
-            second = teams[quotient:(quotient * 2)]
-            third = teams[(quotient * 2):]
+            # remainder == 0
+            if not remainder:
+                params['first'] = teams[:quotient]
+                params['second'] = teams[quotient:(quotient * 2)]
+                params['third'] = teams[(quotient * 2):]
 
-        elif remainder == 1:
-            top = teams[:(quotient + 1)]
-            second = teams[quotient + 1:(quotient * 2) + 1]
-            third = teams[(quotient * 2) + 1:]
+            elif remainder == 1:
+                params['first'] = teams[:(quotient + 1)]
+                params['second'] = teams[quotient + 1:(quotient * 2) + 1]
+                params['third'] = teams[(quotient * 2) + 1:]
 
-        # remainder == 2
+            # remainder == 2
+            else:
+                params['first'] = teams[:(quotient)]
+                params['second'] = teams[quotient:(quotient * 2) + 1]
+                params['third'] = teams[(quotient * 2) + 1:]
+
+            return render_template(template, **params)
         else:
-            top = teams[:(quotient)]
-            second = teams[quotient:(quotient * 2) + 1]
-            third = teams[(quotient * 2) + 1:]
+            params['teams'] = teams[offset:offset + 10]
+            render_template(template, **params)
 
-        return render_template('scoreboard_bristol.html', title='Scoreboard', round=True,
-                               first=top, second=second, third=third)
+    if app.config['LEGO_APP_TYPE'] == 'bristol':
+        params['first'] = teams
+    else:
+        # TODO: remove this slice
+        params['teams'] = teams[:12]
+        params['no_pagination'] = True
 
-    # quarter finals
-    if stage == 1:
-        return render_template('scoreboard_bristol.html', title='Scoreboard',
-                               quarter_final=True, first=teams)
-
-    # semi final
-    if stage == 2:
-        return render_template('scoreboard_bristol.html', title='Scoreboard',
-                               semi_final=True, first=teams)
-
-    # final
-    if stage == 3:
-        return render_template('scoreboard_bristol.html', title='Scoreboard',
-                               final=True, first=teams)
+    return render_template(template, **params)
 
 
 @app.route('/judges/')

@@ -61,10 +61,10 @@ def load_stage() -> int:
             stage = int(fh.read().strip())
 
         assert stage >= 0
-        assert stage <= 3
+        assert stage <= 4
 
     except IOError:
-        logging.error('Could not open stag file. Please run "flask init" first.')
+        logging.error('Could not open stage file. Please run "flask init" first.')
         return 0
 
     except (ValueError, AssertionError):

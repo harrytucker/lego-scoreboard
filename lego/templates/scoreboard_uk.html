@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='uk_final.css') }}">
+<!-- <meta http-equiv="refresh" content="5"> -->
+{% endblock %}
+
+{% block main %}
+<div class="table-wrapper">
+    <table class="center">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Team</th>
+
+                {% if round_1 %}
+                    <th>R1-1</th>
+                    <th>R1-2</th>
+                    <th>R1-3</th>
+
+                    {% if stage == 0 %}
+                        <th>Best</th>
+                    {% endif %}
+                {% endif %}
+
+                {% if round_2 %}
+                    <th>R2</th>
+                {% endif %}
+
+                {% if quarter_final %}
+                    <th>Quarter</th>
+                {% endif %}
+
+                {% if semi_final %}
+                    <th>Semi</th>
+                {% endif %}
+
+                {% if final %}
+                    <th>Final 1</th>
+                    <th>Final 2</th>
+                    <th>Total</th>
+                {% endif %}
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for team in teams %}
+                <tr>
+                    <td>{{ loop.index + offset }}</td>
+                    <td>{{ team.name }}</td>
+
+                    {% for attempt in team.attempts %}
+                        {% if attempt is none %}
+                            <td>-</td>
+                        {% elif attempt == team.highest_score %}
+                            <td>
+                                <strong>{{ attempt }}</strong>
+                            </td>
+                        {% else %}
+                            <td>{{ attempt }}</td>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if stage == 0 %}
+                        {% if team.attempt_1 == none %}
+                            <td>-</td>
+                        {% else %}
+                            <td>{{ team.highest_score }}</td>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if round_2 %}
+                        {% if not team.round_2 %}
+                            <td>-</td>
+                        {% else %}
+                            <td>
+                                <strong>{{ team.round_2 }}</strong>
+                            </td>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if quarter_final %}
+                        {% if not team.quarter %}
+                            <td>-</td>
+                        {% else %}
+                            <td>
+                                <strong>{{ team.quarter }}</strong>
+                            </td>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if semi_final %}
+                        {% if not team.semi %}
+                            <td>-</td>
+                        {% else %}
+                            <td>
+                                <strong>{{ team.semi }}</strong>
+                            </td>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if final %}
+                        {% for attempt in team.finals %}
+                            {% if attempt is none %}
+                                <td>-</td>
+                            {% elif attempt == team.highest_final %}
+                                <td>
+                                    <strong>{{ attempt }}</strong>
+                                </td>
+                            {% else %}
+                                <td>{{ attempt }}</td>
+                            {% endif %}
+                        {% endfor %}
+
+                        <td>{{ team.final_total }}</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if not no_pagination %}
+        <div class="pagination">
+            <ul>
+                <li>
+                    <a href="#" class="first">First</a>
+                </li>
+                <li>
+                    <a href="#" class="prev">Prev</a>
+                </li>
+                <li>
+                    <a href="#" class="next">Next</a>
+                </li>
+                <li>
+                    <a href="#" class="last">Last</a>
+                </li>
+            </ul>
+        </div>
+    {% endif %}
+</div>
+<div class="images">
+    <img src="{{ url_for('static', filename='hydro_logo.jpg')}}">
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script type="application/javascript">
+(function ($) {
+    'use strict';
+
+    function reload(offset) {
+        var url = location.href.split('/').slice(0, -1).join('/') + '/' + offset.toString();
+        location.assign(url);
+    }
+
+    function init() {
+        var $links = $('.pagination'),
+            start = 0,
+            step = 10,
+            offset = {{ offset }},
+            end = {{ end }};
+
+        $links.find('.first').click(function () {
+            reload(0);
+            return false;
+        });
+
+        $links.find('.last').click(function () {
+            var new_offset = Math.floor(end / step) * step;
+
+            if (new_offset === end) {
+                new_offset -= step;
+            }
+
+            reload(new_offset);
+            return false;
+        });
+
+        $links.find('.prev').click(function () {
+            var new_offset = offset - step;
+
+            if (new_offset < 0) {
+                new_offset = 0;
+            }
+
+            reload(new_offset);
+            return false;
+        });
+
+        $links.find('.next').click(function () {
+            var new_offset = offset + step;
+
+            if (new_offset >= end) {
+                new_offset = offset;
+            }
+
+            reload(new_offset);
+            return false;
+        });
+    }
+
+    $(init);
+}(jQuery));
+</script>
+{% endblock %}

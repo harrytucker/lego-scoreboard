@@ -138,6 +138,10 @@ class Team(db.Model):
 
 
     @hybrid_property
+    def round_1_total(self):
+        return sum([a or 0 for a in self.attempts])
+
+    @hybrid_property
     def finals(self):
         return [self.final_1, self.final_2]
 

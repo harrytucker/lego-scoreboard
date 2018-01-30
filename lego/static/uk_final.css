@@ -40,7 +40,10 @@
     color: #fff;
 }
 
-.scoreboard table { border-collapse: separate; }
+.scoreboard table {
+    border-collapse: separate;
+}
+
 .scoreboard tbody tr td:first-child {
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
@@ -58,8 +61,12 @@
 
 .scoreboard table thead th:nth-child(2),
 .scoreboard table tbody td:nth-child(2) {
-    min-width: 300px;
+    width: 300px;
+    max-width: 300px;
     text-align: left;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .scoreboard table thead {

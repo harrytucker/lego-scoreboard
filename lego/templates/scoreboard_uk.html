@@ -144,18 +144,54 @@
 {% endblock %}
 
 {% block scripts %}
+{% if not no_pagination %}
 <script type="application/javascript">
 (function ($) {
     'use strict';
 
     function reload(offset) {
         var url = location.href.split('/').slice(0, -1).join('/') + '/' + offset.toString();
+
+        if (location.search) {
+            url += location.search;
+        }
+
         location.assign(url);
+    }
+
+    function auto_paginate() {
+        var parts = location.search,
+            offset = {{ offset }},
+            step = 10,
+            end = {{ end }},
+            i;
+
+        // allow the auto pagination to be turned off
+        if (parts) {
+            parts = parts.slice(1).split('&');
+            console.log(parts);
+
+            for (i = 0; i < parts.length; i++) {
+                console.log(parts[i]);
+                if (parts[i].indexOf('noauto') === 0) {
+                    return;
+                }
+            }
+        }
+
+        setTimeout(function () {
+            var $links = $('.pagination');
+
+            if ((offset + step) > end) {
+                $links.find('.first').click();
+            } else {
+                $links.find('.next').click();
+            }
+        }, 5000);
     }
 
     function init() {
         var $links = $('.pagination'),
-            start = 0,
             step = 10,
             offset = {{ offset }},
             end = {{ end }};
@@ -197,9 +233,12 @@
             reload(new_offset);
             return false;
         });
+
+        auto_paginate();
     }
 
     $(init);
 }(jQuery));
 </script>
+{% endif %}
 {% endblock %}

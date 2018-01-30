@@ -209,7 +209,7 @@ def scoreboard(offset):
             return render_template(template, **params)
         else:
             params['teams'] = teams[offset:offset + 10]
-            render_template(template, **params)
+            return render_template(template, **params)
 
     if app.config['LEGO_APP_TYPE'] == 'bristol':
         params['first'] = teams

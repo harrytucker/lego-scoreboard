@@ -34,7 +34,7 @@ As an example, the 2018 guide can be found [here](https://firstinspiresst01.blob
 - To view the database in it's raw form, `sqlite3` can be used (requires SQLite 3 to be installed first). To do so, simply run `sqlite3 /app/lego/tmp/lego.db`. The sqlite3 specific commands that can be run can be found using `.help`. SQL queries work in much the same way as other dialects which can be found in various guides available online. Examples of queries you may want to run are:
     - Updating the user passwords: These are stored in plaintext, so can be changed with a simple `UPDATE` statement.
     - Debugging an operation: simply run `.dump` to get the full database output. More granular queries can be created using a `SELECT` statement.
-- The current stage is persisted to a file and cannot be moved backwards through the GUI. However, it can be manually edited if necessary and should be a value of 0-4 representing the first round through to the final. Note that if you do manually go back a stage then you will need to set the `active` column manually for the relevant teams. Formmore informaion, see the Stages section.
+- The current stage is persisted to a file and cannot be moved backwards through the GUI. However, it can be set using the `flask stage` command in the CLI or manually edited and should be a value of 0-4 representing the first round through to the final. Note that if you do manually go back a stage then you will need to set the relevant teams to active. For more informaion, see the Stages section.
 
 ## Configuration
 A sample configuration file can be found at `config.sample.py` which should be copied to `config.py` for local modifications. The following configuration options are currently in use:
@@ -87,6 +87,7 @@ The base flask CLI has been extended with a number of commands specific to this 
 - `add-teams`
 - `list-teams`
 - `reset-teams`
+- `stage`
 
 ## Stages
 A stage identfies the current place in the competition. It can take one of 5 values, represented as the following numbers internally:
@@ -101,7 +102,7 @@ The current stage dictates how much information to display on the scoreboard. Fo
 
 There is a built in mechanism for moving the stage forwards in the admin pages. If you need to move the stage back you will need to do so manually. This requires two steps:
 
-- Edit the file containing the current stage. This can be found in `lego/tmp/.stage`.
+- Use the `flask stage` CLI command to manually set the stage. Alternatively, edit the file containing the current stage. This can be found in `lego/tmp/.stage`.
 - Edit the active teams using the `Manage Active Teams` admin page. This step can also be managed through database access and involves setting the `active` column to 1 or 0 to indicated whether a team is active or not.
 
 
@@ -111,7 +112,7 @@ There is a built in mechanism for moving the stage forwards in the admin pages. 
 - Login: A login page for admins and judges. Login is required to access the admin and judge only pages.
 
 ### Judge Pages
-- Home: Shows a list of all non-practice teams and their scores.
+- Home: Shows a list of all non-practice teams and their scores. This page also contains a link to export all the score data as a CSV file which can be opened using Microsoft Excel or other spreadsheet software.
 - Score Round: A form for calculating and submitting a team's score for a give attempt.
 
 ### Admin Pages
@@ -121,4 +122,4 @@ There is a built in mechanism for moving the stage forwards in the admin pages. 
     - Reset Team Score: this removes the score for a specific attempt made by a team. Allows the attempt to be re-marked by a judge.
 - Add Team: For adding a new team. For bulk team creation, use the CLi command `add-teams`.
 - Manage Stage: For managing the current stage. It is only possible to move forward a stage through this page. For moving back a stage, see the instructions in the Stages section above.
-- Manage Active Teams: (In progress) For managing the current active teams. This is for use when the automated algorithm for sorting teams and marking them as (in)active after the stage has been moved forward is inadequate or faulty, allowing for manual correction.
+- Manage Active Teams: For managing the current active teams. This is for use when the automated algorithm for sorting teams and marking them as (in)active after the stage has been moved forward is inadequate or faulty, allowing for manual correction.

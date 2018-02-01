@@ -25,6 +25,10 @@
     font-weight: normal;
 }
 
+.scoreboard table tr {
+    background-color: transparent;
+}
+
 .scoreboard table tbody td {
     background-color: #eee;
     color: #111;
@@ -45,13 +49,17 @@
 }
 
 .scoreboard tbody tr td:first-child {
-    border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px;
+    -webkit-border-radius: 20px 0 0 20px;
+    -moz-border-radius: 20px 0 0 20px;
+    border-radius: 20px 0 0 20px;
+    /* stop background colour leaking out */
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding;
+    background-clip: padding-box;
 }
 
 .scoreboard tbody tr td:last-child {
-    border-top-right-radius: 20px;
-    border-bottom-right-radius: 20px;
+    border-radius: 0 20px 20px 0;
 }
 
 

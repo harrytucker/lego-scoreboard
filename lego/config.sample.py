@@ -14,5 +14,4 @@ SQLALCHEMY_DATABASE_URI = 'sqlite:///' + \
 SECRET_KEY = 'your-secret-key'
 
 # One of: bristol, uk
-# Only bristol is currently supported
 LEGO_APP_TYPE = 'bristol'

@@ -7,6 +7,16 @@
 Python3.3+ should provide access to the `venv` module for creating a virtual environment. However, some Linux distibutions tweaked the Python installation so you may need to install an additional
 package. Check your distibution for more details. For windows installations, it may be easier to avoid using a virtual envronment and installing the required Python dependencies globally.
 
+## Browsers
+The application has been tested on the latest version of the following browsers (as of Feb 2018):
+
+- Internet Explorer 11
+- Edge
+- Chrome
+- Firefox
+
+Older browsers may have issues in the layout and styling of the application. If this does occur, please ensure your browser is up to date. Alternatively, try another tested browser.
+
 ## Setup
 ### Linux
 A script has been provided to set up the required environment for Linux distributions:
@@ -16,6 +26,8 @@ $ cd ./<repository>
 $ . ./setup.sh
 ```
 Note that the first `.` before running `setup.sh` is required otherwise the virtual environment won't activate properly. If you miss it, run `source ./venv/bin/activate` afterwards.
+
+The setup script will skip installing python dependencies if it thinks they are installed already. Note that this is a very basic check and may not be entirely correct. If the dependencies are not installed or are out of date, simply delete the `venv` directory and try again.
 
 Next you will need to initialise the application:
 ```
@@ -65,6 +77,11 @@ flask generate-secret-key
 flask init
 ```
 
+If you are running code for the UK final you will also need to change the value of `LEGO_APP_TYPE` to `uk`, i.e.:
+```
+LEGO_APP_TYPE = 'uk'
+```
+
 ### Adding Teams
 To add the teams for the day to the database, run:
 ```
@@ -108,45 +125,8 @@ set FLASK_DEBUG=0
 ```
 
 ## Todo
-- [ ] Add logging where appropriate.
 - [ ] Add unit testing ([[1](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vii-unit-testing)] and 2nd from last part).
 - [ ] Create proper manual (see questions in emails plus other relevant data/hacks that may be required).
 - [ ] Add simulation mode for quickly filling out data to simulate the event.
-- [X] Add CSS (In progress).
-    - [X] Use columns for scoreboard rather than floats.
 - [ ] Add JavaScript form helpers for rounds that have bonus points, e.g. disable checkboxes unless pre-requisites have been met.
-- [X] Implement Bristol scoreboard.
-    - First round: 24 teams (3 tables of 8) with 3 attempts each.
-    - Quarter final: 6 teams. Top vs. bottom, next top vs. next bottom, two middle teams:
-        - Team 1 -> Table A
-        - Team 2 -> Table C
-        - Team 3 -> Table E
-        - Team 4 -> Table F
-        - Team 5 -> Table D
-        - Team 6 -> Table B
-    - Semi final: 4 teams.
-        - Team 1 -> Table A
-        - Team 2 -> Table C
-        - Team 3 -> Table D
-        - Team 4 -> Table B
-    - Final: 2 teams (2 rounds).
-        - Team 1 -> Table A
-        - Team 2 -> Table B
-        - (Then swap for 2nd round).
-- [ ] Implement UK final scoreboard.
-    - Current top 10 teams at top.
-    - Cycle through remaining teams in batches of 10.
-    - Keep current state for each refresh using a cache: [Caching](http://flask.pocoo.org/docs/0.12/patterns/caching/).
-    - Top 8 teams progress, then 4, then 2 (knock out).
-        - Team 1 -> Table A
-        - Team 2 -> Table C
-        - Team 3 -> Table E
-        - Team 4 -> Table G
-        - Team 5 -> Table H
-        - Team 6 -> Table F
-        - Team 7 -> Table D
-        - Team 8 -> Table B
-        - (And so on...)
-- [ ] Add page for managing active teams.
-- [ ] Add CLI for listing teams.
-- [ ] Add other tasks to complete here.
+- [ ] Clean up and document code for maintainability.

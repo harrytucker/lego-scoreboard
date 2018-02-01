@@ -6,6 +6,7 @@ from base64 import b64encode
 import os
 
 import click
+from sqlalchemy import asc
 
 from lego import app, db
 from lego.models import User, Team
@@ -36,21 +37,7 @@ def init_app():
     click.echo('Default users created.')
     click.echo('Practice team created.')
 
-    stage_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tmp', '.stage')
-
-    try:
-        with open(stage_file_path) as fh:
-            stage = int(fh.read().strip())
-    except IOError:
-        click.echo('No stage found, setting to: round.')
-        with open(stage_file_path, 'w') as fh:
-            fh.write('0')
-            stage = 0
-
-    stages = ('round', 'quarter_final', 'semi_final', 'final')
-    stage = stages[stage]
-
-    click.echo('Stage: {!s}'.format(stage))
+    _set_stage()
 
 
 def _request_password(user: str, default: str):
@@ -63,7 +50,8 @@ def _request_password(user: str, default: str):
     pword2 = click.prompt('Confirm password for {!s}'.format(user), hide_input=True)
 
     if pword != pword2:
-        raise click.Abort('Passwords do not match.')
+        click.echo('Passwords do not match.')
+        raise click.Abort()
 
     return pword
 
@@ -106,6 +94,7 @@ def add_teams(file):
     db.session.commit()
     click.echo('Teams successfully added.')
 
+
 @app.cli.command('reset-teams',
     short_help='Remove all teams from the database.')
 def reset_teams():
@@ -119,6 +108,60 @@ def reset_teams():
 
 @app.cli.command('list-teams',
     short_help='List all teams from the database.')
-def list_teams():
-    click.echo('Not yet implemented')
-    pass
+@click.option('--practice', is_flag=True, help='Include the practice team.')
+@click.option('--active', is_flag=True, help='Don\'t show teams that aren\'t currently active.')
+def list_teams(practice: bool, active: bool):
+    filters = {}
+
+    if practice:
+        filters.update({'is_practice': True})
+
+    if active:
+        filters.update({'active': True})
+
+    teams = Team.query.filter_by(**filters).order_by(asc('number')).all()
+
+    click.echo('  Number   Name')
+    click.echo(' -------- --------------')
+
+    for t in teams:
+        click.echo('  {:<6}   {!s}'.format(t.number, t.name))
+
+
+@app.cli.command('stage', short_help='Set the current stage.')
+def set_stage():
+    _set_stage()
+
+
+def _set_stage():
+    stage_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tmp', '.stage')
+
+    while True:
+        stage = click.prompt('Enter stage (0-4)')
+
+        try:
+            stage = int(stage)
+        except ValueError:
+            click.echo('Invalid value for stage: {!s}'.format(stage))
+            continue
+
+        stages = ('round_1', 'round_2', 'quarter_final', 'semi_final', 'final')
+        stage_txt = stages[stage]
+
+        if app.config['LEGO_APP_TYPE'] == 'bristol' and stage == 1:
+            click.echo('Round 2 is only available during UK final.\n'
+                       'If this is not an error, please change your config.py and try again.')
+            raise click.Abort()
+
+        click.echo('You have chosen {!s} ({!s}).'.format(stage_txt, stage))
+
+        if click.confirm('Is this correct?'):
+            try:
+                with open(stage_file_path, 'w') as fh:
+                    fh.write(str(stage))
+            except IOError as e:
+                click.echo('Could not save stage to file. ({!s})'.format(e))
+                raise click.Abort()
+
+            click.echo('Successfully set stage.')
+            return

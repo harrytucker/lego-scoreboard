@@ -1,22 +1,23 @@
-# -----------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------------------
 # Routing for the application.
 #
-# This is essentially the controllers for the application in terms of MVC,
-# but all in one.
-# -----------------------------------------------------------------------------
+# This is essentially the controllers for the application in terms of MVC, but all in one.
+# -------------------------------------------------------------------------------------------------
 
 from functools import cmp_to_key
 import os
 import re
 import unicodedata
 
-from flask import render_template, flash, redirect, request, url_for, g, abort
+from flask import render_template, flash, redirect, request, url_for, g, abort, make_response
 from flask_login import login_user, logout_user, current_user, login_required
+from sqlalchemy  import asc
 from sqlalchemy.exc import IntegrityError
 
 from lego import app, db, lm
 from lego.forms import LoginForm, ScoreRoundForm, EditTeamForm, NewTeamForm, EditTeamScoreForm, ResetTeamScoreForm, StageForm, generate_manage_active_teams_form
 from lego.models import User, Team
+import lego.util as util
 
 
 @app.before_request
@@ -30,10 +31,11 @@ def override_url_for():
 
 
 def dated_url_for(endpoint, **values):
-    """Append a cache buster to static assets.
+    '''
+    Append a cache buster to static assets.
 
     Based on: <http://flask.pocoo.org/snippets/40/>
-    """
+    '''
     if endpoint == 'static':
         filename = values.get('filename', None)
 
@@ -47,6 +49,9 @@ def dated_url_for(endpoint, **values):
 
 @app.after_request
 def after_request(response):
+    '''
+    Log all requests
+    '''
     app.logger.info('%s %s %s %s %s',
                     request.remote_addr,
                     request.method,
@@ -58,11 +63,12 @@ def after_request(response):
 
 @app.template_filter('slugify')
 def slugify(value: str):
-    """Normalizes string, converts to lowercase, removes non-alpha characters,
+    '''
+    Normalizes string, converts to lowercase, removes non-alpha characters,
     and converts spaces to hyphens.
 
     Based on: <https://gist.github.com/berlotto/6295018>.
-    """
+    '''
     if not value:
         return ''
 
@@ -76,42 +82,44 @@ def slugify(value: str):
     return hyphenate_value
 
 
-def compare_teams(team_1, team_2):
-    if team_1 > team_2:
-        return 1
-
-    if team_1 < team_2:
-        return -1
-
-    return 0
-
-
 @app.errorhandler(403)
-def page_not_found(error):
+def permission_denied(error):
+    '''
+    403 (permission denied) error handler.
+    '''
     return render_template('errors/403.html', title='Permission denied'), 403
 
 
 @app.errorhandler(404)
 def page_not_found(error):
+    '''
+    404 (page not found) error handler.
+    '''
     return render_template('errors/404.html', title='Page not found'), 404
 
 
 @app.errorhandler(Exception)
 def internal_server_error(exc):
+    '''
+    500 (internal error) error handler.
+    '''
     app.logger.exception(exc)
     return render_template('errors/500.html', title='Internal error'), 500
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    '''
+    Login page
+    '''
     if g.user is not None and g.user.is_authenticated:
         return redirect(url_for('home'))
 
     form = LoginForm()
 
     if form.validate_on_submit():
-        username = request.form['username']
-        password = request.form['password']
+        username = form.username.data
+        password = form.password.data
 
         res = User.authenticate(username, password)
 
@@ -127,6 +135,11 @@ def login():
 @app.route('/logout')
 @login_required
 def logout():
+    '''
+    Logout page.
+
+    Not strictly a page as it immediately redirects.
+    '''
     logout_user()
     return redirect(url_for('home'))
 
@@ -134,37 +147,18 @@ def logout():
 @app.route('/')
 @app.route('/home')
 def home():
-    teams = Team.query.filter_by(is_practice=False).order_by('number ASC').all()
+    '''
+    Home page.
+    '''
+    teams = Team.query.filter_by(is_practice=False).order_by(asc('number')).all()
     return render_template('home.html', title='Home', teams=teams)
-
-
-@app.route('/tables')
-def tables():
-    stage = app.load_stage()
-
-    if stage == 0:
-        flash('Current stage is invalid for this page')
-        return render_template('tables.html', title='Tables', teams=[])
-
-    teams = Team.query.filter_by(active=True, is_practice=False).all()
-    teams = sorted(teams, key=cmp_to_key(compare_teams))
-
-    if stage == 1:
-        tables = ['A', 'C', 'E', 'F', 'D', 'B']
-    elif stage == 2:
-        tables = ['A', 'C', 'D', 'B']
-    elif stage == 3:
-        tables = ['A', 'B']
-
-    return render_template('tables.html', title='Tables', teams=teams, tables=tables)
-
 
 
 @app.route('/scoreboard/', defaults={'offset': 0})
 @app.route('/scoreboard/<int:offset>')
 def scoreboard(offset):
     teams = Team.query.filter_by(active=True, is_practice=False).all()
-    teams = sorted(teams, key=cmp_to_key(compare_teams))
+    teams = sorted(teams, key=cmp_to_key(util.compare_teams))
     stage = app.load_stage()
     params = {
         'title': 'Scoreboard',
@@ -214,8 +208,7 @@ def scoreboard(offset):
     if app.config['LEGO_APP_TYPE'] == 'bristol':
         params['first'] = teams
     else:
-        # TODO: remove this slice
-        params['teams'] = teams[:12]
+        params['teams'] = teams
         params['no_pagination'] = True
 
     return render_template(template, **params)
@@ -229,7 +222,56 @@ def judges_home():
         return abort(403)
 
     teams = Team.query.filter_by(is_practice=False).order_by('number')
-    return render_template('judges/home.html', title='Judges - Home', teams=teams)
+    show_round_2 = app.config['LEGO_APP_TYPE'] == 'uk'
+
+    return render_template('judges/home.html', title='Judges - Home', teams=teams,
+                           show_round_2=show_round_2)
+
+
+@app.route('/judges/export')
+def judges_export():
+    if not(current_user.is_judge or current_user.is_admin):
+        return abort(403)
+
+    teams = Team.query.filter_by(is_practice=False).order_by('number')
+    headers = ['Number', 'Name', 'Round 1 - Attempt 1', 'Round 1 - Attempt 2',
+               'Round 1 - Attempt 3', 'Round 2', 'Quarter Final', 'Semi Final',
+               'Final 1', 'Final 2']
+    columns = ['number', 'name', 'attempt_1', 'attempt_2', 'attempt_3', 'round_2',
+               'quarter', 'semi', 'final_1', 'final_2']
+
+    csv_parts = []
+    csv_parts.append(','.join(headers))
+
+    for t in teams:
+        row = []
+
+        for c in columns:
+            x = getattr(t, c)
+
+            if x is None:
+                x = '-'
+
+            x = str(x)
+            row.append(x)
+
+        csv_parts.append(','.join(row))
+
+    resp = make_response('\n'.join(csv_parts))
+
+    resp.headers['Content-Type'] = 'text/csv'
+    resp.headers['Content-Disposition'] = 'attachment; filename="teams.csv"'
+    resp.headers['Content-Transfer-Encoding'] = 'binary'
+    resp.headers['Accept-Ranges'] = 'bytes'
+    resp.headers['Cache-Control'] = 'private'
+    resp.headers['Pragma'] = 'private'
+    resp.headers['Expires'] = 'Mon, 26 Jul 1997 05:00:00 GMT'
+
+    app.logger.info(resp)
+    app.logger.info(resp.headers)
+
+    return resp
+
 
 @app.route('/judges/score_round', methods=['GET', 'POST'])
 @login_required
@@ -439,7 +481,7 @@ def admin_stage():
 
 def set_active_teams(stage):
     teams = Team.query.filter_by(active=True, is_practice=False).all()
-    teams = sorted(teams, key=cmp_to_key(compare_teams))
+    teams = sorted(teams, key=cmp_to_key(util.compare_teams))
 
     if app.config['LEGO_APP_TYPE'] == 'bristol':
         for i, team in enumerate(teams):

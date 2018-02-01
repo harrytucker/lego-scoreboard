@@ -2,7 +2,6 @@
 
 {% block head %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='uk_final.css') }}">
-<!-- <meta http-equiv="refresh" content="5"> -->
 {% endblock %}
 
 {% block main %}
@@ -52,10 +51,6 @@
                     {% for attempt in team.attempts %}
                         {% if attempt is none %}
                             <td>-</td>
-                        {% elif attempt == team.highest_score %}
-                            <td>
-                                <strong>{{ attempt }}</strong>
-                            </td>
                         {% else %}
                             <td>{{ attempt }}</td>
                         {% endif %}
@@ -73,9 +68,7 @@
                         {% if not team.round_2 %}
                             <td>-</td>
                         {% else %}
-                            <td>
-                                <strong>{{ team.round_2 }}</strong>
-                            </td>
+                            <td>{{ team.round_2 }}</td>
                         {% endif %}
                     {% endif %}
 
@@ -83,9 +76,7 @@
                         {% if not team.quarter %}
                             <td>-</td>
                         {% else %}
-                            <td>
-                                <strong>{{ team.quarter }}</strong>
-                            </td>
+                            <td>{{ team.quarter }}</td>
                         {% endif %}
                     {% endif %}
 
@@ -93,9 +84,7 @@
                         {% if not team.semi %}
                             <td>-</td>
                         {% else %}
-                            <td>
-                                <strong>{{ team.semi }}</strong>
-                            </td>
+                            <td>{{ team.semi }}</td>
                         {% endif %}
                     {% endif %}
 
@@ -103,10 +92,6 @@
                         {% for attempt in team.finals %}
                             {% if attempt is none %}
                                 <td>-</td>
-                            {% elif attempt == team.highest_final %}
-                                <td>
-                                    <strong>{{ attempt }}</strong>
-                                </td>
                             {% else %}
                                 <td>{{ attempt }}</td>
                             {% endif %}
@@ -138,9 +123,11 @@
         </div>
     {% endif %}
 </div>
+<!--
 <div class="images">
     <img src="{{ url_for('static', filename='hydro_logo.jpg')}}">
 </div>
+-->
 {% endblock %}
 
 {% block scripts %}
@@ -148,6 +135,10 @@
 <script type="application/javascript">
 (function ($) {
     'use strict';
+
+    var offset = {{ offset }},
+        end = {{ end }},
+        step = 10;
 
     function reload(offset) {
         var url = location.href.split('/').slice(0, -1).join('/') + '/' + offset.toString();
@@ -161,18 +152,13 @@
 
     function auto_paginate() {
         var parts = location.search,
-            offset = {{ offset }},
-            step = 10,
-            end = {{ end }},
             i;
 
         // allow the auto pagination to be turned off
         if (parts) {
             parts = parts.slice(1).split('&');
-            console.log(parts);
 
             for (i = 0; i < parts.length; i++) {
-                console.log(parts[i]);
                 if (parts[i].indexOf('noauto') === 0) {
                     return;
                 }
@@ -191,10 +177,7 @@
     }
 
     function init() {
-        var $links = $('.pagination'),
-            step = 10,
-            offset = {{ offset }},
-            end = {{ end }};
+        var $links = $('.pagination');
 
         $links.find('.first').click(function () {
             reload(0);

@@ -77,7 +77,9 @@ class Team(db.Model):
                 if s > o:
                     return False
 
-        if self.number < other.number:
+        # we want to order by score highest to lowest
+        # but if we fall back to this, we order by lowest number to highest
+        if self.number > other.number:
             return True
 
         return False
@@ -127,7 +129,9 @@ class Team(db.Model):
                 if s < o:
                     return False
 
-        if self.number > other.number:
+        # we want to order by score highest to lowest
+        # but if we fall back to this, we order by lowest number to highest
+        if self.number < other.number:
             return True
 
         return False

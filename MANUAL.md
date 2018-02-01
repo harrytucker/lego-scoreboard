@@ -1,5 +1,5 @@
 # Manual
-This application has been built with the idea that it will be passed on to future maintainers. For example, Flask was chosen because it is written in a commonly used language (Python) and has a number of guides and help resources available.
+This application has been built with the idea that it will be passed on to future maintainers.
 
 ## Resources
 The following resources were used to create the original application which may be of use for future updates or answer questions about how certain parts work:
@@ -46,7 +46,7 @@ A sample configuration file can be found at `config.sample.py` which should be c
 - `LEGO_APP_TYPE`: The application type. Supports `'bristol'`, for use in the Bristol final, and `'uk'`, for use in the UK final. the main differences are the customisations to the scoreboard due to the different format of the finals and number of teams.
 
 ## Database
-The database layout is below. the metadat key is:
+The database layout is below. the metadata key is:
 - `PK`: Primary key.
 - `U`: Unique value. This may be enforced by the aplication or the database.
 

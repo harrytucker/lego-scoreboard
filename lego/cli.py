@@ -101,20 +101,20 @@ def reset_teams():
     click.echo('All teams will be deleted from the database.')
 
     if click.confirm('Do you wish to continue?', abort=True):
-        db.session.query(Team).delete()
+        Team.query.filter_by(is_practice=False).delete()
         db.session.commit()
         click.echo('Teams deleted.')
 
 
 @app.cli.command('list-teams',
     short_help='List all teams from the database.')
-@click.option('--practice', is_flag=True, help='Include the practice team.')
+@click.option('--no-practice', is_flag=True, help='Don\'t include the practice team.')
 @click.option('--active', is_flag=True, help='Don\'t show teams that aren\'t currently active.')
-def list_teams(practice: bool, active: bool):
+def list_teams(no_practice: bool, active: bool):
     filters = {}
 
-    if practice:
-        filters.update({'is_practice': True})
+    if no_practice:
+        filters.update({'is_practice': False})
 
     if active:
         filters.update({'active': True})

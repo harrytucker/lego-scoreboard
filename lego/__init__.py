@@ -21,9 +21,11 @@ except ImportError:
                   'config.sample.py to config.py as detailed in the setup instructions.')
     sys.exit(1)
 
+# create app object and load configuration
 app = Flask(__name__)
 app.config.from_object(config)
 
+# initialise logging
 app.logger.addHandler(util.create_log_handler('app'))
 app.logger.info('Initialising application')
 
@@ -38,9 +40,7 @@ lm.login_view = 'login'
 app.load_stage = util.load_stage
 
 # imports of modules that require app
-from lego import cli
-from lego import routes
-from lego.models import User
+from lego import cli, routes
 
 @lm.user_loader
 def load_user(id):

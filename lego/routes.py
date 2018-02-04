@@ -22,11 +22,17 @@ import lego.util as util
 
 @app.before_request
 def before_request():
+    '''
+    Set up user global.
+    '''
     g.user = current_user
 
 
 @app.context_processor
 def override_url_for():
+    '''
+    Override for addding a cache buster to static assets.
+    '''
     return dict(url_for=dated_url_for)
 
 
@@ -50,7 +56,7 @@ def dated_url_for(endpoint, **values):
 @app.after_request
 def after_request(response):
     '''
-    Log all requests
+    Log all requests.
     '''
     app.logger.info('%s %s %s %s %s',
                     request.remote_addr,
@@ -229,6 +235,7 @@ def judges_home():
 
 
 @app.route('/judges/export')
+@login_required
 def judges_export():
     if not(current_user.is_judge or current_user.is_admin):
         return abort(403)
@@ -265,6 +272,8 @@ def judges_export():
     resp.headers['Accept-Ranges'] = 'bytes'
     resp.headers['Cache-Control'] = 'private'
     resp.headers['Pragma'] = 'private'
+    # the exact date doesn't matter here as long as it's in the past so it
+    # expires immediately and a browser won't try and cache it
     resp.headers['Expires'] = 'Mon, 26 Jul 1997 05:00:00 GMT'
 
     app.logger.info(resp)
@@ -423,6 +432,9 @@ def admin_team_score_edit(id: int):
 @app.route('/admin/team/<int:id>/score/reset', methods=['GET', 'POST'])
 @login_required
 def admin_team_score_reset(id: int):
+    '''
+    For resetting a team's score for a specific round.
+    '''
     if not current_user.is_admin:
         return abort(403)
 
@@ -447,7 +459,11 @@ def admin_team_score_reset(id: int):
 
 
 @app.route('/admin/stage', methods=['GET', 'POST'])
+@login_required
 def admin_stage():
+    '''
+    For moving the stage forward.
+    '''
     if not current_user.is_admin:
         return abort(403)
 
@@ -480,6 +496,9 @@ def admin_stage():
 
 
 def set_active_teams(stage):
+    '''
+    Helper for setting the active teams after a stage has been moved forward.
+    '''
     teams = Team.query.filter_by(active=True, is_practice=False).all()
     teams = sorted(teams, key=cmp_to_key(util.compare_teams))
 
@@ -513,6 +532,9 @@ def set_active_teams(stage):
 
 @app.route('/admin/manage_active_teams', methods=['GET', 'POST'])
 def admin_manage_active_teams():
+    '''
+    For managing active teams if the automatic setting is not sufficient.
+    '''
     if not current_user.is_admin:
         return abort(403)
 

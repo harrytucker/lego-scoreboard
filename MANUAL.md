@@ -31,9 +31,10 @@ As an example, the 2018 guide can be found [here](https://firstinspiresst01.blob
 - Error and debug logs can be found in the `lego/logs/` directory. If the error is not output to the GUI or commandline, it will be output in at least one of the log files.
 
 ## Tips
-- To view the database in it's raw form, `sqlite3` can be used (requires SQLite 3 to be installed first). To do so, simply run `sqlite3 /app/lego/tmp/lego.db`. The sqlite3 specific commands that can be run can be found using `.help`. SQL queries work in much the same way as other dialects which can be found in various guides available online. Examples of queries you may want to run are:
+- To view and/or modify the database in it's raw form, `sqlite3` can be used (requires SQLite 3 to be installed first). To do so, simply run `sqlite3 /app/lego/tmp/app.db`. The sqlite3 specific commands that can be run can be found using `.help`. SQL queries work in much the same way as other dialects which can be found in various guides available online. Examples of queries you may want to run are:
     - Updating the user passwords: These are stored in plaintext, so can be changed with a simple `UPDATE` statement.
-    - Debugging an operation: simply run `.dump` to get the full database output. More granular queries can be created using a `SELECT` statement.
+    - Debugging an operation: Simply run `.dump` to get the full database output, or `.dump <tablename>` to view the schema and current data for a specific table. More granular queries can be created using a `SELECT` statement.
+    - Viewing a table's schema: User `.schema [tablename]` to view the schemas for the entire database or a single table by not setting or setting `tablename` respectively.
 - The current stage is persisted to a file and cannot be moved backwards through the GUI. However, it can be set using the `flask stage` command in the CLI or manually edited and should be a value of 0-4 representing the first round through to the final. Note that if you do manually go back a stage then you will need to set the relevant teams to active. For more informaion, see the Stages section.
 
 ## Configuration
@@ -41,7 +42,7 @@ A sample configuration file can be found at `config.sample.py` which should be c
 
 - `WTF_CSRF_ENABLED`: Eanbles CSRF protection. the was added due to the tiny amount of extra code required and the small security improvement it adds. Should not need to be modified.
 - `SQLALCHEMY_TRACK_MODIFICATIONS`: Enables transaction logging. Turned off as it isn't necessary for this application. Should not need to be modified.
-- `SQLALCHEMY_DATABASE_URI`: The path to the SQLite3 database file. This is `lego/tmp/lego.db`. Should not need to be modified.
+- `SQLALCHEMY_DATABASE_URI`: The path to the SQLite3 database file. This is `lego/tmp/app.db`. Should not need to be modified.
 - `SECRET_KEY`: The secret key used to sign session cookies. Should be set during the application setup (see README.md)
 - `LEGO_APP_TYPE`: The application type. Supports `'bristol'`, for use in the Bristol final, and `'uk'`, for use in the UK final. the main differences are the customisations to the scoreboard due to the different format of the finals and number of teams.
 

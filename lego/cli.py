@@ -1,6 +1,16 @@
-# -----------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------------------
+# Command line interface extensions to the defaults provided by flask.
 #
-# -----------------------------------------------------------------------------
+# Provides the following commands:
+# - init: Initialises the application database, creates the default users, creates the practice
+#       team and sets the stage.
+# - generate-secret-key: Generates a secret key to be used in config.py.
+# - add-teams: Add teams to the database.
+# - list-teams: List the teams currently in the database.
+# - reset-teams: Remove all non-practice teams from the database.
+# - stage: Move the stage forwards or backwards. This is for advanced usage only and should not be
+#       required while running the event itself.
+# -------------------------------------------------------------------------------------------------
 
 from base64 import b64encode
 import os
@@ -10,6 +20,7 @@ from sqlalchemy import asc
 
 from lego import app, db
 from lego.models import User, Team
+
 
 @app.cli.command('init', short_help='Initialise the application.',
     help='Initialise the application by creating the database and the default '
@@ -41,6 +52,9 @@ def init_app():
 
 
 def _request_password(user: str, default: str):
+    '''
+    Helper for requesting a password to be input.
+    '''
     pword = click.prompt('Enter password for {!s}'.format(user), hide_input=True, default=default)
 
     # allow them to use the default
@@ -128,12 +142,17 @@ def list_teams(no_practice: bool, active: bool):
         click.echo('  {:<6}   {!s}'.format(t.number, t.name))
 
 
-@app.cli.command('stage', short_help='Set the current stage.')
+@app.cli.command('stage', short_help='Set the current stage.',
+    help='Set the current stage. this is for advanced usage only and may cause issues if used '
+         'during a live event. See the manual for when this should be used.')
 def set_stage():
     _set_stage()
 
 
 def _set_stage():
+    '''
+    Helper for setting the stage.
+    '''
     stage_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tmp', '.stage')
 
     while True:

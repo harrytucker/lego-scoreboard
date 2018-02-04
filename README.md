@@ -7,9 +7,10 @@
 Python3.3+ should provide access to the `venv` module for creating a virtual environment. However, some Linux distibutions tweaked the Python installation so you may need to install an additional
 package. Check your distibution for more details. For windows installations, it may be easier to avoid using a virtual envronment and installing the required Python dependencies globally.
 
+There have been reports that Python 3.6 has a problem that breaks the use of Sqlite. This hasn't been verified, but if you do see a problem in this area, it is suggested to use Python 3.4 instead.
+
 ## Browsers
 The application has been tested on the latest version of the following browsers (as of Feb 2018):
-
 - Internet Explorer 11
 - Edge
 - Chrome
@@ -20,7 +21,7 @@ Older browsers may have issues in the layout and styling of the application. If 
 ## Setup
 ### Linux
 A script has been provided to set up the required environment for Linux distributions:
-```
+```bash
 $ git clone <repository>
 $ cd ./<repository>
 $ . ./setup.sh
@@ -29,74 +30,35 @@ Note that the first `.` before running `setup.sh` is required otherwise the virt
 
 The setup script will skip installing python dependencies if it thinks they are installed already. Note that this is a very basic check and may not be entirely correct. If the dependencies are not installed or are out of date, simply delete the `venv` directory and try again.
 
-Next you will need to initialise the application:
-```
-$ cd ./lego
-
-# create config file from sample
-$ cp ./config_sample.py ./config.py
-
-# generate secret key
-# copy this value into SECRET_KEY in your config.py
-$ flask generate-secret-key
-
+## Using the Appication
+### Initialisation
+Once you have installed the dependencies, copy `<path\to\repository>\lego\config.sample.py` to `<path\to\repository>\lego\config.py` and run the following:
+```bash
 # create database and default users
 # you will be prompted for user passwords here
 $ flask init
 ```
 
-### Windows
-For Windows users, run the following:
-```
-# clone this repository using Git Bash or other Git tool
-git clone <repository>
-
-# using cmd.exe
-cd <path\to\repository>
-
-# experimental script for installing dependencies
-setup
-
-# or manually install dependencies
-pip install -r requirements.txt
-set FLASK_APP=<path\to\repository>\lego\__init__.py
-set FLASK_DEBUG=1
-```
-It is probably possible to use a virtual envronment on Windows, but it hasn't been tested, so the dependencies are installed globally.
-
-## Using the Appication
-### Initialisation
-Once you have installed the dependencies, copy `<path\to\repository>\lego\config.sample.py` to `<path\to\repository>\lego\config.py` and run the following:
-```
-# generate a secret key
-# copy this value into SECRET_KEY in your config.py
-flask generate-secret-key
-
-# create database and default users
-# you will be prompted for user passwords here
-flask init
-```
-
 If you are running code for the UK final you will also need to change the value of `LEGO_APP_TYPE` to `uk`, i.e.:
-```
+```python
 LEGO_APP_TYPE = 'uk'
 ```
 
 ### Adding Teams
 To add the teams for the day to the database, run:
-```
+```bash
 $ flask add-teams <path/to/teams.txt>
 ```
 An example teams.txt file can be found at `teams_example.txt`.
 
 The file format is as follows with one number and name pair per line:
-```
+```txt
 number, name
 ```
 
 ### Run the Application
 To run the application, simply run:
-```
+```bash
 $ flask run
 ```
 This will run the application on port 5000 of localhost, e.g. `http://localhost:5000`.
@@ -117,11 +79,7 @@ If you wish to run the application for a long period of time, e.g. for the compe
 
 Additionally, disabling debug mode by running the following will reduce the verbosity of the output to stdout. This is initialised to 1 by the setup scripts.
 ```
-# for linux
 export FLASK_DEBUG=0
-
-# for windows
-set FLASK_DEBUG=0
 ```
 
 ## Todo

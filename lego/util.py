@@ -8,7 +8,7 @@ from logging.handlers import RotatingFileHandler
 import os
 
 
-__all__ = ['create_log_handler', 'load_stage']
+__all__ = ['create_log_handler', 'load_stage', 'compare_teams']
 
 # 1 MiB
 MB = 1024 * 1024

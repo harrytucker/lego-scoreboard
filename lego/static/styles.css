@@ -16,6 +16,15 @@ strong {
     font-weight: bold;
 }
 
+em {
+    font-style: italic;
+}
+
+sup {
+    font-size: 0.6em;
+    vertical-align: super;
+}
+
 .header {
     height: 60px;
     margin: 0 auto 20px;
@@ -93,6 +102,10 @@ strong {
     text-align: center;
 }
 
+.header .page-logo-title {
+    line-height: 3.1rem;
+}
+
 .main {
     margin: 0 auto;
     width: 1000px;
@@ -113,11 +126,13 @@ strong {
     padding: 0 2px 10px;
 }
 
-.messages {
+.messages,
+.errors {
     margin-bottom: 18px;
 }
 
-.message {
+.message,
+.errors li {
     width: 60%;
     margin: 0 auto 2px;
     padding: 6px 16px;
@@ -182,12 +197,14 @@ strong {
 }
 
 .input-select.input-error,
-.input-text.input-error {
+.input-text.input-error,
+.input-number.input-error {
     background-color: #ffdede;
 }
 
 .input-select.input-error:focus,
-.input-text.input-error {
+.input-text.input-error,
+.input-number.input-error {
     outline-color: #ed2939
 }
 

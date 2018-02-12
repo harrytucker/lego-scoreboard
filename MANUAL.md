@@ -81,7 +81,7 @@ The database layout is below. the metadata key is:
 
 
 ## Command Line Interface
-The base flask CLI has been extended with a number of commands specific to this application. For a full list see `flask --help`. The following commands have been added. their documentation is available using `flask <command> --help`.
+The base flask CLI has been extended with a number of commands specific to this application. For a full list see `flask --help`. The following commands have been added. Their documentation is available using `flask <command> --help`.
 
 - `init`
 - `secret`
@@ -89,6 +89,7 @@ The base flask CLI has been extended with a number of commands specific to this 
 - `list-teams`
 - `reset-teams`
 - `stage`
+- `simulate` - Covered in more detail below.
 
 ## Stages
 A stage identfies the current place in the competition. It can take one of 5 values, represented as the following numbers internally:
@@ -124,3 +125,10 @@ There is a built in mechanism for moving the stage forwards in the admin pages. 
 - Add Team: For adding a new team. For bulk team creation, use the CLi command `add-teams`.
 - Manage Stage: For managing the current stage. It is only possible to move forward a stage through this page. For moving back a stage, see the instructions in the Stages section above.
 - Manage Active Teams: For managing the current active teams. This is for use when the automated algorithm for sorting teams and marking them as (in)active after the stage has been moved forward is inadequate or faulty, allowing for manual correction.
+
+## Simulation
+Using `flask simulate`, you can simulate a day's event in a few short minutes. this is intended for checking the scoreboard works correctly. Whle it is functional, note that is it essentially a mash-up of existing functionality and is not particularly inuitive to use.
+
+After starting the command, a script will complete each stage in it's coponent parts, pausing for confirmation to move to the next, i.e. Round 1-1, Round 1-2, Round 1-3, Round 2, Quarter Final, etc. After the script has paused, you can check the scoreboard to check it is working as intended before continuing.
+
+Be aware that simulations will empty the teams database before and after the the script is run to ensure a clean completion. Please ensure that you do not overwrite real data when running the simulation.

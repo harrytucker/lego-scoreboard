@@ -14,12 +14,17 @@
 
 from base64 import b64encode
 import os
+from random import randint, seed
 
 import click
 from sqlalchemy import asc
 
 from lego import app, db
 from lego.models import User, Team
+from lego.routes import set_active_teams
+
+# seed random number generation
+seed()
 
 
 @app.cli.command('init', short_help='Initialise the application.',
@@ -83,7 +88,10 @@ def secret():
     short_help='Add teams to the database from a file.',
     help='Add teams to the database from a file. The file should contain one team per line.')
 @click.argument('file', type=click.File())
-def add_teams(file):
+def add_teams(file: str):
+    _add_teams(file)
+
+def _add_teams(file: str):
     for line in file:
         line = line.strip()
 
@@ -111,10 +119,11 @@ def add_teams(file):
 
 @app.cli.command('reset-teams',
     short_help='Remove all teams from the database.')
-def reset_teams():
+@click.option('-y', is_flag=True, help='Skip confirmation.')
+def reset_teams(no_confirm: bool):
     click.echo('All teams will be deleted from the database.')
 
-    if click.confirm('Do you wish to continue?', abort=True):
+    if no_confirm or click.confirm('Do you wish to continue?', abort=True):
         Team.query.filter_by(is_practice=False).delete()
         db.session.commit()
         click.echo('Teams deleted.')
@@ -149,14 +158,15 @@ def set_stage():
     _set_stage()
 
 
-def _set_stage():
+def _set_stage(stage: int=None, no_confirm: bool=False):
     '''
     Helper for setting the stage.
     '''
     stage_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tmp', '.stage')
 
     while True:
-        stage = click.prompt('Enter stage (0-4)')
+        if stage is None:
+            stage = click.prompt('Enter stage (0-4)')
 
         try:
             stage = int(stage)
@@ -174,7 +184,7 @@ def _set_stage():
 
         click.echo('You have chosen {!s} ({!s}).'.format(stage_txt, stage))
 
-        if click.confirm('Is this correct?'):
+        if no_confirm or click.confirm('Is this correct?'):
             try:
                 with open(stage_file_path, 'w') as fh:
                     fh.write(str(stage))
@@ -184,3 +194,78 @@ def _set_stage():
 
             click.echo('Successfully set stage.')
             return
+
+
+@app.cli.command('simulate', short_help='Simulate a run through the comptition.',
+    help='Simulate a run through the competition. Will pause at the end of each round. '
+         'WARNING: This will remove any existing teams from the database.')
+def simulate():
+    # empty the teams first
+    click.echo('Resetting teams')
+    Team.query.filter_by(is_practice=False).delete()
+    db.session.commit()
+
+    # add teams from example file
+    click.echo('Adding example teams')
+    file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../teams_example.txt')
+
+    with open(file_path) as fh:
+        _add_teams(fh)
+
+    # set the initial stage
+    _set_stage(0, True)
+
+    teams = Team.query.filter_by(is_practice=False, active=True).all()
+
+    # round 1
+    for _ in range(3):
+        for t in teams:
+            t.set_score(randint(0, 20) * 10)
+
+        db.session.commit()
+        click.pause()
+
+    # round 2
+    if app.config['LEGO_APP_TYPE'] == 'uk':
+        _set_stage(1, True)
+        set_active_teams(1)
+        teams = Team.query.filter_by(is_practice=False, active=True).all()
+
+        for t in teams:
+            t.set_score(randint(0, 20) * 10)
+
+        db.session.commit()
+        click.pause()
+
+    _set_stage(2, True)
+    set_active_teams(2)
+    teams = Team.query.filter_by(is_practice=False, active=True).all()
+
+    # quarter + semi
+    for i in range(2):
+        for t in teams:
+            t.set_score(randint(0, 20) * 10)
+
+        db.session.commit()
+        click.pause()
+
+        _set_stage(3 + i, True)
+        set_active_teams(3 + i)
+        teams = Team.query.filter_by(is_practice=False, active=True).all()
+
+    # final
+    for i in range(2):
+        for t in teams:
+            t.set_score(randint(0, 20) * 10)
+
+        db.session.commit()
+        click.pause()
+
+
+    # remove the used teams
+    click.echo('Resetting teams')
+    Team.query.filter_by(is_practice=False).delete()
+    db.session.commit()
+
+    click.echo('Complete!')
+

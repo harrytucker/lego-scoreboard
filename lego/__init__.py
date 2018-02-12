@@ -41,6 +41,7 @@ app.load_stage = util.load_stage
 
 # imports of modules that require app
 from lego import cli, routes
+from lego.models import User
 
 @lm.user_loader
 def load_user(id):

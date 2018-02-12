@@ -5,7 +5,8 @@
 # -----------------------------------------------------------------------------
 
 from flask_wtf import FlaskForm
-from wtforms import SelectField, IntegerField, HiddenField
+from wtforms import SelectField, HiddenField
+from wtforms.fields.html5 import IntegerField
 from wtforms.validators import DataRequired, NumberRange
 
 
@@ -22,4 +23,4 @@ class EditTeamScoreForm(FlaskForm):
                                  ('final_2', 'Final 2')],
                         default='attempt_1',
                         validators=[DataRequired()])
-    score = IntegerField('Score', validators=[DataRequired(), NumberRange(min=0)])
+    score = IntegerField('Score', validators=[NumberRange(min=0)])

@@ -84,7 +84,7 @@ The database layout is below. the metadata key is:
 The base flask CLI has been extended with a number of commands specific to this application. For a full list see `flask --help`. The following commands have been added. their documentation is available using `flask <command> --help`.
 
 - `init`
-- `generate-secret-key`
+- `secret`
 - `add-teams`
 - `list-teams`
 - `reset-teams`

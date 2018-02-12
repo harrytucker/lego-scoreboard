@@ -3,6 +3,10 @@
     color: #111;
 }
 
+.scoreboard .header {
+    margin-bottom: 0;
+}
+
 .scoreboard .page-header {
     display: none;
 }
@@ -81,8 +85,34 @@
     text-transform: uppercase;
 }
 
-.scoreboard .images {
-    margin-top: 60px;
+.scoreboard .top-images,
+.scoreboard .bottom-images {
+    width: 1000px;
+    height: 80px;
+    margin: 0 auto;
+}
+
+.scoreboard .top-images img,
+.scoreboard .bottom-images img {
+    height: 80px;
+}
+
+.scoreboard .top-images {
+    margin-bottom: 20px;
+}
+
+.scoreboard .top-images img:first-child {
+    float: left;
+    margin-left: 50px;
+}
+
+.scoreboard .top-images img:last-child {
+    float: right;
+    margin-right: 50px;
+}
+
+.scoreboard .bottom-images {
+    margin-top: 30px;
     text-align: center;
 }
 

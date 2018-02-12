@@ -4,7 +4,7 @@
 # Provides the following commands:
 # - init: Initialises the application database, creates the default users, creates the practice
 #       team and sets the stage.
-# - generate-secret-key: Generates a secret key to be used in config.py.
+# - secret: Generates a secret key to be used in config.py.
 # - add-teams: Add teams to the database.
 # - list-teams: List the teams currently in the database.
 # - reset-teams: Remove all non-practice teams from the database.
@@ -70,11 +70,11 @@ def _request_password(user: str, default: str):
     return pword
 
 
-@app.cli.command('generate-secret-key',
+@app.cli.command('secret',
     short_help='Generate a secret key to set in config.py.',
     help='Generate a secret key to set in config.py. The key is used to encrypt '
          'the session cookie to prevent session hijacking.')
-def generate_secret_key():
+def secret():
     key = b64encode(os.urandom(64)).decode('utf-8')
     click.echo('Secret key: {!s}'.format(key))
 

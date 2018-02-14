@@ -211,6 +211,10 @@ def scoreboard(offset):
             params['teams'] = teams[offset:offset + 10]
             return render_template(template, **params)
 
+    # force offset to 0 if we refreshed in the middle of a cycle
+    if params['offset'] != 0:
+        return redirect(url_for('scoreboard'))
+
     if app.config['LEGO_APP_TYPE'] == 'bristol':
         params['first'] = teams
     else:

@@ -229,6 +229,6 @@ class Team(db.Model):
         setattr(self, key, int(score))
 
 
-    def reset_round_score(self, round):
+    def reset_round_score(self, key):
         app.logger.info('Resetting %s for team: %s (%d)', key, self.name, self.number)
         setattr(self, key, None)

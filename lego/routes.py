@@ -362,14 +362,17 @@ def admin_team_edit(id: int):
             team.number = form.number.data
             team.name = form.name.data
             db.session.commit()
+
         except IntegrityError as e:
-            db.session.rollback()
             app.logger.exception(e)
+            db.session.rollback()
             flash('The name or number requested is already in use. Please use another one.')
+
         except Exception as e:
-            db.session.rollback()
             app.logger.exception(e)
-            flash('An unknown error occurred. See the error logs for more information')
+            db.session.rollback()
+            flash('An unknown error occurred. See the logs for more information')
+
         else:
             flash('Team details successfully updated')
             return redirect(url_for('admin_team'))
@@ -393,14 +396,16 @@ def admin_team_new():
             team = Team(number=form.number.data, name=form.name.data)
             db.session.add(team)
             db.session.commit()
+
         except IntegrityError as e:
-            db.session.rollback()
             app.logger.exception(e)
+            db.session.rollback()
             flash('The name or number requested is already in use. Please use another one.')
+
         except Exception as e:
-            db.session.rollback()
             app.logger.exception(e)
-            flash('An unknown error occurred. See the error logs for more information')
+            db.session.rollback()
+            flash('An unknown error occurred. See the logs for more information')
         else:
             flash('Team details successfully updated')
             return redirect(url_for('admin_team'))
@@ -424,7 +429,7 @@ def admin_team_score_edit(id: int):
         except Exception as e:
             app.logger.exception(e)
             db.session.rollback()
-            flash('An unknown error occurred. See the error logs for more information')
+            flash('An unknown error occurred. See the logs for more information')
 
         else:
             flash('Team score successfully updated')
@@ -455,7 +460,7 @@ def admin_team_score_reset(id: int):
         except Exception as e:
             app.logger.exception(e)
             db.session.rollback()
-            flash('An unknown error occurred. See the error logs for more information')
+            flash('An unknown error occurred. See the logs for more information')
 
         else:
             flash('Team score successfully reset')

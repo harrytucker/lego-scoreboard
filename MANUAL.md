@@ -28,7 +28,7 @@ As an example, the 2018 guide can be found [here](https://firstinspiresst01.blob
 ## Common Issues
 - A simple way to check the setup has been performed correctly is to run `flask --help`. If everything is fine, you will see multiple commands listed in addition to the standard `flask run` and `flask shell`. If you do not see these, run `flask shell` and the error should be returned.
 - If you see an error similar to `AttributeError: 'module' object has no attribute 'config'` on a page when the application is running, simply restart the application. This can happen when an exception occurs such as an ImportError or SyntaxError and the application gets stuck.
-- Error and debug logs can be found in the `lego/logs/` directory. If the error is not output to the GUI or commandline, it will be output in at least one of the log files.
+- Logs for the application can be found in the `lego/logs/app.log` directory. If the error is not output to the GUI or commandline, it will be output to the log file.
 
 ## Tips
 - To view and/or modify the database in it's raw form, `sqlite3` can be used (requires SQLite 3 to be installed first). To do so, simply run `sqlite3 /app/lego/tmp/app.db`. The sqlite3 specific commands that can be run can be found using `.help`. SQL queries work in much the same way as other dialects which can be found in various guides available online. Examples of queries you may want to run are:

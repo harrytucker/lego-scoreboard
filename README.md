@@ -83,7 +83,10 @@ export FLASK_DEBUG=0
 ```
 
 ## Todo
-- [ ] Add unit testing ([[1](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vii-unit-testing)] and 2nd from last part).
+- [ ] Add tests ([[1](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vii-unit-testing)] and 2nd from last part).
+    - [ ] Add tests for cli
+    - [ ] Add tests for team model
+    - [ ] Add tests for util
 - [ ] Add JavaScript form helpers for rounds that have bonus points, e.g. disable checkboxes unless pre-requisites have been met.
 - [ ] Clean up and document code for maintainability.
 - [ ] Improve teams cli:

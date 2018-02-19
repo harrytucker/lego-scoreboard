@@ -81,7 +81,7 @@ def _request_password(user: str, default: str):
          'the session cookie to prevent session hijacking.')
 def secret():
     key = b64encode(os.urandom(64)).decode('utf-8')
-    click.echo('Secret key: {!s}'.format(key))
+    click.echo(key)
 
 
 @app.cli.command('add-teams',
@@ -120,19 +120,22 @@ def _add_teams(file: str):
 @app.cli.command('reset-teams',
     short_help='Remove all teams from the database.')
 @click.option('-y', is_flag=True, help='Skip confirmation.')
-def reset_teams(no_confirm: bool):
-    click.echo('All teams will be deleted from the database.')
+def reset_teams(y: bool):
+    no_confirm = y
 
-    if no_confirm or click.confirm('Do you wish to continue?', abort=True):
-        Team.query.filter_by(is_practice=False).delete()
-        db.session.commit()
-        click.echo('Teams deleted.')
+    if not no_confirm:
+        click.echo('All teams will be deleted from the database.')
+        click.confirm('Do you wish to continue?', abort=True)
+
+    Team.query.filter_by(is_practice=False).delete()
+    db.session.commit()
+    click.echo('Teams deleted.')
 
 
 @app.cli.command('list-teams',
     short_help='List all teams from the database.')
 @click.option('--no-practice', is_flag=True, help='Don\'t include the practice team.')
-@click.option('--active', is_flag=True, help='Don\'t show teams that aren\'t currently active.')
+@click.option('--active', is_flag=True, help='Only show teams that aren\'t currently active.')
 def list_teams(no_practice: bool, active: bool):
     filters = {}
 

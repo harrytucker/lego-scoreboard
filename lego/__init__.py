@@ -27,7 +27,6 @@ app.config.from_object(config)
 
 # initialise logging
 app.logger.addHandler(util.create_log_handler('app'))
-app.logger.info('Initialising application')
 
 # database
 db = SQLAlchemy(app)

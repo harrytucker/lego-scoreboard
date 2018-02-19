@@ -420,10 +420,12 @@ def admin_team_score_edit(id: int):
         try:
             team.edit_round_score(form.stage.data, form.score.data)
             db.session.commit()
+
         except Exception as e:
-            db.session.rollback()
             app.logger.exception(e)
+            db.session.rollback()
             flash('An unknown error occurred. See the error logs for more information')
+
         else:
             flash('Team score successfully updated')
             return redirect(url_for('admin_team'))
@@ -449,12 +451,14 @@ def admin_team_score_reset(id: int):
         try:
             team.reset_round_score(form.stage.data)
             db.session.commit()
+
         except Exception as e:
+            app.logger.exception(e)
             db.session.rollback()
             flash('An unknown error occurred. See the error logs for more information')
-            app.logger.exception(e)
+
         else:
-            flash('Team score successfully updated')
+            flash('Team score successfully reset')
             return redirect(url_for('admin_team'))
 
     form.id.data = team.id
@@ -484,6 +488,7 @@ def admin_stage():
 
         if new_stage <= stage:
             flash('Unable to go back a stage.')
+
         if app.config['LEGO_APP_TYPE'] == 'bristol' and new_stage == 1:
             flask('Round 2 only available during UK Final.')
         else:

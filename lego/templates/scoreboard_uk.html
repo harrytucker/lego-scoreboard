@@ -1,0 +1,231 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='uk_final.css') }}">
+{% endblock %}
+
+{% block main %}
+<div class="top-images">
+    <img src="{{ url_for('static', filename='iet_education_logo.jpg')}}">
+    <img src="{{ url_for('static', filename='first_lego_logo.jpg')}}">
+</div>
+
+<div class="table-wrapper">
+
+    <table class="center">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Team</th>
+
+                {% if round_1 %}
+                    <th>R1-1</th>
+                    <th>R1-2</th>
+                    <th>R1-3</th>
+
+                    {% if stage == 0 %}
+                        <th>Best</th>
+                    {% endif %}
+                {% endif %}
+
+                {% if round_2 %}
+                    <th>R2</th>
+                {% endif %}
+
+                {% if quarter_final %}
+                    <th>Quarter</th>
+                {% endif %}
+
+                {% if semi_final %}
+                    <th>Semi</th>
+                {% endif %}
+
+                {% if final %}
+                    <th>Final 1</th>
+                    <th>Final 2</th>
+                    <th>Total</th>
+                {% endif %}
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for team in teams %}
+                <tr>
+                    <td>{{ loop.index + offset }}</td>
+                    <td>{{ team.name }}</td>
+
+                    {% for attempt in team.attempts %}
+                        {% if attempt is none %}
+                            <td>-</td>
+                        {% else %}
+                            <td>{{ attempt }}</td>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if stage == 0 %}
+                        {% if team.attempt_1 == none %}
+                            <td>-</td>
+                        {% else %}
+                            <td>{{ team.highest_score }}</td>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if round_2 %}
+                        {% if not team.round_2 %}
+                            <td>-</td>
+                        {% else %}
+                            <td>{{ team.round_2 }}</td>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if quarter_final %}
+                        {% if not team.quarter %}
+                            <td>-</td>
+                        {% else %}
+                            <td>{{ team.quarter }}</td>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if semi_final %}
+                        {% if not team.semi %}
+                            <td>-</td>
+                        {% else %}
+                            <td>{{ team.semi }}</td>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if final %}
+                        {% for attempt in team.finals %}
+                            {% if attempt is none %}
+                                <td>-</td>
+                            {% else %}
+                                <td>{{ attempt }}</td>
+                            {% endif %}
+                        {% endfor %}
+
+                        <td>{{ team.final_total }}</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if not no_pagination %}
+        <div class="pagination">
+            <ul>
+                <li>
+                    <a href="#" class="first">First</a>
+                </li>
+                <li>
+                    <a href="#" class="prev">Prev</a>
+                </li>
+                <li>
+                    <a href="#" class="next">Next</a>
+                </li>
+                <li>
+                    <a href="#" class="last">Last</a>
+                </li>
+            </ul>
+        </div>
+    {% endif %}
+</div>
+<div class="bottom-images">
+    <img src="{{ url_for('static', filename='hydro_logo.jpg')}}">
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% if not no_pagination %}
+<script type="application/javascript">
+(function ($) {
+    'use strict';
+
+    var offset = {{ offset }},
+        end = {{ end }},
+        step = 10;
+
+    function reload(offset) {
+        var url = location.href.split('/').slice(0, -1).join('/') + '/' + offset.toString();
+
+        if (location.search) {
+            url += location.search;
+        }
+
+        location.assign(url);
+    }
+
+    function auto_paginate() {
+        var parts = location.search,
+            i;
+
+        // allow the auto pagination to be turned off
+        if (parts) {
+            parts = parts.slice(1).split('&');
+
+            for (i = 0; i < parts.length; i++) {
+                if (parts[i].indexOf('noauto') === 0) {
+                    return;
+                }
+            }
+        }
+
+        setTimeout(function () {
+            var $links = $('.pagination');
+
+            if ((offset + step) > end) {
+                $links.find('.first').click();
+            } else {
+                $links.find('.next').click();
+            }
+        }, 5000);
+    }
+
+    function init() {
+        var $links = $('.pagination');
+
+        $links.find('.first').click(function () {
+            reload(0);
+            return false;
+        });
+
+        $links.find('.last').click(function () {
+            var new_offset = Math.floor(end / step) * step;
+
+            if (new_offset === end) {
+                new_offset -= step;
+            }
+
+            reload(new_offset);
+            return false;
+        });
+
+        $links.find('.prev').click(function () {
+            var new_offset = offset - step;
+
+            if (new_offset < 0) {
+                new_offset = 0;
+            }
+
+            reload(new_offset);
+            return false;
+        });
+
+        $links.find('.next').click(function () {
+            var new_offset = offset + step;
+
+            if (new_offset >= end) {
+                new_offset = offset;
+            }
+
+            reload(new_offset);
+            return false;
+        });
+
+        auto_paginate();
+    }
+
+    $(init);
+}(jQuery));
+</script>
+{% endif %}
+{% endblock %}

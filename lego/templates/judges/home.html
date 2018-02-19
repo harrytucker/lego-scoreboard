@@ -1,35 +1,49 @@
 {% extends 'base.html' %}
 {% block main %}
+<div class="export">
+    <a href="{{ url_for('judges_export') }}" target="_blank" title="Export this data">Export this data</a>
+</div>
+
 <table class="center">
-	<thead>
-		<tr>
-			<th>Team number</th>
-			<th>Team name</th>
-			<th>Round 1</th>
-			<th>Round 2</th>
-			<th>Round 3</th>
-			<th>Quarter Final</th>
-			<th>Semi Final</th>
-			<th>Final 1</th>
-			<th>Final 2</th>
-		</tr>
-	</thead>
+    <thead>
+        <tr>
+            <th>Number</th>
+            <th>Name</th>
+            <th>R1-1</th>
+            <th>R1-2</th>
+            <th>R1-3</th>
 
-	<tbody>
-		{% for team in teams %}
-			<tr>
-				<td>{{ team.number }}</td>
-				<td>{{ team.name }}</td>
+            {% if show_round_2 %}
+                <th>R2</th>
+            {% endif %}
 
-				<td>{% if team.round_1 is none %} - {% else %} {{ team.round_1 }} {% endif %}</td>
-				<td>{% if team.round_2 is none %} - {% else %} {{ team.round_2 }} {% endif %}</td>
-				<td>{% if team.round_3 is none %} - {% else %} {{ team.round_3 }} {% endif %}</td>
-				<td>{% if team.quarter is none %} - {% else %} {{ team.quarter }} {% endif %}</td>
-				<td>{% if team.semi is none %} - {% else %} {{ team.semi }} {% endif %}</td>
-				<td>{% if team.final_1 is none %} - {% else %} {{ team.final_1 }} {% endif %}</td>
-				<td>{% if team.final_2 is none %} - {% else %} {{ team.final_2 }} {% endif %}</td>
-			</tr>
-		{% endfor %}
-	</tbody>
+            <th>Quarter Final</th>
+            <th>Semi Final</th>
+            <th>Final 1</th>
+            <th>Final 2</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for team in teams %}
+            <tr>
+                <td>{{ team.number }}</td>
+                <td>{{ team.name }}</td>
+
+                <td>{% if team.attempt_1 is none %} - {% else %} {{ team.attempt_1 }} {% endif %}</td>
+                <td>{% if team.attempt_2 is none %} - {% else %} {{ team.attempt_2 }} {% endif %}</td>
+                <td>{% if team.attempt_3 is none %} - {% else %} {{ team.attempt_3 }} {% endif %}</td>
+
+                {% if show_round_2 %}
+                    <td>{% if team.round_2 is none %} - {% else %} {{ team.round_2 }} {% endif %}</td>
+                {% endif %}
+
+                <td>{% if team.quarter is none %} - {% else %} {{ team.quarter }} {% endif %}</td>
+                <td>{% if team.semi is none %} - {% else %} {{ team.semi }} {% endif %}</td>
+                <td>{% if team.final_1 is none %} - {% else %} {{ team.final_1 }} {% endif %}</td>
+                <td>{% if team.final_2 is none %} - {% else %} {{ team.final_2 }} {% endif %}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
 </table>
 {% endblock %}

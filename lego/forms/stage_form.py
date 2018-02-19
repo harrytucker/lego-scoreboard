@@ -10,7 +10,8 @@ from wtforms.validators import Optional
 class StageForm(FlaskForm):
     stage = SelectField('Move to stage:',
                         choices=[('0', 'First Round'),
-                                 ('1', 'Quarter Final'),
-                                 ('2', 'Semi Final'),
-                                 ('3', 'Final')],
+                                 ('1', 'Second Round (UK Final only)'),
+                                 ('2', 'Quarter Final'),
+                                 ('3', 'Semi Final'),
+                                 ('4', 'Final')],
                         validators=[Optional()])

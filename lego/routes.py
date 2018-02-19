@@ -1,39 +1,47 @@
-# -----------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------------------
 # Routing for the application.
 #
-# This is essentially the controllers for the application in terms of MVC,
-# but all in one.
-# -----------------------------------------------------------------------------
+# This is essentially the controllers for the application in terms of MVC, but all in one.
+# -------------------------------------------------------------------------------------------------
 
 from functools import cmp_to_key
 import os
 import re
 import unicodedata
 
-from flask import render_template, flash, redirect, request, url_for, g, abort
+from flask import render_template, flash, redirect, request, url_for, g, abort, make_response
 from flask_login import login_user, logout_user, current_user, login_required
+from sqlalchemy  import asc
 from sqlalchemy.exc import IntegrityError
 
 from lego import app, db, lm
-from lego.forms import LoginForm, ScoreRoundForm, EditTeamForm, NewTeamForm, EditTeamScoreForm, ResetTeamScoreForm, StageForm
+from lego.forms import LoginForm, ScoreRoundForm, EditTeamForm, NewTeamForm, EditTeamScoreForm, ResetTeamScoreForm, StageForm, generate_manage_active_teams_form
 from lego.models import User, Team
+import lego.util as util
 
 
 @app.before_request
 def before_request():
+    '''
+    Set up user global.
+    '''
     g.user = current_user
 
 
 @app.context_processor
 def override_url_for():
+    '''
+    Override for addding a cache buster to static assets.
+    '''
     return dict(url_for=dated_url_for)
 
 
 def dated_url_for(endpoint, **values):
-    """Append a cache buster to static assets.
+    '''
+    Append a cache buster to static assets.
 
     Based on: <http://flask.pocoo.org/snippets/40/>
-    """
+    '''
     if endpoint == 'static':
         filename = values.get('filename', None)
 
@@ -47,6 +55,9 @@ def dated_url_for(endpoint, **values):
 
 @app.after_request
 def after_request(response):
+    '''
+    Log all requests.
+    '''
     app.logger.info('%s %s %s %s %s',
                     request.remote_addr,
                     request.method,
@@ -58,11 +69,12 @@ def after_request(response):
 
 @app.template_filter('slugify')
 def slugify(value: str):
-    """Normalizes string, converts to lowercase, removes non-alpha characters,
+    '''
+    Normalizes string, converts to lowercase, removes non-alpha characters,
     and converts spaces to hyphens.
 
     Based on: <https://gist.github.com/berlotto/6295018>.
-    """
+    '''
     if not value:
         return ''
 
@@ -76,78 +88,44 @@ def slugify(value: str):
     return hyphenate_value
 
 
-def compare_teams(team_1, team_2):
-    stage = app.load_stage()
-    if stage == 0:
-        attempt_1 = [a if a is not None else 0 for a in team_1.attempts]
-        attempt_2 = [a if a is not None else 0 for a in team_2.attempts]
-
-        attempt_1.sort(reverse=True)
-        attempt_2.sort(reverse=True)
-
-        for score_1, score_2 in zip(attempt_1, attempt_2):
-            if score_1 > score_2:
-                return -1
-            elif score_1 < score_2:
-                return 1
-
-        return 0
-
-    if stage == 3:
-        if team_1.final_total > team_2.final_total:
-            return -1
-        elif team_1.final_total < team_2.final_total:
-            return 1
-        else:
-            final_scores_1 = [a if a is not None else 0 for a in team_1.finals]
-            final_scores_2 = [a if a is not None else 0 for a in team_2.finals]
-
-            final_scores_1.sort(reverse=True)
-            final_scores_2.sort(reverse=True)
-
-            for score_1, score_2 in zip(final_scores_1, final_scores_2):
-                if score_1 > score_2:
-                    return -1
-                elif score_1 < score_2:
-                    return 1
-                    
-            return 0
-
-    if team_1.highest_score > team_2.highest_score:
-        return -1
-
-    if team_1.highest_score < team_2.highest_score:
-        return 1
-
-    return 0
-
-
 @app.errorhandler(403)
-def page_not_found(error):
+def permission_denied(error):
+    '''
+    403 (permission denied) error handler.
+    '''
     return render_template('errors/403.html', title='Permission denied'), 403
 
 
 @app.errorhandler(404)
 def page_not_found(error):
+    '''
+    404 (page not found) error handler.
+    '''
     return render_template('errors/404.html', title='Page not found'), 404
 
 
 @app.errorhandler(Exception)
 def internal_server_error(exc):
+    '''
+    500 (internal error) error handler.
+    '''
     app.logger.exception(exc)
     return render_template('errors/500.html', title='Internal error'), 500
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    '''
+    Login page
+    '''
     if g.user is not None and g.user.is_authenticated:
         return redirect(url_for('home'))
 
     form = LoginForm()
 
     if form.validate_on_submit():
-        username = request.form['username']
-        password = request.form['password']
+        username = form.username.data
+        password = form.password.data
 
         res = User.authenticate(username, password)
 
@@ -163,6 +141,11 @@ def login():
 @app.route('/logout')
 @login_required
 def logout():
+    '''
+    Logout page.
+
+    Not strictly a page as it immediately redirects.
+    '''
     logout_user()
     return redirect(url_for('home'))
 
@@ -170,90 +153,75 @@ def logout():
 @app.route('/')
 @app.route('/home')
 def home():
-    teams = Team.query.filter_by(is_practice=False).order_by('number ASC').all()
+    '''
+    Home page.
+    '''
+    teams = Team.query.filter_by(is_practice=False).order_by(asc('number')).all()
     return render_template('home.html', title='Home', teams=teams)
 
 
-@app.route('/tables')
-def tables():
+@app.route('/scoreboard/', defaults={'offset': 0})
+@app.route('/scoreboard/<int:offset>')
+def scoreboard(offset):
+    teams = Team.query.filter_by(active=True, is_practice=False).all()
+    teams = sorted(teams, key=cmp_to_key(util.compare_teams))
     stage = app.load_stage()
+    params = {
+        'title': 'Scoreboard',
+        'stage': stage,
+        'offset': offset,
+        'end': len(teams)
+    }
 
-    if stage == 0:
-        flash('Current stage is invalid for this page')
-        return render_template('tables.html', title='Tables', teams=[])
-
-    teams = Team.query.filter_by(active=True, is_practice=False).order_by('number ASC').all()
-    teams = sorted(teams, key=cmp_to_key(compare_teams))
-
-    if stage == 1:
-        tables = ['A', 'C', 'E', 'F', 'D', 'B']
-    elif stage == 2:
-        tables = ['A', 'C', 'D', 'B']
-    elif stage == 3:
-        tables = ['A', 'B']
-
-    return render_template('tables.html', title='Tables', teams=teams, tables=tables)
-
-
-
-@app.route('/scoreboard')
-def scoreboard():
-    teams = Team.query.filter_by(active=True, is_practice=False).order_by('number ASC').all()
-    teams = sorted(teams, key=cmp_to_key(compare_teams))
-    stage = app.load_stage()
-
-    # TODO: swap the below with this
-    # if app.config['LEGO_APP_TYPE'] in ('bristol', 'uk'):
-    #     template = 'scoreboard_{!s}.html'.format(app.config['LEGO_APP_TYPE'])
-
-    if app.config['LEGO_APP_TYPE'] == 'bristol':
-        template = 'scoreboard_bristol.html'
+    if app.config['LEGO_APP_TYPE'] in ('bristol', 'uk'):
+        template = 'scoreboard_{!s}.html'.format(app.config['LEGO_APP_TYPE'])
     else:
         raise Exception('Unsupported value for LEGO_APP_TYPE: {!s}' \
                         .format(app.config['LEGO_APP_TYPE']))
 
+    stages = ('round_1', 'round_2', 'quarter_final', 'semi_final', 'final')
+    for i, s in enumerate(stages):
+        if stage >= i:
+            params[s] = True
+
     if stage == 0:
-        quotient = len(teams) // 3
-        remainder = len(teams) % 3
+        if app.config['LEGO_APP_TYPE'] == 'bristol':
+            quotient = len(teams) // 3
+            remainder = len(teams) % 3
 
-        # remainder == 0
-        if not remainder:
-            top = teams[:quotient]
-            second = teams[quotient:(quotient * 2)]
-            third = teams[(quotient * 2):]
+            # remainder == 0
+            if not remainder:
+                params['first'] = teams[:quotient]
+                params['second'] = teams[quotient:(quotient * 2)]
+                params['third'] = teams[(quotient * 2):]
 
-        elif remainder == 1:
-            top = teams[:(quotient + 1)]
-            second = teams[quotient + 1:(quotient * 2) + 1]
-            third = teams[(quotient * 2) + 1:]
+            elif remainder == 1:
+                params['first'] = teams[:(quotient + 1)]
+                params['second'] = teams[quotient + 1:(quotient * 2) + 1]
+                params['third'] = teams[(quotient * 2) + 1:]
 
-        # remainder == 2
+            # remainder == 2
+            else:
+                params['first'] = teams[:(quotient)]
+                params['second'] = teams[quotient:(quotient * 2) + 1]
+                params['third'] = teams[(quotient * 2) + 1:]
+
+            return render_template(template, **params)
         else:
-            top = teams[:(quotient)]
-            second = teams[quotient:(quotient * 2) + 1]
-            third = teams[(quotient * 2) + 1:]
+            params['teams'] = teams[offset:offset + 10]
+            return render_template(template, **params)
 
-        app.logger.info('top: %s', str(top))
-        app.logger.info('second: %s', str(second))
-        app.logger.info('third: %s', str(third))
+    # force offset to 0 if we refreshed in the middle of a cycle
+    if params['offset'] != 0:
+        return redirect(url_for('scoreboard'))
 
-        return render_template('scoreboard_bristol.html', title='Scoreboard', round=True,
-                               first=top, second=second, third=third)
+    if app.config['LEGO_APP_TYPE'] == 'bristol':
+        params['first'] = teams
+    else:
+        params['teams'] = teams
+        params['no_pagination'] = True
 
-    # quarter finals
-    if stage == 1:
-        return render_template('scoreboard_bristol.html', title='Scoreboard - Quarter Final',
-                               quarter_final=True, first=teams)
-
-    # semi final
-    if stage == 2:
-        return render_template('scoreboard_bristol.html', title='Scoreboard - Semi Final',
-                               semi_final=True, first=teams)
-
-    # final
-    if stage == 3:
-        return render_template('scoreboard_bristol.html', title='Scoreboard - Final',
-                               final=True, first=teams)
+    return render_template(template, **params)
 
 
 @app.route('/judges/')
@@ -264,7 +232,59 @@ def judges_home():
         return abort(403)
 
     teams = Team.query.filter_by(is_practice=False).order_by('number')
-    return render_template('judges/home.html', title='Judges - Home', teams=teams)
+    show_round_2 = app.config['LEGO_APP_TYPE'] == 'uk'
+
+    return render_template('judges/home.html', title='Judges - Home', teams=teams,
+                           show_round_2=show_round_2)
+
+
+@app.route('/judges/export')
+@login_required
+def judges_export():
+    if not(current_user.is_judge or current_user.is_admin):
+        return abort(403)
+
+    teams = Team.query.filter_by(is_practice=False).order_by('number')
+    headers = ['Number', 'Name', 'Round 1 - Attempt 1', 'Round 1 - Attempt 2',
+               'Round 1 - Attempt 3', 'Round 2', 'Quarter Final', 'Semi Final',
+               'Final 1', 'Final 2']
+    columns = ['number', 'name', 'attempt_1', 'attempt_2', 'attempt_3', 'round_2',
+               'quarter', 'semi', 'final_1', 'final_2']
+
+    csv_parts = []
+    csv_parts.append(','.join(headers))
+
+    for t in teams:
+        row = []
+
+        for c in columns:
+            x = getattr(t, c)
+
+            if x is None:
+                x = '-'
+
+            x = str(x)
+            row.append(x)
+
+        csv_parts.append(','.join(row))
+
+    resp = make_response('\n'.join(csv_parts))
+
+    resp.headers['Content-Type'] = 'text/csv'
+    resp.headers['Content-Disposition'] = 'attachment; filename="teams.csv"'
+    resp.headers['Content-Transfer-Encoding'] = 'binary'
+    resp.headers['Accept-Ranges'] = 'bytes'
+    resp.headers['Cache-Control'] = 'private'
+    resp.headers['Pragma'] = 'private'
+    # the exact date doesn't matter here as long as it's in the past so it
+    # expires immediately and a browser won't try and cache it
+    resp.headers['Expires'] = 'Mon, 26 Jul 1997 05:00:00 GMT'
+
+    app.logger.info(resp)
+    app.logger.info(resp.headers)
+
+    return resp
+
 
 @app.route('/judges/score_round', methods=['GET', 'POST'])
 @login_required
@@ -274,7 +294,7 @@ def judges_score_round():
 
     form = ScoreRoundForm()
 
-    teams = Team.query.filter_by(active=True).order_by('number')
+    teams = Team.query.filter_by(active=True).order_by('number').all()
     form.team.choices = [('', '--Select team--')]
     form.team.choices += [(str(t.id), t.name) for t in teams]
 
@@ -342,18 +362,20 @@ def admin_team_edit(id: int):
             team.number = form.number.data
             team.name = form.name.data
             db.session.commit()
+
         except IntegrityError as e:
-            db.session.rollback()
             app.logger.exception(e)
+            db.session.rollback()
             flash('The name or number requested is already in use. Please use another one.')
+
         except Exception as e:
-            db.session.rollback()
             app.logger.exception(e)
-            flash('An unknown error occurred. See the error logs for more information')
+            db.session.rollback()
+            flash('An unknown error occurred. See the logs for more information')
+
         else:
             flash('Team details successfully updated')
             return redirect(url_for('admin_team'))
-
 
     form.id.data = team.id
     form.name.data = team.name
@@ -374,14 +396,16 @@ def admin_team_new():
             team = Team(number=form.number.data, name=form.name.data)
             db.session.add(team)
             db.session.commit()
+
         except IntegrityError as e:
-            db.session.rollback()
             app.logger.exception(e)
+            db.session.rollback()
             flash('The name or number requested is already in use. Please use another one.')
+
         except Exception as e:
-            db.session.rollback()
             app.logger.exception(e)
-            flash('An unknown error occurred. See the error logs for more information')
+            db.session.rollback()
+            flash('An unknown error occurred. See the logs for more information')
         else:
             flash('Team details successfully updated')
             return redirect(url_for('admin_team'))
@@ -399,12 +423,14 @@ def admin_team_score_edit(id: int):
 
     if form.validate_on_submit():
         try:
-            team.edit_round_score(int(form.stage.data), form.score.data)
+            team.edit_round_score(form.stage.data, form.score.data)
             db.session.commit()
+
         except Exception as e:
-            db.session.rollback()
             app.logger.exception(e)
-            flash('An unknown error occurred. See the error logs for more information')
+            db.session.rollback()
+            flash('An unknown error occurred. See the logs for more information')
+
         else:
             flash('Team score successfully updated')
             return redirect(url_for('admin_team'))
@@ -417,6 +443,9 @@ def admin_team_score_edit(id: int):
 @app.route('/admin/team/<int:id>/score/reset', methods=['GET', 'POST'])
 @login_required
 def admin_team_score_reset(id: int):
+    '''
+    For resetting a team's score for a specific round.
+    '''
     if not current_user.is_admin:
         return abort(403)
 
@@ -425,14 +454,16 @@ def admin_team_score_reset(id: int):
 
     if form.validate_on_submit():
         try:
-            team.reset_round_score(int(form.stage.data))
+            team.reset_round_score(form.stage.data)
             db.session.commit()
+
         except Exception as e:
-            db.session.rollback()
-            flash('An unknown error occurred. See the error logs for more information')
             app.logger.exception(e)
+            db.session.rollback()
+            flash('An unknown error occurred. See the logs for more information')
+
         else:
-            flash('Team score successfully updated')
+            flash('Team score successfully reset')
             return redirect(url_for('admin_team'))
 
     form.id.data = team.id
@@ -441,11 +472,15 @@ def admin_team_score_reset(id: int):
 
 
 @app.route('/admin/stage', methods=['GET', 'POST'])
+@login_required
 def admin_stage():
+    '''
+    For moving the stage forward.
+    '''
     if not current_user.is_admin:
         return abort(403)
 
-    stages = ('First Round', 'Quarter Final', 'Semi Final', 'Final')
+    stages = ('First Round', 'Second Round', 'Quarter Final', 'Semi Final', 'Final')
 
     stage = app.load_stage()
     current_stage = stages[stage]
@@ -458,6 +493,9 @@ def admin_stage():
 
         if new_stage <= stage:
             flash('Unable to go back a stage.')
+
+        if app.config['LEGO_APP_TYPE'] == 'bristol' and new_stage == 1:
+            flask('Round 2 only available during UK Final.')
         else:
             set_active_teams(new_stage)
 
@@ -472,29 +510,56 @@ def admin_stage():
 
 
 def set_active_teams(stage):
-    teams = Team.query.filter_by(active=True, is_practice=False).order_by('number ASC').all()
-    teams = sorted(teams, key=cmp_to_key(compare_teams))
+    '''
+    Helper for setting the active teams after a stage has been moved forward.
+    '''
+    teams = Team.query.filter_by(active=True, is_practice=False).all()
+    teams = sorted(teams, key=cmp_to_key(util.compare_teams))
 
     if app.config['LEGO_APP_TYPE'] == 'bristol':
         for i, team in enumerate(teams):
-            if stage == 1 and i >= 6:
+            if stage == 2 and i >= 6:
                 team.active = False
 
-            if stage == 2 and i >= 4:
+            if stage == 3 and i >= 4:
                 team.active = False
 
-            if stage == 3 and i >= 2:
+            if stage == 4 and i >= 2:
                 team.active = False
 
     elif app.config['LEGO_APP_TYPE'] == 'uk':
         for i, team in enumerate(teams):
-            if stage == 1 and i >= 8:
+            if stage == 1 and i >= 12:
                 team.active = False
 
-            if stage == 2 and i >= 4:
+            if stage == 2 and i >= 8:
                 team.active = False
 
-            if stage == 3 and i >= 2:
+            if stage == 3 and i >= 4:
+                team.active = False
+
+            if stage == 4 and i >= 2:
                 team.active = False
 
     db.session.commit()
+
+
+@app.route('/admin/manage_active_teams', methods=['GET', 'POST'])
+def admin_manage_active_teams():
+    '''
+    For managing active teams if the automatic setting is not sufficient.
+    '''
+    if not current_user.is_admin:
+        return abort(403)
+
+    form = generate_manage_active_teams_form()
+
+    if form.validate_on_submit():
+        for t in form.teams:
+            is_active = form[str(t.id) + '_active'].data
+            t.active = is_active
+
+        db.session.commit()
+
+    return render_template('admin/manage_active_teams.html', title='Manage Active Teams',
+                           form=form)

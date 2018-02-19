@@ -1,7 +1,7 @@
 __pycache__
 venv
 config.py
-lego.db
+*.db
 *.log
 *.log.*
 .stage

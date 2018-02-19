@@ -26,9 +26,6 @@
                                 <a class="nav-link" href="{{ url_for('scoreboard') }}">Scoreboard</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('tables') }}">Tables</a>
-                            </li>
-                            <li class="nav-item">
                                 {% if current_user.is_authenticated %}
                                     <a class="nav-link" href="{{ url_for('logout') }}">Log out</a>
                                 {% else %}
@@ -64,6 +61,9 @@
                                         <li class="nav-item">
                                             <a class="nav-link" href="{{ url_for('admin_stage') }}">Manage Stage</a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{ url_for('admin_manage_active_teams') }}">Manage Active Teams</a>
+                                        </li>
                                     </ul>
                                 </li>
                             {% endif %}
@@ -73,7 +73,9 @@
             </nav>
 
             <div class="page-logo">
-                <h2 class="page-logo-title">2018 FIRST Lego League Robotics Challenge</h2>
+                <h2 class="page-logo-title">
+                    <em>FIRST<sup>&reg;</sup></em> LEGO<sup>&reg;</sup> League UK and Ireland final 2017-18
+                </h2>
             </div>
         </header>
 

@@ -249,23 +249,23 @@ def judges_export():
     teams = Team.query.filter_by(is_practice=False).all()
     teams = sorted(teams, key=cmp_to_key(util.compare_teams))
 
-    headers = ['Number', 'Name', 'Round 1 - Attempt 1', 'Round 1 - Attempt 2',
-               'Round 1 - Attempt 3', 'Round 2', 'Quarter Final', 'Semi Final',
-               'Final 1', 'Final 2']
-    columns = ['number', 'name', 'attempt_1', 'attempt_2', 'attempt_3', 'round_2',
-               'quarter', 'semi', 'final_1', 'final_2']
+    headers = ['Rank', 'Number', 'Name', 'Round 1 - Attempt 1', 'Round 1 - Attempt 2',
+               'Round 1 - Attempt 3', 'Round 1 - Best', 'Round 2', 'Quarter Final', 'Semi Final',
+               'Final 1', 'Final 2', 'Final Total']
+    columns = ['number', 'name', 'attempt_1', 'attempt_2', 'attempt_3', 'best_attempt', 'round_2',
+               'quarter', 'semi', 'final_1', 'final_2', 'final_total']
 
     csv_parts = []
     csv_parts.append(','.join(headers))
 
-    for t in teams:
-        row = []
+    for i, t in enumerate(teams, start=1):
+        row = [str(i)]
 
         for c in columns:
             x = getattr(t, c)
 
             if x is None:
-                x = '-'
+                x = ''
 
             x = str(x)
             row.append(x)

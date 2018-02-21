@@ -77,15 +77,14 @@
     border-radius: 0 20px 20px 0;
 }
 
-
-.scoreboard table tbody td:nth-child(2) {
+.scoreboard table tbody td:nth-child(3) {
     text-transform: uppercase;
 }
 
-.scoreboard table thead th:nth-child(2),
-.scoreboard table tbody td:nth-child(2) {
-    width: 300px;
-    max-width: 300px;
+.scoreboard table thead th:nth-child(3),
+.scoreboard table tbody td:nth-child(3) {
+    width: 200px;
+    max-width: 200px;
     text-align: left;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -94,10 +93,10 @@
 
 /* Minimum width */
 @media (min-width: 1300px) {
-    .scoreboard table thead th:nth-child(2),
-    .scoreboard table tbody td:nth-child(2) {
-        width: 400px;
-        max-width: 400px;
+    .scoreboard table thead th:nth-child(3),
+    .scoreboard table tbody td:nth-child(3) {
+        width: 380px;
+        max-width: 380px;
     }
 }
 

@@ -2,6 +2,10 @@
 
 {% block head %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='uk_final.css') }}">
+
+{% if no_pagination %}
+    <meta http-equiv="refresh" content="5">
+{% endif %}
 {% endblock %}
 
 {% block main %}

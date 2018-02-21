@@ -83,12 +83,12 @@ The database layout is below. the metadata key is:
 ## Command Line Interface
 The base flask CLI has been extended with a number of commands specific to this application. For a full list see `flask --help`. The following commands have been added. Their documentation is available using `flask <command> --help`.
 
-- `init`
-- `secret`
-- `add-teams`
-- `list-teams`
-- `reset-teams`
-- `stage`
+- `init` - See README.md for more details.
+- `secret` - Used internally by `init`, but useful if you need to regenerate your secret key set in your `config.py`.
+- `add-teams` - Add teams from a file.
+- `list-teams` - List teams.
+- `reset-teams` - Removes all non-practice teams.
+- `stage` - Sets the stage.
 - `simulate` - Covered in more detail below.
 
 ## Stages
@@ -127,7 +127,7 @@ There is a built in mechanism for moving the stage forwards in the admin pages. 
 - Manage Active Teams: For managing the current active teams. This is for use when the automated algorithm for sorting teams and marking them as (in)active after the stage has been moved forward is inadequate or faulty, allowing for manual correction.
 
 ## Simulation
-Using `flask simulate`, you can simulate a day's event in a few short minutes. this is intended for checking the scoreboard works correctly. Whle it is functional, note that is it essentially a mash-up of existing functionality and is not particularly inuitive to use.
+Using `flask simulate`, you can simulate a day's event in a few short minutes. This is intended for checking the scoreboard works correctly. While it is functional, note that is it essentially a mash-up of existing functionality and the log output is not easy to follow at this time. You will also need to run the application using `flask run` or the provided `run.sh` script in order to viw the scoreboard.
 
 After starting the command, a script will complete each stage in it's coponent parts, pausing for confirmation to move to the next, i.e. Round 1-1, Round 1-2, Round 1-3, Round 2, Quarter Final, etc. After the script has paused, you can check the scoreboard to check it is working as intended before continuing.
 

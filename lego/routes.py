@@ -231,7 +231,9 @@ def judges_home():
     if not (current_user.is_judge or current_user.is_admin):
         return abort(403)
 
-    teams = Team.query.filter_by(is_practice=False).order_by('number')
+    teams = Team.query.filter_by(is_practice=False).all()
+    teams = sorted(teams, key=cmp_to_key(util.compare_teams))
+
     show_round_2 = app.config['LEGO_APP_TYPE'] == 'uk'
 
     return render_template('judges/home.html', title='Judges - Home', teams=teams,
@@ -244,7 +246,9 @@ def judges_export():
     if not(current_user.is_judge or current_user.is_admin):
         return abort(403)
 
-    teams = Team.query.filter_by(is_practice=False).order_by('number')
+    teams = Team.query.filter_by(is_practice=False).all()
+    teams = sorted(teams, key=cmp_to_key(util.compare_teams))
+
     headers = ['Number', 'Name', 'Round 1 - Attempt 1', 'Round 1 - Attempt 2',
                'Round 1 - Attempt 3', 'Round 2', 'Quarter Final', 'Semi Final',
                'Final 1', 'Final 2']

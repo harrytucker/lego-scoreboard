@@ -169,7 +169,7 @@ def _set_stage(stage: int=None, no_confirm: bool=False):
 
     while True:
         if stage is None:
-            stage = click.prompt('Enter stage (0-4)')
+            stage = click.prompt('Enter stage (0-4)', default='0')
 
         try:
             stage = int(stage)

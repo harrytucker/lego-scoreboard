@@ -39,11 +39,12 @@ class Team(db.Model):
         stage = app.load_stage()
 
         if stage == 4:
-            if self.final_total < other.final_total:
-                return True
+            if self.final_total is not None and other.final_total is not None:
+                if self.final_total < other.final_total:
+                    return True
 
-            if self.final_total > other.final_total:
-                return False
+                if self.final_total > other.final_total:
+                    return False
 
         if stage >= 3:
             if (self.semi or -1) < (other.semi or -1):
@@ -91,11 +92,12 @@ class Team(db.Model):
         stage = app.load_stage()
 
         if stage == 4:
-            if self.final_total > other.final_total:
-                return True
+            if self.final_total is not None and other.final_total is not None:
+                if self.final_total > other.final_total:
+                    return True
 
-            if self.final_total < other.final_total:
-                return False
+                if self.final_total < other.final_total:
+                    return False
 
         if stage >= 3:
             if (self.semi or -1) > (other.semi or -1):
@@ -145,6 +147,12 @@ class Team(db.Model):
 
 
     @hybrid_property
+    def best_attempt(self):
+        ret = max(self.attempt_1 or -1, self.attempt_2 or -1, self.attempt_3 or -1)
+        return None if ret == -1 else ret
+
+
+    @hybrid_property
     def round_1_total(self):
         return sum([a or 0 for a in self.attempts])
 
@@ -154,6 +162,9 @@ class Team(db.Model):
 
     @hybrid_property
     def final_total(self):
+        if self.final_1 is None and self.final_2 is None:
+            return None
+
         return sum([self.final_1 or 0, self.final_2 or 0])
 
     @hybrid_property

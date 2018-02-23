@@ -69,7 +69,7 @@
                     {% endfor %}
 
                     {% if stage == 0 %}
-                        {% if team.attempt_1 == none %}
+                        {% if team.attempt_1 is none %}
                             <td>-</td>
                         {% else %}
                             <td>{{ team.highest_score }}</td>
@@ -77,7 +77,7 @@
                     {% endif %}
 
                     {% if round_2 %}
-                        {% if not team.round_2 %}
+                        {% if team.round_2 is none %}
                             <td>-</td>
                         {% else %}
                             <td>{{ team.round_2 }}</td>
@@ -85,7 +85,7 @@
                     {% endif %}
 
                     {% if quarter_final %}
-                        {% if not team.quarter %}
+                        {% if team.quarter is none %}
                             <td>-</td>
                         {% else %}
                             <td>{{ team.quarter }}</td>
@@ -93,7 +93,7 @@
                     {% endif %}
 
                     {% if semi_final %}
-                        {% if not team.semi %}
+                        {% if team.semi is none %}
                             <td>-</td>
                         {% else %}
                             <td>{{ team.semi }}</td>

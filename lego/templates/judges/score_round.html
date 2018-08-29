@@ -224,7 +224,7 @@
                 {% if form.m13_complete.errors %}
                     {{ form.m13_complete(class_='input-radio input-error') }}
                 {% else %}
-                    {{ form.m13_complete(class_='input-radio') }}
+                    {{ form.m13_complete(class_='input-radio', onchange='toggle_bonus(this.id)') }}
                 {% endif %}
             </div>
 
@@ -271,7 +271,7 @@
                 {% if form.m16_part_1.errors %}
                     {{ form.m16_part_1(class_='input-radio input-error') }}
                 {% else %}
-                    {{ form.m16_part_1(class_='input-radio') }}
+                    {{ form.m16_part_1(class_='input-radio', onclick='toggle_bonus(this.id)') }}
                 {% endif %}
             </div>
 
@@ -300,7 +300,7 @@
                 {% if form.m17_complete.errors %}
                     {{ form.m17_complete(class_='input-radio input-error') }}
                 {% else %}
-                    {{ form.m17_complete(class_='input-radio') }}
+                    {{ form.m17_complete(class_='input-radio', onchange='toggle_bonus(this.id)' )}}
                 {% endif %}
             </div>
 
@@ -379,5 +379,17 @@
 
     $(init)
 }(jQuery))
+
+// js form helper
+function toggle_bonus(id){
+    var form_id = id.substring(0,3)
+    var form_bonus = document.getElementById(form_id+"_bonus")
+    form_bonus.disabled = !document.getElementById(id+"-0").checked
+
+    if(form_bonus.disabled){
+        form_bonus.checked = false
+    }
+}
+
 </script>
 {% endblock %}

@@ -380,6 +380,9 @@
     $(init)
 }(jQuery))
 
+
+
+
 // js form helper
 function toggle_bonus(id){
     var form_id = id.substring(0,3)
@@ -391,5 +394,30 @@ function toggle_bonus(id){
     }
 }
 
+function inital_startup(){ //TODO: not working - doc.getEleID is null
+    // This isnt very good - could be done better, mark which have a bonus and deal with them spcfically?
+    var inputs = document.getElementsByTagName("input")
+    var checkboxes = []
+    for(i=0;i<inputs.length;i++){
+        if(inputs[i].type=="checkbox"){
+            checkboxes.push(inputs[i])
+        }
+    }
+    for(i=0;i<checkboxes.length;i++){
+        if(checkboxes[i].id.search("bonus") != -1 ){
+            try{
+                toggle_bonus(checkboxes[i].id.substring(0,3)+"_complete")
+            } catch(err){
+                console.log(err)
+                try{
+                    toggle_bonus(checkboxes[i].id.substring(0,3)+"_part_1")
+                } catch (err) {
+                    console.log(err)
+                }
+            }
+        }
+    }
+}
+inital_startup()
 </script>
 {% endblock %}

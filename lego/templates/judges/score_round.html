@@ -149,7 +149,7 @@
                 {% if form.m08_complete.errors %}
                     {{ form.m08_complete(class_='input-select input-error') }}
                 {% else %}
-                    {{ form.m08_complete(class_='input-select') }}
+                    {{ form.m08_complete(class_='input-select', onchange='dropdown_bonus_toggle(this.id,30)') }}
                 {% endif %}
             </div>
 
@@ -416,6 +416,19 @@ function inital_startup(){ //TODO: not working - doc.getEleID is null
                 }
             }
         }
+    }
+    dropdown_bonus_toggle("m08_complete", 30)
+}
+// Toggle bonus for the drop down m08
+// TODO: could probably be done better
+function dropdown_bonus_toggle(id, target){
+    var form_id = id.substring(0,3)
+    var bonus = document.getElementById(form_id + "_bonus")
+    if(document.getElementById(id).value == target){
+        bonus.disabled = false
+    } else {
+        bonus.checked = false
+        bonus.disabled = true
     }
 }
 inital_startup()

@@ -63,7 +63,7 @@ class ScoreRoundForm(FlaskForm):
                               validators=[InputRequired('Please make a choice for M01.')])
 
     m02_complete = RadioField('Solar Panels need to be angled toward or away from you, '
-                              'depending on strategy and conditions.'
+                              'depending on strategy and conditions.',
                               choices=[('0', '0 (0 points)'),
                                        ('18', '1 (18 points)'),
                                        ('22', '2 (22 points)'),
@@ -80,7 +80,7 @@ class ScoreRoundForm(FlaskForm):
                               validators=[InputRequired('Please make a choice for M03')])
 
     m04_complete = RadioField('The Robot or whatever agent-craft it sends out needs to cross ',
-                              'the Craters Model, by driving directly over it.'
+                              'the Craters Model, by driving directly over it.',
                               choices=[('20', 'Yes (20 points)'),
                                        ('0', 'No (0 points)')],
                               default='0',
@@ -104,7 +104,7 @@ class ScoreRoundForm(FlaskForm):
                                        ('16', '2 (16 points)'),
                                        ('30', '3 (30 points)'),
                                        ('32', '4 (32 points)'),
-                                       ('46', '5 (46 points)')],,
+                                       ('46', '5 (46 points)')],
                               default='0',
                               validators=[InputRequired('Please make a choice for M06')])
 
@@ -161,7 +161,7 @@ class ScoreRoundForm(FlaskForm):
                                choices=[('0', '0 (0 points)'),
                                         ('8', '1 (8 points)'),
                                         ('12', '2 (12 points)'),
-                                        ('16', '3 (16 points)')
+                                        ('16', '3 (16 points)'),
                                         ('20', '4 (20 points)'),
                                         ('24', '5 (24 points)'),],
                                validators=[Optional()])

@@ -27,24 +27,21 @@ class BonusField(BooleanField):
 
 
 class ScoreRoundForm(FlaskForm):
-    m01_title = 'M01 - Pipe Removal'
-    m02_title = 'M02 - Flow'
-    m03_title = 'M03 - Pump Addition'
-    m04_title = 'M04 - Rain'
-    m05_title = 'M05 - Filter'
-    m06_title = 'M06 - Water Treatment'
-    m07_title = 'M07 - Fountain'
-    m08_title = 'M08 - Manhole Covers'
-    m09_title = 'M09 - Tripod'
-    m10_title = 'M10 - Pipe Replacement'
-    m11_title = 'M11 - Pipe Construction'
-    m12_title = 'M12 - Sludge'
-    m13_title = 'M13 - Flower'
-    m14_title = 'M14 - Water Well'
-    m15_title = 'M15 - Fire'
-    m16_title = 'M16 - Water Collection'
-    m17_title = 'M17 - Slingshot'
-    m18_title = 'M18 - Faucet'
+    m01_title = 'M01 - Space Travel'
+    m02_title = 'M02 - Solar Panel Array'
+    m03_title = 'M03 - 3D Printing'
+    m04_title = 'M04 - Crater Crossing'
+    m05_title = 'M05 - Extraction'
+    m06_title = 'M06 - Space Station Modules'
+    m07_title = 'M07 - Space Walk Emergency'
+    m08_title = 'M08 - Aerobic Exercise'
+    m09_title = 'M09 - Strength Exercise'
+    m10_title = 'M10 - Food Production'
+    m11_title = 'M11 - Escape Velocity'
+    m12_title = 'M12 - Satellite Orbits'
+    m13_title = 'M13 - Observatory'
+    m14_title = 'M14 - Meteoroid Deflection'
+    m15_title = 'M15 - Landing Touch-Down'
     penalties_title = 'Penalties'
 
     # fields
@@ -53,149 +50,139 @@ class ScoreRoundForm(FlaskForm):
     confirm = HiddenField(default='0')
     score = IntegerField('Total score', validators=[Optional()])
 
-    m01_complete = RadioField('Broken Pipe completely in Base.',
-                              choices=[('20', 'Yes (20 points)'),
-                                       ('0', 'No (0 points)')],
+    m01_complete = RadioField('Send Payload rockets (carts) down the Space Travel Ramp.',
+                              choices=[('0', '0 (0 points)'),
+                                       ('10', '1 (10 points)'),
+                                       ('14', '2 (14 points)'),
+                                       ('22', '3 (22 points)'),
+                                       ('24', '4 (24 points)'),
+                                       ('32', '5 (32 points)'),
+                                       ('36', '6 (36 points)'),
+                                       ('46', '7 (46 points)')],
                               default='0',
                               validators=[InputRequired('Please make a choice for M01.')])
 
-    m02_complete = RadioField('Big Water in other teams field, achieved by only turning the '
-                              'Pump system valves.',
-                              choices=[('25', 'Yes (25 points)'),
-                                       ('0', 'No (0 points)')],
+    m02_complete = RadioField('Solar Panels need to be angled toward or away from you, '
+                              'depending on strategy and conditions.'
+                              choices=[('0', '0 (0 points)'),
+                                       ('18', '1 (18 points)'),
+                                       ('22', '2 (22 points)'),
+                                       ('40', '3 (40 points)')],
                               default='0',
                               validators=[InputRequired('Please make a choice for M02.')])
 
-    m03_complete = RadioField('Pump Addition is in contact with the mat and is completely in the '
-                              'Pump Addition target.',
-                              choices=[('20', 'Yes (20 points)'),
-                                       ('0', 'No (0 points)')],
+    m03_complete = RadioField('The Regolith Core must be placed into the 3D Printer, '
+                              'the ejected 2x4 Brick can be delivered for more points.',
+                              choices=[('0', '0 (0 points)'),
+                                       ('18', '1 (18 points)'),
+                                       ('22', '2 (22 points)')],
                               default='0',
                               validators=[InputRequired('Please make a choice for M03')])
 
-    m04_complete = RadioField('At least one Rain out of the Rain Cloud.',
+    m04_complete = RadioField('The Robot or whatever agent-craft it sends out needs to cross ',
+                              'the Craters Model, by driving directly over it.'
                               choices=[('20', 'Yes (20 points)'),
                                        ('0', 'No (0 points)')],
                               default='0',
                               validators=[InputRequired('Please make a choice for M04')])
 
-    m05_complete = RadioField('Filter moved north until the lock latch dropped.',
-                              choices=[('30', 'Yes (30 points)'),
-                                       ('0', 'No (0 points)')],
+    m05_complete = RadioField('The Robot must get all the Core Samples out of the Core Site.',
+                              choices=[('0', '0 (0 points)'),
+                                       ('16', '1 (16 points)'),
+                                       ('24', '2 (24 points)'),
+                                       ('26', '3 (26 points)'),
+                                       ('28', '4 (28 points)'),
+                                       ('34', '5 (34 points)'),
+                                       ('36', '6 (36 points)')],
                               default='0',
                               validators=[InputRequired('Please make a choice for M05')])
 
-    m06_complete = RadioField('Big Water ejected from Water Treatment, only by moving the '
-                              'Toilet lever.',
-                              choices=[('20', 'Yes (20 points)'),
-                                       ('0', 'No (0 points)')],
+    m06_complete = RadioField('The Robot needs to remove and insert Modules among the '
+                              'Habitation Hub port holes.',
+                              choices=[('0', '0 (0 points)'),
+                                       ('14', '1 (14 points)'),
+                                       ('16', '2 (16 points)'),
+                                       ('30', '3 (30 points)'),
+                                       ('32', '4 (32 points)'),
+                                       ('46', '5 (46 points)')],,
                               default='0',
                               validators=[InputRequired('Please make a choice for M06')])
 
-    m07_complete = RadioField('Fountain middle layer raised some obvious amount, only due to a '
-                              'Big Water in the gray tub.',
-                              choices=[('20', 'Yes (20 points)'),
-                                       ('0', 'No (0 points)')],
+    m07_complete = RadioField('The Robot needs to get Gerhard’s body into the Airlock Chamber.',
+                              choices=[('0', '0 (0 points)'),
+                                       ('18', '1 (18 points)'),
+                                       ('22', '2 (22 points')],
                               default='0',
                               validators=[InputRequired('Please make a choice for M07')])
 
-    m08_complete = SelectField('Manhole covers flipped past vertical.',
+    m08_complete = SelectField('The Robot needs to repeatedly move one or both of the '
+                               'Exercise Machine’s Handle Assemblies to make the Pointer advance.',
                                choices=[('0', '0 (0 points)'),
-                                        ('15', '1 (15 points)'),
-                                        ('30', '2 (30 points)')],
-                               validators=[Optional()])
-    m08_bonus = BonusField('Both covers completely in separate Tripod target areas (30 points).',
-                           value='30')
-
-    m09_complete = SelectField('Tripod in either Tripod target, with all of its feet touching the '
-                               'mat.',
-                               choices=[('0', 'Not in target (0 points)'),
-                                        ('15', 'Partially in target (15 points)'),
-                                        ('20', 'Completely in target (20 points)')],
+                                        ('18', '1 (18 points)'),
+                                        ('20', '2 (20 points)'),
+                                        ('22', '3 (22 points)')],
                                validators=[Optional()])
 
-    m10_complete = RadioField('New Pipe where broken pipe started, in full/flat contact with '
-                              'the mat.',
-                              choices=[('20', 'Yes (20 points)'),
+    m09_complete = SelectField('The Robot needs to lift the Strength Bar to a scoring heigth.',
+                               choices=[('16', 'Yes (16 points)'),
+                                        ('0', 'No (0 points)')],
+                               validators=[Optional()])
+
+    m10_complete = RadioField('Move the Push Bar to get into the green scoring range.',
+                              choices=[('16', 'Yes (16 points)'),
                                        ('0', 'No (0 points)')],
                               default='0',
                               validators=[InputRequired('Please make a choice for M10')])
 
-    m11_complete = SelectField('New Pipe in the target and in full/flat contact ' \
-                               'with the mat.',
-                               choices=[('0', 'Not in target (0 points)'),
-                                        ('15', 'Partially in target (15 points)'),
-                                        ('20', 'Completely in target (20 points)')],
+    m11_complete = SelectField('The Robot needs to impact the Strike Pad hard enough to '
+                               'keep the spacecraft from dropping back down.',
+                               choices=[('24', 'Yes (24 points)'),
+                                       ('0', 'No (0 points)')],
                                validators=[Optional()])
 
-    m12_complete = RadioField('Sludge touching the visible wood of a garden box.',
-                              choices=[('30', 'Yes (30 points)'),
-                                       ('0', 'No (0 points)')],
+    m12_complete = RadioField('The Robot needs to move one or more Satellites to the Outer Orbit.',
+                              choices=[('0', '0 (0 points)'),
+                                       ('8', '1 (8 points)'),
+                                       ('16', '2 (16 points)'),
+                                       ('24', '3 (24 points)')],
                               default='0',
                               validators=[InputRequired('Please make a choice for M12')])
 
-    m13_complete = RadioField('Flower raise an obvious amount only due to Big Water in the '
-                              'brown pot.',
-                              choices=[('30', 'Yes (30 points)'),
-                                       ('0', 'No (0 points)')],
+    m13_complete = RadioField('Rotate the Observatory to a precise direction.',
+                              choices=[('0', '0 (0 points)'),
+                                       ('16', '1 (16 points)'),
+                                       ('18', '2 (18 points)'),
+                                       ('20', '3 (20 points)')],
                               default='0',
                               validators=[InputRequired('Please make a choice for M13')])
-    m13_bonus = BonusField('At least one Rain in the purple part not touching anything but the '
-                           'flower model (30 points).',
-                           value='30')
 
-    m14_complete = SelectField('Water Well in contact with the mat and in the Water Well target.',
-                               choices=[('0', 'Not in target (0 points)'),
-                                        ('15', 'Partially in target (15 points)'),
-                                        ('25', 'Completely in target (25 points)')],
+    m14_complete = SelectField('From west of the Free-Line, send one or both Meteoroids '
+                                'Independently to the Meteoroid catcher.',
+                               choices=[('0', '0 (0 points)'),
+                                        ('8', '1 (8 points)'),
+                                        ('12', '2 (12 points)'),
+                                        ('16', '3 (16 points)')
+                                        ('20', '4 (20 points)'),
+                                        ('24', '5 (24 points)'),],
                                validators=[Optional()])
 
-    m15_complete = RadioField('Fire dropped, only y Fireturck applying force to house lever.',
-                              choices=[('25', 'Yes (25 points)'),
-                                       ('0', 'No (0 points)')],
+    m15_complete = RadioField('Get the Lander to one of its targets intact, or at least '
+                              'get it to Base.',
+                              choices=[('0', '0 (0 points)'),
+                                       ('16', '1 (16 points)'),
+                                       ('20', '2 (20 points)'),
+                                       ('22', '3 (22 points)')],
                               default='0',
                               validators=[InputRequired('Please make a choice for M15')])
 
-    m16_part_1 = RadioField('At least one Rain in Water Collection Area.',
-                            choices=[('10', 'Yes (10 points)'),
-                                     ('0', 'No (0 points)')],
-                            default='0',
-                            validators=[InputRequired('Please make a choice for M16')])
-    m16_part_2 = SelectField('Big Water in Water Collection Area.',
-                             choices=[('0', '0 (0 points)'),
-                                      ('10', '1 (10 points)'),
-                                      ('20', '2 (20 points)'),
-                                      ('30', '3 (30 points)'),
-                                      ('40', '4 (40 points)'),
-                                      ('50', '5 (50 points)')],
-                             validators=[Optional()])
-    m16_bonus = BonusField('One scoring Big Water an top of second scoring Big Water, touching '
-                           'nothing but other water (30 points).',
-                           value='30')
-
-    m17_complete = RadioField('Slingshot completely in its target area.',
-                              choices=[('20', 'Yes (20 points)'),
-                                       ('0', 'No (0 points)')],
-                              default='0',
-                              validators=[InputRequired('Please make a choice for M17')])
-    m17_bonus = BonusField('Dirty Water and a Rain completely in the target (15 points).',
-                           value='15')
-
-
-    m18_complete = RadioField('Water level more blue than white by only turning Faucet handle.',
-                              choices=[('25', 'Yes (25 points)'),
-                                       ('0', 'No (0 points)')],
-                              default='0',
-                              validators=[InputRequired('Please make a choice for M18')])
-
     penalties_chosen = SelectField('Number of penalties',
                              choices=[('0', '0 (0 points)'),
-                                      ('5', '1 (-5 points)'),
-                                      ('10', '2 (-10 points)'),
-                                      ('15', '3 (-15 points)'),
-                                      ('20', '4 (-20 points)'),
-                                      ('25', '5 (-25 points)'),
-                                      ('30', '6 (-30 points)')],
+                                      ('3', '1 (-3 points)'),
+                                      ('6', '2 (-6 points)'),
+                                      ('9', '3 (-9 points)'),
+                                      ('12', '4 (-12 points)'),
+                                      ('15', '5 (-15 points)'),
+                                      ('18', '6 (-18 points)')],
                              validators=[Optional()])
 
     def points_scored(self) -> int:

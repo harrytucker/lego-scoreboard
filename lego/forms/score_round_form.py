@@ -79,7 +79,7 @@ class ScoreRoundForm(FlaskForm):
                               default='0',
                               validators=[InputRequired('Please make a choice for M03')])
 
-    m04_complete = RadioField('The Robot or whatever agent-craft it sends out needs to cross ',
+    m04_complete = RadioField('The Robot or whatever agent-craft it sends out needs to cross '
                               'the Craters Model, by driving directly over it.',
                               choices=[('20', 'Yes (20 points)'),
                                        ('0', 'No (0 points)')],
@@ -198,8 +198,8 @@ class ScoreRoundForm(FlaskForm):
         score += int(self.m07_complete.data)
 
         m08_score = int(self.m08_complete.data)
-        if m08_score == 30:
-            m08_score += int(self.m08_bonus.value if self.m08_bonus.data else 0)
+        # if m08_score == 30:
+        #     m08_score += int(self.m08_bonus.value if self.m08_bonus.data else 0)
         score += m08_score
 
         score += int(self.m09_complete.data)
@@ -208,25 +208,25 @@ class ScoreRoundForm(FlaskForm):
         score += int(self.m12_complete.data)
 
         m13_score = int(self.m13_complete.data)
-        if m13_score == 30:
-            m13_score += int(self.m13_bonus.value if self.m13_bonus.data else 0)
+        # if m13_score == 30:
+        #     m13_score += int(self.m13_bonus.value if self.m13_bonus.data else 0)
         score += m13_score
 
         score += int(self.m14_complete.data)
         score += int(self.m15_complete.data)
 
-        m16_score = int(self.m16_part_1.data)
-        m16_score += int(self.m16_part_2.data)
-        if int(self.m16_part_2.data) >= 20:
-            m16_score += int(self.m16_bonus.value if self.m16_bonus.data else 0)
-        score += m16_score
-
-        m17_score = int(self.m17_complete.data)
-        if m17_score == 20:
-            m17_score += int(self.m17_bonus.value if self.m17_bonus.data else 0)
-        score += m17_score
-
-        score += int(self.m18_complete.data)
+        # m16_score = int(self.m16_part_1.data)
+        # m16_score += int(self.m16_part_2.data)
+        # if int(self.m16_part_2.data) >= 20:
+        #     m16_score += int(self.m16_bonus.value if self.m16_bonus.data else 0)
+        # score += m16_score
+        #
+        # m17_score = int(self.m17_complete.data)
+        # if m17_score == 20:
+        #     m17_score += int(self.m17_bonus.value if self.m17_bonus.data else 0)
+        # score += m17_score
+        #
+        # score += int(self.m18_complete.data)
         score -= int(self.penalties_chosen.data)
 
         if score < 0:

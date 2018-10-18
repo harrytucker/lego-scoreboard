@@ -111,7 +111,7 @@ class ScoreRoundForm(FlaskForm):
     m07_complete = RadioField('The Robot needs to get Gerhard’s body into the Airlock Chamber.',
                               choices=[('0', '0 (0 points)'),
                                        ('18', '1 (18 points)'),
-                                       ('22', '2 (22 points')],
+                                       ('22', '2 (22 points)')],
                               default='0',
                               validators=[InputRequired('Please make a choice for M07')])
 
@@ -121,12 +121,12 @@ class ScoreRoundForm(FlaskForm):
                                         ('18', '1 (18 points)'),
                                         ('20', '2 (20 points)'),
                                         ('22', '3 (22 points)')],
-                               validators=[Optional()])
+                               validators=[InputRequired('Please make a choice for M08.')])
 
     m09_complete = SelectField('The Robot needs to lift the Strength Bar to a scoring heigth.',
                                choices=[('16', 'Yes (16 points)'),
                                         ('0', 'No (0 points)')],
-                               validators=[Optional()])
+                               validators=[InputRequired('Please make a choice for M09.')])
 
     m10_complete = RadioField('Move the Push Bar to get into the green scoring range.',
                               choices=[('16', 'Yes (16 points)'),
@@ -138,7 +138,7 @@ class ScoreRoundForm(FlaskForm):
                                'keep the spacecraft from dropping back down.',
                                choices=[('24', 'Yes (24 points)'),
                                        ('0', 'No (0 points)')],
-                               validators=[Optional()])
+                               validators=[InputRequired('Please make a choice for M11.')])
 
     m12_complete = RadioField('The Robot needs to move one or more Satellites to the Outer Orbit.',
                               choices=[('0', '0 (0 points)'),
@@ -164,7 +164,7 @@ class ScoreRoundForm(FlaskForm):
                                         ('16', '3 (16 points)'),
                                         ('20', '4 (20 points)'),
                                         ('24', '5 (24 points)'),],
-                               validators=[Optional()])
+                               validators=[InputRequired('Please make a choice for M14.')])
 
     m15_complete = RadioField('Get the Lander to one of its targets intact, or at least '
                               'get it to Base.',
@@ -185,51 +185,29 @@ class ScoreRoundForm(FlaskForm):
                                       ('18', '6 (-18 points)')],
                              validators=[Optional()])
 
-    def points_scored(self) -> int:
+    def points_scored(self) -> (int, str):
         """Calculate the points scored for this round."""
-        score = 0
 
-        score += int(self.m01_complete.data)
-        score += int(self.m02_complete.data)
-        score += int(self.m03_complete.data)
-        score += int(self.m04_complete.data)
-        score += int(self.m05_complete.data)
-        score += int(self.m06_complete.data)
-        score += int(self.m07_complete.data)
+        score_breakdown = {
+            'm01_score': int(self.m01_complete.data),
+            'm02_score': int(self.m02_complete.data),
+            'm03_score': int(self.m03_complete.data),
+            'm04_score': int(self.m04_complete.data),
+            'm05_score': int(self.m05_complete.data),
+            'm06_score': int(self.m06_complete.data),
+            'm07_score': int(self.m07_complete.data),
+            'm08_score': int(self.m08_complete.data),
+            'm09_score': int(self.m09_complete.data),
+            'm10_score': int(self.m10_complete.data),
+            'm11_score': int(self.m11_complete.data),
+            'm12_score': int(self.m12_complete.data),
+            'm13_score': int(self.m13_complete.data),
+            'm14_score': int(self.m14_complete.data),
+            'm15_score': int(self.m15_complete.data),
+            'penalties': -int(self.penalties_chosen.data)
+        }
 
-        m08_score = int(self.m08_complete.data)
-        # if m08_score == 30:
-        #     m08_score += int(self.m08_bonus.value if self.m08_bonus.data else 0)
-        score += m08_score
+        score = sum(score_breakdown.values()) if sum(score_breakdown.values()) else 0
+        score_breakdown = str(score_breakdown)
 
-        score += int(self.m09_complete.data)
-        score += int(self.m10_complete.data)
-        score += int(self.m11_complete.data)
-        score += int(self.m12_complete.data)
-
-        m13_score = int(self.m13_complete.data)
-        # if m13_score == 30:
-        #     m13_score += int(self.m13_bonus.value if self.m13_bonus.data else 0)
-        score += m13_score
-
-        score += int(self.m14_complete.data)
-        score += int(self.m15_complete.data)
-
-        # m16_score = int(self.m16_part_1.data)
-        # m16_score += int(self.m16_part_2.data)
-        # if int(self.m16_part_2.data) >= 20:
-        #     m16_score += int(self.m16_bonus.value if self.m16_bonus.data else 0)
-        # score += m16_score
-        #
-        # m17_score = int(self.m17_complete.data)
-        # if m17_score == 20:
-        #     m17_score += int(self.m17_bonus.value if self.m17_bonus.data else 0)
-        # score += m17_score
-        #
-        # score += int(self.m18_complete.data)
-        score -= int(self.penalties_chosen.data)
-
-        if score < 0:
-            score = 0
-
-        return score
+        return score, score_breakdown

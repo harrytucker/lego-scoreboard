@@ -19,13 +19,21 @@ class Team(db.Model):
     active = db.Column(db.Boolean, default=True, nullable=False)
     is_practice = db.Column(db.Boolean, default=False, nullable=False)
     attempt_1 = db.Column(db.Integer, nullable=True)
+    attempt_1_breakdown = db.Column(db.String, nullable=True)
     attempt_2 = db.Column(db.Integer, nullable=True)
+    attempt_2_breakdown = db.Column(db.String, nullable=True)
     attempt_3 = db.Column(db.Integer, nullable=True)
+    attempt_3_breakdown = db.Column(db.String, nullable=True)
     round_2 = db.Column(db.Integer, nullable=True)
+    round_2_breakdown = db.Column(db.String, nullable=True)
     quarter = db.Column(db.Integer, nullable=True)
+    quarter_breakdown = db.Column(db.String, nullable=True)
     semi = db.Column(db.Integer, nullable=True)
+    semi_breakdown = db.Column(db.String, nullable=True)
     final_1 = db.Column(db.Integer, nullable=True)
+    final_1_breakdown = db.Column(db.String, nullable=True)
     final_2 = db.Column(db.Integer, nullable=True)
+    final_2_breakdown = db.Column(db.String, nullable=True)
 
     def __repr__(self):
         name = self.__class__.__name__
@@ -193,41 +201,49 @@ class Team(db.Model):
         # first round
         if stage == 0:
             if self.attempt_1 is None:
-                self.attempt_1 = score
+                self.attempt_1 = score[0]
+                self.attempt_1_breakdown = score[1]
             elif self.attempt_2 is None:
-                self.attempt_2 = score
+                self.attempt_2 = score[0]
+                self.attempt_2_breakdown = score[1]
             elif self.attempt_3 is None:
-                self.attempt_3 = score
+                self.attempt_3 = score[0]
+                self.attempt_3_breakdown = score[1]
             else:
                 raise Exception('All attempts have been made for this stage.')
 
         # second round
         elif stage == 1:
             if self.round_2 is None:
-                self.round_2 = score
+                self.round_2 = score[0]
+                self.round_2_breakdown = score[1]
             else:
                 raise Exception('All attempts have been made for this stage.')
 
         # quarter finals
         elif stage == 2:
             if self.quarter is None:
-                self.quarter = score
+                self.quarter = score[0]
+                self.quarter_breakdown = score[1]
             else:
                 raise Exception('All attempts have been made for this stage.')
 
         # semi finals
         elif stage == 3:
             if self.semi is None:
-                self.semi = score
+                self.semi = score[0]
+                self.semi_breakdown = score[1]
             else:
                 raise Exception('All attempts have been made for this stage.')
 
         # finals
         elif stage == 4:
             if self.final_1 is None:
-                self.final_1 = score
+                self.final_1 = score[0]
+                self.final_1_breakdown = score[1]
             elif self.final_2 is None:
-                self.final_2 = score
+                self.final_2 = score[0]
+                self.final_2_breakdown = score[1]
             else:
                 raise Exception('All attempts have been made for this stage.')
 

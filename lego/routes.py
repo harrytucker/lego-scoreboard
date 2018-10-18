@@ -316,7 +316,7 @@ def judges_score_round():
                 db.session.commit()
 
                 flash('Submitted for team: {!s}, score: {!s}.' \
-                      .format(team.name, score))
+                      .format(team.name, score[0]))
 
                 return redirect(url_for('judges_score_round'))
 
@@ -326,15 +326,15 @@ def judges_score_round():
         else:
             form.confirm.data = '1'
 
-        flash('Score: {!s}'.format(score))
+        flash('Score: {!s}'.format(score[0]))
 
         # data submitted to the form overrides whatever we set as data here
         # so we have to override that if something changed after the
         # initial confirmation
         if form.score.raw_data:
-            form.score.raw_data[0] = score
+            form.score.raw_data[0] = score[0]
         else:
-            form.score.data = score
+            form.score.data = score[0]
 
         return render_template('judges/score_round.html', title='Score Round',
                                form=form, confirm=True)

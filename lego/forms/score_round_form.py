@@ -51,82 +51,82 @@ class ScoreRoundForm(FlaskForm):
     score = IntegerField('Total score', validators=[Optional()])
 
     m01_complete = RadioField('Send Payload rockets (carts) down the Space Travel Ramp.',
-                              choices=[('0', '0 (0 points)'),
-                                       ('10', '1 (10 points)'),
-                                       ('14', '2 (14 points)'),
-                                       ('22', '3 (22 points)'),
-                                       ('24', '4 (24 points)'),
-                                       ('32', '5 (32 points)'),
-                                       ('36', '6 (36 points)'),
-                                       ('46', '7 (46 points)')],
+                              choices=[('0', '(0 points)'),
+                                       ('10', 'Crew Payload (10 points)'),
+                                       ('14', 'Supply Payload (14 points)'),
+                                       ('22', 'Vehicle Payload (22 points)'),
+                                       ('24', 'Crew Payload + Supply Payload (24 points)'),
+                                       ('32', 'Crew Payload + Vehicle Payload (32 points)'),
+                                       ('36', 'Supply Payload + Vehicle Payload (36 points)'),
+                                       ('46', 'All Payloads (46 points)')],
                               default='0',
                               validators=[InputRequired('Please make a choice for M01.')])
 
     m02_complete = RadioField('Solar Panels need to be angled toward or away from you, '
-                              'depending on strategy and conditions.',
-                              choices=[('0', '0 (0 points)'),
-                                       ('18', '1 (18 points)'),
-                                       ('22', '2 (22 points)'),
-                                       ('40', '3 (40 points)')],
+                              'depending on strategy and conditions.'
+                              choices=[('0', '(0 points)'),
+                                       ('18', '(18 points)'),
+                                       ('22', '(22 points)'),
+                                       ('40', '(40 points)')],
                               default='0',
                               validators=[InputRequired('Please make a choice for M02.')])
 
     m03_complete = RadioField('The Regolith Core must be placed into the 3D Printer, '
                               'the ejected 2x4 Brick can be delivered for more points.',
-                              choices=[('0', '0 (0 points)'),
-                                       ('18', '1 (18 points)'),
-                                       ('22', '2 (22 points)')],
+                              choices=[('0', 'Core not placed in printer (0 points)'),
+                                       ('18', 'Ejected and partially in planet area (18 points)'),
+                                       ('22', 'Ejected and completely in planet area (22 points)')],
                               default='0',
                               validators=[InputRequired('Please make a choice for M03')])
 
-    m04_complete = RadioField('The Robot or whatever agent-craft it sends out needs to cross '
-                              'the Craters Model, by driving directly over it.',
-                              choices=[('20', 'Yes (20 points)'),
+    m04_complete = RadioField('The Robot or whatever agent-craft it sends out needs to cross ',
+                              'the Craters Model, by driving directly over it.'
+                              choices=[('20', 'Yes, travelled East to West, completely past the flattened gate (20 points)'),
                                        ('0', 'No (0 points)')],
                               default='0',
                               validators=[InputRequired('Please make a choice for M04')])
 
     m05_complete = RadioField('The Robot must get all the Core Samples out of the Core Site.',
                               choices=[('0', '0 (0 points)'),
-                                       ('16', '1 (16 points)'),
-                                       ('24', '2 (24 points)'),
-                                       ('26', '3 (26 points)'),
-                                       ('28', '4 (28 points)'),
-                                       ('34', '5 (34 points)'),
-                                       ('36', '6 (36 points)')],
+                                       ('16', 'All samples moved no longer touching axle (16 points)'),
+                                       ('24', 'All samples moved and water core supported only by food growth chamber (24 points)'),
+                                       ('26', 'All samples moved and Gas Core completely in base (26 points)'),
+                                       ('28', 'All four moved and Gas Core is touching the mat and in landers target circle (28 points)'),
+                                       ('34', 'All four moved and Gas core in Base and Water Core is supported only by Food Growth Chamber (34 points)'),
+                                       ('36', 'All four moved and Gas core in Target Circle and Water Core is supported only by Food Growth Chamber (36 points)')],
                               default='0',
                               validators=[InputRequired('Please make a choice for M05')])
 
     m06_complete = RadioField('The Robot needs to remove and insert Modules among the '
                               'Habitation Hub port holes.',
                               choices=[('0', '0 (0 points)'),
-                                       ('14', '1 (14 points)'),
-                                       ('16', '2 (16 points)'),
-                                       ('30', '3 (30 points)'),
-                                       ('32', '4 (32 points)'),
-                                       ('46', '5 (46 points)')],
+                                       ('14', 'Dock Module in the Habitation Hub port, east side (14 points)'),
+                                       ('16', 'Tube Module in the Habitation Hub port, west side: (16 points)'),
+                                       ('30', 'Dock Module in east side, plus Cone Module in base or Tube Module in west side (30 points)'),
+                                       ('32', 'Cone Module completely in Base and Tube Module in Habitation Hub west side (32 points)'),
+                                       ('46', '32 points + Dock module in east side (46 points)')],,
                               default='0',
                               validators=[InputRequired('Please make a choice for M06')])
 
     m07_complete = RadioField('The Robot needs to get Gerhard’s body into the Airlock Chamber.',
                               choices=[('0', '0 (0 points)'),
-                                       ('18', '1 (18 points)'),
-                                       ('22', '2 (22 points')],
+                                       ('18', 'Gerhard’s body partially in airlock chamber (18 points)'),
+                                       ('22', 'Gerhard’s body completely in airlock chamber (22 points')],
                               default='0',
                               validators=[InputRequired('Please make a choice for M07')])
 
     m08_complete = SelectField('The Robot needs to repeatedly move one or both of the '
                                'Exercise Machine’s Handle Assemblies to make the Pointer advance.',
                                choices=[('0', '0 (0 points)'),
-                                        ('18', '1 (18 points)'),
-                                        ('20', '2 (20 points)'),
-                                        ('22', '3 (22 points)')],
-                               validators=[Optional()])
+                                        ('18', 'Pointer completely in gray, or partly covering either of gray’s end-borders (18 points)'),
+                                        ('20', 'Pointer completely in white (20 points)'),
+                                        ('22', 'Pointer completely in orange, or partly covering either of orange’s end-borders (22 points)')],
+                               validators=[InputRequired('Please make a choice for M08')])
 
-    m09_complete = SelectField('The Robot needs to lift the Strength Bar to a scoring heigth.',
+    m09_complete = SelectField('The Robot needs to lift the Strength Bar to a scoring height.',
                                choices=[('16', 'Yes (16 points)'),
                                         ('0', 'No (0 points)')],
-                               validators=[Optional()])
+                               validators=[InputRequired('Please make a choice for M09')])
 
     m10_complete = RadioField('Move the Push Bar to get into the green scoring range.',
                               choices=[('16', 'Yes (16 points)'),
@@ -138,40 +138,40 @@ class ScoreRoundForm(FlaskForm):
                                'keep the spacecraft from dropping back down.',
                                choices=[('24', 'Yes (24 points)'),
                                        ('0', 'No (0 points)')],
-                               validators=[Optional()])
+                               validators=[InputRequired('Please make a choice for M11')])
 
     m12_complete = RadioField('The Robot needs to move one or more Satellites to the Outer Orbit.',
                               choices=[('0', '0 (0 points)'),
-                                       ('8', '1 (8 points)'),
-                                       ('16', '2 (16 points)'),
-                                       ('24', '3 (24 points)')],
+                                       ('8', '1 moved between the two lines of the Outer Orbit(8 points)'),
+                                       ('16', '2 moved between the two lines of the Outer Orbit(16 points)'),
+                                       ('24', '3 moved between the two lines of the Outer Orbit(24 points)')],
                               default='0',
                               validators=[InputRequired('Please make a choice for M12')])
 
     m13_complete = RadioField('Rotate the Observatory to a precise direction.',
                               choices=[('0', '0 (0 points)'),
-                                       ('16', '1 (16 points)'),
-                                       ('18', '2 (18 points)'),
-                                       ('20', '3 (20 points)')],
+                                       ('16', 'Tip completely in gray, or partly covering either of gray’s end-borders (16 points)'),
+                                       ('18', 'Tip completely in white (18 points)'),
+                                       ('20', 'Tip completely in orange, or partly covering either of orange’s end-borders (20 points)')],
                               default='0',
                               validators=[InputRequired('Please make a choice for M13')])
 
     m14_complete = SelectField('From west of the Free-Line, send one or both Meteoroids '
                                 'Independently to the Meteoroid catcher.',
                                choices=[('0', '0 (0 points)'),
-                                        ('8', '1 (8 points)'),
-                                        ('12', '2 (12 points)'),
-                                        ('16', '3 (16 points)'),
-                                        ('20', '4 (20 points)'),
-                                        ('24', '5 (24 points)'),],
-                               validators=[Optional()])
+                                        ('8', 'Meteoroid in Either Side Section (8 points)'),
+                                        ('12', 'Meteoroid in the Center Section (12 points)'),
+                                        ('16', 'Both in Sides (16 points)')
+                                        ('20', 'Side and Center (20 points)'),
+                                        ('24', 'Both in Center (24 points)'),],
+                               validators=[InputRequired('Please make a choice for M14')])
 
     m15_complete = RadioField('Get the Lander to one of its targets intact, or at least '
                               'get it to Base.',
                               choices=[('0', '0 (0 points)'),
-                                       ('16', '1 (16 points)'),
-                                       ('20', '2 (20 points)'),
-                                       ('22', '3 (22 points)')],
+                                       ('16', 'Both parts of the Lander completely into Base (16 points)'),
+                                       ('20', 'Lander  intact, touching the Mat, and completely in the Northeast Planet Area (20 points)'),
+                                       ('22', 'Lander intact, touching the Mat, and completely in its Target Circle (22 points)')],
                               default='0',
                               validators=[InputRequired('Please make a choice for M15')])
 
@@ -198,8 +198,8 @@ class ScoreRoundForm(FlaskForm):
         score += int(self.m07_complete.data)
 
         m08_score = int(self.m08_complete.data)
-        # if m08_score == 30:
-        #     m08_score += int(self.m08_bonus.value if self.m08_bonus.data else 0)
+        if m08_score == 30:
+            m08_score += int(self.m08_bonus.value if self.m08_bonus.data else 0)
         score += m08_score
 
         score += int(self.m09_complete.data)
@@ -208,25 +208,25 @@ class ScoreRoundForm(FlaskForm):
         score += int(self.m12_complete.data)
 
         m13_score = int(self.m13_complete.data)
-        # if m13_score == 30:
-        #     m13_score += int(self.m13_bonus.value if self.m13_bonus.data else 0)
+        if m13_score == 30:
+            m13_score += int(self.m13_bonus.value if self.m13_bonus.data else 0)
         score += m13_score
 
         score += int(self.m14_complete.data)
         score += int(self.m15_complete.data)
 
-        # m16_score = int(self.m16_part_1.data)
-        # m16_score += int(self.m16_part_2.data)
-        # if int(self.m16_part_2.data) >= 20:
-        #     m16_score += int(self.m16_bonus.value if self.m16_bonus.data else 0)
-        # score += m16_score
-        #
-        # m17_score = int(self.m17_complete.data)
-        # if m17_score == 20:
-        #     m17_score += int(self.m17_bonus.value if self.m17_bonus.data else 0)
-        # score += m17_score
-        #
-        # score += int(self.m18_complete.data)
+        m16_score = int(self.m16_part_1.data)
+        m16_score += int(self.m16_part_2.data)
+        if int(self.m16_part_2.data) >= 20:
+            m16_score += int(self.m16_bonus.value if self.m16_bonus.data else 0)
+        score += m16_score
+
+        m17_score = int(self.m17_complete.data)
+        if m17_score == 20:
+            m17_score += int(self.m17_bonus.value if self.m17_bonus.data else 0)
+        score += m17_score
+
+        score += int(self.m18_complete.data)
         score -= int(self.penalties_chosen.data)
 
         if score < 0:

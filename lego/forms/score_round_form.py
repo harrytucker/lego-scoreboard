@@ -63,7 +63,7 @@ class ScoreRoundForm(FlaskForm):
                               validators=[InputRequired('Please make a choice for M01.')])
 
     m02_complete = RadioField('Solar Panels need to be angled toward or away from you, '
-                              'depending on strategy and conditions.'
+                              'depending on strategy and conditions.',
                               choices=[('0', '(0 points)'),
                                        ('18', '(18 points)'),
                                        ('22', '(22 points)'),

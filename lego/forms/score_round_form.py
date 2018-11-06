@@ -115,17 +115,19 @@ class ScoreRoundForm(FlaskForm):
                               default='0',
                               validators=[InputRequired('Please make a choice for M07')])
 
-    m08_complete = SelectField('The Robot needs to repeatedly move one or both of the '
+    m08_complete = RadioField('The Robot needs to repeatedly move one or both of the '
                                'Exercise Machine’s Handle Assemblies to make the Pointer advance.',
                                choices=[('0', '0 (0 points)'),
                                         ('18', 'Pointer completely in gray, or partly covering either of gray’s end-borders (18 points)'),
                                         ('20', 'Pointer completely in white (20 points)'),
                                         ('22', 'Pointer completely in orange, or partly covering either of orange’s end-borders (22 points)')],
+                               default='0',
                                validators=[InputRequired('Please make a choice for M08')])
 
-    m09_complete = SelectField('The Robot needs to lift the Strength Bar to a scoring height.',
+    m09_complete = RadioField('The Robot needs to lift the Strength Bar to a scoring height.',
                                choices=[('16', 'Yes (16 points)'),
                                         ('0', 'No (0 points)')],
+                               default='0',
                                validators=[InputRequired('Please make a choice for M09')])
 
     m10_complete = RadioField('Move the Push Bar to get into the green scoring range.',
@@ -134,10 +136,11 @@ class ScoreRoundForm(FlaskForm):
                               default='0',
                               validators=[InputRequired('Please make a choice for M10')])
 
-    m11_complete = SelectField('The Robot needs to impact the Strike Pad hard enough to '
+    m11_complete = RadioField('The Robot needs to impact the Strike Pad hard enough to '
                                'keep the spacecraft from dropping back down.',
                                choices=[('24', 'Yes (24 points)'),
                                        ('0', 'No (0 points)')],
+                               default='0',
                                validators=[InputRequired('Please make a choice for M11')])
 
     m12_complete = RadioField('The Robot needs to move one or more Satellites to the Outer Orbit.',
@@ -156,7 +159,7 @@ class ScoreRoundForm(FlaskForm):
                               default='0',
                               validators=[InputRequired('Please make a choice for M13')])
 
-    m14_complete = SelectField('From west of the Free-Line, send one or both Meteoroids '
+    m14_complete = RadioField('From west of the Free-Line, send one or both Meteoroids '
                                 'Independently to the Meteoroid catcher.',
                                choices=[('0', '0 (0 points)'),
                                         ('8', 'Meteoroid in Either Side Section (8 points)'),
@@ -164,6 +167,7 @@ class ScoreRoundForm(FlaskForm):
                                         ('16', 'Both in Sides (16 points)'),
                                         ('20', 'Side and Center (20 points)'),
                                         ('24', 'Both in Center (24 points)'),],
+                               default='0',
                                validators=[InputRequired('Please make a choice for M14')])
 
     m15_complete = RadioField('Get the Lander to one of its targets intact, or at least '

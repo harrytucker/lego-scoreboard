@@ -104,7 +104,7 @@ class ScoreRoundForm(FlaskForm):
                                        ('16', 'Tube Module in the Habitation Hub port, west side: (16 points)'),
                                        ('30', 'Dock Module in east side, plus Cone Module in base or Tube Module in west side (30 points)'),
                                        ('32', 'Cone Module completely in Base and Tube Module in Habitation Hub west side (32 points)'),
-                                       ('46', '32 points + Dock module in east side (46 points)')],
+                                       ('46', 'Cone Module completely in Base and Dock and Tube modules in east side and west sides consequetively (46 points)')],
                               default='0',
                               validators=[InputRequired('Please make a choice for M06')])
 

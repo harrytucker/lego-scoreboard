@@ -79,8 +79,8 @@ class ScoreRoundForm(FlaskForm):
                               default='0',
                               validators=[InputRequired('Please make a choice for M03')])
 
-    m04_complete = RadioField('The Robot or whatever agent-craft it sends out needs to cross ',
-                              'the Craters Model, by driving directly over it.'
+    m04_complete = RadioField('The Robot or whatever agent-craft it sends out needs to cross '
+                              'the Craters Model, by driving directly over it.',
                               choices=[('20', 'Yes, travelled East to West, completely past the flattened gate (20 points)'),
                                        ('0', 'No (0 points)')],
                               default='0',
@@ -104,7 +104,7 @@ class ScoreRoundForm(FlaskForm):
                                        ('16', 'Tube Module in the Habitation Hub port, west side: (16 points)'),
                                        ('30', 'Dock Module in east side, plus Cone Module in base or Tube Module in west side (30 points)'),
                                        ('32', 'Cone Module completely in Base and Tube Module in Habitation Hub west side (32 points)'),
-                                       ('46', '32 points + Dock module in east side (46 points)')],,
+                                       ('46', '32 points + Dock module in east side (46 points)')],
                               default='0',
                               validators=[InputRequired('Please make a choice for M06')])
 
@@ -161,7 +161,7 @@ class ScoreRoundForm(FlaskForm):
                                choices=[('0', '0 (0 points)'),
                                         ('8', 'Meteoroid in Either Side Section (8 points)'),
                                         ('12', 'Meteoroid in the Center Section (12 points)'),
-                                        ('16', 'Both in Sides (16 points)')
+                                        ('16', 'Both in Sides (16 points)'),
                                         ('20', 'Side and Center (20 points)'),
                                         ('24', 'Both in Center (24 points)'),],
                                validators=[InputRequired('Please make a choice for M14')])

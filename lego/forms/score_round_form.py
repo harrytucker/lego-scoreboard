@@ -51,7 +51,7 @@ class ScoreRoundForm(FlaskForm):
     score = IntegerField('Total score', validators=[Optional()])
 
     m01_complete = RadioField('Send Payload rockets (carts) down the Space Travel Ramp.',
-                              choices=[('0', '(0 points)'),
+                              choices=[('0', 'No payload (0 points)'),
                                        ('10', 'Crew Payload (10 points)'),
                                        ('14', 'Supply Payload (14 points)'),
                                        ('22', 'Vehicle Payload (22 points)'),
@@ -63,7 +63,7 @@ class ScoreRoundForm(FlaskForm):
                               validators=[InputRequired('Please make a choice for M01.')])
 
     m02_complete = RadioField('Solar Panels need to be angled toward or away from you, '
-                              'depending on strategy and conditions.',
+                              'depending on strategy and conditions. (See scoring sheet)',
                               choices=[('0', '(0 points)'),
                                        ('18', '(18 points)'),
                                        ('22', '(22 points)'),
@@ -87,7 +87,7 @@ class ScoreRoundForm(FlaskForm):
                               validators=[InputRequired('Please make a choice for M04')])
 
     m05_complete = RadioField('The Robot must get all the Core Samples out of the Core Site.',
-                              choices=[('0', '0 (0 points)'),
+                              choices=[('0', 'Failed (0 points)'),
                                        ('16', 'All samples moved no longer touching axle (16 points)'),
                                        ('24', 'All samples moved and water core supported only by food growth chamber (24 points)'),
                                        ('26', 'All samples moved and Gas Core completely in base (26 points)'),
@@ -99,9 +99,9 @@ class ScoreRoundForm(FlaskForm):
 
     m06_complete = RadioField('The Robot needs to remove and insert Modules among the '
                               'Habitation Hub port holes.',
-                              choices=[('0', '0 (0 points)'),
+                              choices=[('0', 'Failed (0 points)'),
                                        ('14', 'Dock Module in the Habitation Hub port, east side (14 points)'),
-                                       ('16', 'Tube Module in the Habitation Hub port, west side: (16 points)'),
+                                       ('16', 'Tube Module in the Habitation Hub port, west side (16 points)'),
                                        ('30', 'Dock Module in east side, plus Cone Module in base or Tube Module in west side (30 points)'),
                                        ('32', 'Cone Module completely in Base and Tube Module in Habitation Hub west side (32 points)'),
                                        ('46', 'Cone Module completely in Base and Dock and Tube modules in east side and west sides consequetively (46 points)')],
@@ -109,7 +109,7 @@ class ScoreRoundForm(FlaskForm):
                               validators=[InputRequired('Please make a choice for M06')])
 
     m07_complete = RadioField('The Robot needs to get Gerhard’s body into the Airlock Chamber.',
-                              choices=[('0', '0 (0 points)'),
+                              choices=[('0', 'Gerhard’s body not in airlock chamber (0 points)'),
                                        ('18', 'Gerhard’s body partially in airlock chamber (18 points)'),
                                        ('22', 'Gerhard’s body completely in airlock chamber (22 points')],
                               default='0',
@@ -117,7 +117,7 @@ class ScoreRoundForm(FlaskForm):
 
     m08_complete = RadioField('The Robot needs to repeatedly move one or both of the '
                                'Exercise Machine’s Handle Assemblies to make the Pointer advance.',
-                               choices=[('0', '0 (0 points)'),
+                               choices=[('0', 'Pointer not in any coloured area (0 points)'),
                                         ('18', 'Pointer completely in gray, or partly covering either of gray’s end-borders (18 points)'),
                                         ('20', 'Pointer completely in white (20 points)'),
                                         ('22', 'Pointer completely in orange, or partly covering either of orange’s end-borders (22 points)')],
@@ -144,15 +144,15 @@ class ScoreRoundForm(FlaskForm):
                                validators=[InputRequired('Please make a choice for M11')])
 
     m12_complete = RadioField('The Robot needs to move one or more Satellites to the Outer Orbit.',
-                              choices=[('0', '0 (0 points)'),
-                                       ('8', '1 moved between the two lines of the Outer Orbit(8 points)'),
-                                       ('16', '2 moved between the two lines of the Outer Orbit(16 points)'),
-                                       ('24', '3 moved between the two lines of the Outer Orbit(24 points)')],
+                              choices=[('0', 'No satellites moved into orbit (0 points)'),
+                                       ('8', '1 moved between the two lines of the Outer Orbit (8 points)'),
+                                       ('16', '2 moved between the two lines of the Outer Orbit (16 points)'),
+                                       ('24', '3 moved between the two lines of the Outer Orbit (24 points)')],
                               default='0',
                               validators=[InputRequired('Please make a choice for M12')])
 
     m13_complete = RadioField('Rotate the Observatory to a precise direction.',
-                              choices=[('0', '0 (0 points)'),
+                              choices=[('0', 'Tip not in any coloured section (0 points)'),
                                        ('16', 'Tip completely in gray, or partly covering either of gray’s end-borders (16 points)'),
                                        ('18', 'Tip completely in white (18 points)'),
                                        ('20', 'Tip completely in orange, or partly covering either of orange’s end-borders (20 points)')],
@@ -161,7 +161,7 @@ class ScoreRoundForm(FlaskForm):
 
     m14_complete = RadioField('From west of the Free-Line, send one or both Meteoroids '
                                 'Independently to the Meteoroid catcher.',
-                               choices=[('0', '0 (0 points)'),
+                               choices=[('0', 'No Meteoroid in any section (0 points)'),
                                         ('8', 'Meteoroid in Either Side Section (8 points)'),
                                         ('12', 'Meteoroid in the Center Section (12 points)'),
                                         ('16', 'Both in Sides (16 points)'),
@@ -172,7 +172,7 @@ class ScoreRoundForm(FlaskForm):
 
     m15_complete = RadioField('Get the Lander to one of its targets intact, or at least '
                               'get it to Base.',
-                              choices=[('0', '0 (0 points)'),
+                              choices=[('0', 'Failed to get lander to target or base (0 points)'),
                                        ('16', 'Both parts of the Lander completely into Base (16 points)'),
                                        ('20', 'Lander  intact, touching the Mat, and completely in the Northeast Planet Area (20 points)'),
                                        ('22', 'Lander intact, touching the Mat, and completely in its Target Circle (22 points)')],

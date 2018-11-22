@@ -46,13 +46,18 @@
             <h2>{{ form.m01_title }}</h2>
 
             <div class="form-input">
-                {{ form.m01_complete.label }}
-
+                <div>
+                    {{ form.m01_complete }}
+                </div>
+                <!-- {% for x in form.m01_complete %}
+                    
+                {% endfor %} -->
+                    <!--    
                 {% if form.m01_complete.errors %}
                     {{ form.m01_complete(class_='input-radio input-error') }}
                 {% else %}
                     {{ form.m01_complete(class_='input-radio') }}
-                {% endif %}
+                {% endif %} -->
             </div>
         </section>
 
@@ -147,12 +152,16 @@
                 {{ form.m08_complete.label }}
 
                 {% if form.m08_complete.errors %}
-                    {{ form.m08_complete(class_='input-radio input-error') }}
+                    {{ form.m08_complete(class_='input-select input-error') }}
                 {% else %}
-                    {{ form.m08_complete(class_='input-radio', onchange='dropdown_bonus_toggle(this.id,30)') }}
+                    {{ form.m08_complete(class_='input-select', onchange='dropdown_bonus_toggle(this.id,30)') }}
                 {% endif %}
             </div>
 
+            <div class="form-input">
+                {{ form.m08_bonus(class_='input-checkbox') }}
+                {{ form.m08_bonus.label(class_='inline') }}
+            </div>
         </section>
 
         <section>
@@ -162,9 +171,9 @@
                 {{ form.m09_complete.label }}
 
                 {% if form.m09_complete.errors %}
-                    {{ form.m09_complete(class_='input-radio input-error') }}
+                    {{ form.m09_complete(class_='input-select input-error') }}
                 {% else %}
-                    {{ form.m09_complete(class_='input-radio') }}
+                    {{ form.m09_complete(class_='input-select') }}
                 {% endif %}
             </div>
         </section>
@@ -190,9 +199,9 @@
                 {{ form.m11_complete.label }}
 
                 {% if form.m11_complete.errors %}
-                    {{ form.m11_complete(class_='input-radio input-error') }}
+                    {{ form.m11_complete(class_='input-select input-error') }}
                 {% else %}
-                    {{ form.m11_complete(class_='input-radio') }}
+                    {{ form.m11_complete(class_='input-select') }}
                 {% endif %}
             </div>
         </section>
@@ -224,6 +233,10 @@
                 {% endif %}
             </div>
 
+            <div class="form-input">
+                {{ form.m13_bonus(class_='input-checkbox') }}
+                {{ form.m13_bonus.label(class_='inline') }}
+            </div>
         </section>
 
         <section>
@@ -233,9 +246,9 @@
                 {{ form.m14_complete.label }}
 
                 {% if form.m14_complete.errors %}
-                    {{ form.m14_complete(class_='input-radio input-error') }}
+                    {{ form.m14_complete(class_='input-select input-error') }}
                 {% else %}
-                    {{ form.m14_complete(class_='input-radio') }}
+                    {{ form.m14_complete(class_='input-select') }}
                 {% endif %}
             </div>
         </section>
@@ -250,6 +263,68 @@
                     {{ form.m15_complete(class_='input-radio input-error') }}
                 {% else %}
                     {{ form.m15_complete(class_='input-radio') }}
+                {% endif %}
+            </div>
+        </section>
+
+        <section>
+            <h2>{{ form.m16_title }}</h2>
+
+            <div class="form-input">
+                {{ form.m16_part_1.label }}
+
+                {% if form.m16_part_1.errors %}
+                    {{ form.m16_part_1(class_='input-radio input-error') }}
+                {% else %}
+                    {{ form.m16_part_1(class_='input-radio', onclick='toggle_bonus(this.id)') }}
+                {% endif %}
+            </div>
+
+            <div class="form-input">
+                {{ form.m16_part_2.label }}
+
+                {% if form.m16_part_2.errors %}
+                    {{ form.m16_part_2(class_='input-select input-error') }}
+                {% else %}
+                    {{ form.m16_part_2(class_='input-select') }}
+                {% endif %}
+            </div>
+
+            <div class="form-input">
+                {{ form.m16_bonus(class_='input-checkbox') }}
+                {{ form.m16_bonus.label(class_='inline') }}
+            </div>
+        </section>
+
+        <section>
+            <h2>{{ form.m17_title }}</h2>
+
+            <div class="form-input">
+                {{ form.m17_complete.label }}
+
+                {% if form.m17_complete.errors %}
+                    {{ form.m17_complete(class_='input-radio input-error') }}
+                {% else %}
+                    {{ form.m17_complete(class_='input-radio', onchange='toggle_bonus(this.id)' )}}
+                {% endif %}
+            </div>
+
+            <div class="form-input">
+                {{ form.m17_bonus(class_='input-checkbox') }}
+                {{ form.m17_bonus.label(class_='inline') }}
+            </div>
+        </section>
+
+        <section>
+            <h2>{{ form.m18_title }}</h2>
+
+            <div class="form-input">
+                {{ form.m18_complete.label }}
+
+                {% if form.m18_complete.errors %}
+                    {{ form.m18_complete(class_='input-radio input-error') }}
+                {% else %}
+                    {{ form.m18_complete(class_='input-radio') }}
                 {% endif %}
             </div>
         </section>

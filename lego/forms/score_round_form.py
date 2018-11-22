@@ -10,6 +10,21 @@ from wtforms.compat import text_type
 from wtforms.validators import InputRequired, Optional
 
 
+# A boolean field (checkbox) with an associated non-bool value (e.g. an int) 
+# class CheckboxValueField(BooleanField):
+#     def __init__(self, label=None, validators=None, false_values=None, value=None, **kwargs):
+#         super(CheckboxValueField, self).__init__(label, validators, false_values, **kwargs)
+#         self.value = value
+
+
+#     def _value(self):
+#         if self.raw_data:
+#             return text_type(self.raw_data[0])
+
+#         if self.value:
+#             return self.value
+
+#         return 'y'
 class BonusField(BooleanField):
     def __init__(self, label=None, validators=None, false_values=None, value=None, **kwargs):
         super(BonusField, self).__init__(label, validators, false_values, **kwargs)
@@ -24,6 +39,23 @@ class BonusField(BooleanField):
             return self.value
 
         return 'y'
+
+# used to combine several checkbox field values into one object
+class CompleteField():
+    def __init__(self, components, label):
+        self.components = components
+        self.data = 0
+        for component in components:
+            # if the checkbox is a scoring one add its value to the total
+            if isinstance(component.value, int):
+                self.data += component.value
+            # if its an essential condition that wasn't met, set it to 0
+            elif isinstance(component.value, bool):
+                if component.value == False:
+                    self.data = 0
+                    break
+            
+        self.label = label
 
 
 class ScoreRoundForm(FlaskForm):
@@ -50,6 +82,8 @@ class ScoreRoundForm(FlaskForm):
     confirm = HiddenField(default='0')
     score = IntegerField('Total score', validators=[Optional()])
 
+    # example before
+    """
     m01_complete = SelectField('Send Payload rockets (carts) down the Space Travel Ramp.',
                               choices=[('True', 'Independent'), # TODO make this logic work
                                        ('10', 'Crew Payload '),
@@ -57,6 +91,14 @@ class ScoreRoundForm(FlaskForm):
                                        ('22', 'Vehicle Payload ')],
                               default='0',
                               validators=[InputRequired('Please make a choice for M01.')])
+    """
+    # and after desired changes
+    m01_label = 'Send Payload rockets (carts) down the Space Travel Ramp.'
+    m01_independent = BonusField('Cart was independent by the time it made the first track connection', value='true')
+    m01_crew = BonusField('Crew Payload', value='10')
+    m01_supply = BonusField('Supply payload', value='14')
+    m01_vehicle = BonusField('Vehicle payload', value='22')    
+
 
     m02_complete = SelectField('Solar Panels need to be angled toward or away from you, '
                               'depending on strategy and conditions.',
@@ -104,10 +146,10 @@ class ScoreRoundForm(FlaskForm):
                                         # TODO the first choice must be checked for the others to count
                                         # Make this a checkbox
                                choices=[('0', 'Exercise Machine Pointer advanced only by moving one or both of the Handle Assemblies'),
-                                        # Make these an unlocked radio choice if checkbox is ticked
+                                        # Make these an unlocked radio choice if above checkbox is ticked
                                         ('18', 'Pointer completely in gray, or partly covering either of gray’s end-borders'),
                                         ('20', 'Pointer completely in white'),
-                                        ('22', 'Pointer completely in orange, or partly covering either of orange’s end-borders')],
+                                       ('22', 'Pointer completely in orange, or partly covering either of orange’s end-borders')],
                                validators=[Optional()])
 
     m09_complete = RadioField('The Robot lifted the Strength Bar to a scoring height so that the tooth-strip’s'
@@ -183,9 +225,9 @@ class ScoreRoundForm(FlaskForm):
 
     def points_scored(self) -> (int, str):
         """Calculate the points scored for this round."""
-
+       # self.m01_complete = CompleteField([self.m01_independent, self.m01_crew, self.m01_supply, self.m01_vehicle], 'Send greg rockets (carts) down the Space Travel Ramp.')
         score_breakdown = {
-            'm01_score': int(self.m01_complete.data),
+            #'m01_score': int(self.m01_complete.data),
             'm02_score': int(self.m02_complete.data),
             'm03_score': int(self.m03_complete.data),
             'm04_score': int(self.m04_complete.data),
@@ -202,6 +244,7 @@ class ScoreRoundForm(FlaskForm):
             'm15_score': int(self.m15_complete.data),
             'penalties': -int(self.penalties_chosen.data)
         }
+        self.m01_crew.value
 
         score = sum(score_breakdown.values()) if sum(score_breakdown.values()) else 0
         score_breakdown = str(score_breakdown)

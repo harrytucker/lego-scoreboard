@@ -5,7 +5,7 @@
 # -----------------------------------------------------------------------------
 
 from flask_wtf import FlaskForm
-from wtforms import RadioField, BooleanField, SelectField, IntegerField, HiddenField
+from wtforms import RadioField, BooleanField, SelectField, IntegerField, HiddenField, Form, FormField, FieldList
 from wtforms.compat import text_type
 from wtforms.validators import InputRequired, Optional
 
@@ -58,193 +58,198 @@ class CompleteField():
         self.label = label
 
 
-class ScoreRoundForm(FlaskForm):
-    m01_title = 'M01 - Space Travel'
-    m02_title = 'M02 - Solar Panel Array'
-    m03_title = 'M03 - 3D Printing'
-    m04_title = 'M04 - Crater Crossing'
-    m05_title = 'M05 - Extraction'
-    m06_title = 'M06 - Space Station Modules'
-    m07_title = 'M07 - Space Walk Emergency'
-    m08_title = 'M08 - Aerobic Exercise'
-    m09_title = 'M09 - Strength Exercise'
-    m10_title = 'M10 - Food Production'
-    m11_title = 'M11 - Escape Velocity'
-    m12_title = 'M12 - Satellite Orbits'
-    m13_title = 'M13 - Observatory'
-    m14_title = 'M14 - Meteoroid Deflection'
-    m15_title = 'M15 - Landing Touch-Down'
-    penalties_title = 'Penalties'
+class ScoredField():
+    def score(self):
+        x = 0
+        for attr in self:
+            print('sdifdoij')
+        return x
 
+
+class ClassFactory:
+    def __init__(self):
+        self.instantiated = {}
+
+    def new_class(self, name, bases, dict):
+        if name not in self.instantiated:
+            self.instantiated[name] = FieldList(FormField(type(name, bases, dict)), min_entries=1)
+            print('===========================================================================================',
+                  self.instantiated[name].__dict__)
+            # self.instantiated[name] = type(name, bases, dict)()
+        return self.instantiated[name]
+
+
+class_factory = ClassFactory()
+
+
+class ScoreRoundForm(FlaskForm):
     # fields
     team = SelectField('Team:', validators=[InputRequired(message='Please select a team.')])
     yellow_card = BooleanField('Yellow card')
     confirm = HiddenField(default='0')
     score = IntegerField('Total score', validators=[Optional()])
 
-    # example before
-    """
-    m01_complete = SelectField('Send Payload rockets (carts) down the Space Travel Ramp.',
-                              choices=[('True', 'Independent'), # TODO make this logic work
-                                       ('10', 'Crew Payload '),
-                                       ('14', 'Supply Payload '),
-                                       ('22', 'Vehicle Payload ')],
-                              default='0',
-                              validators=[InputRequired('Please make a choice for M01.')])
-    """
-    # and after desired changes
-    m01_label = 'Send Payload rockets (carts) down the Space Travel Ramp.'
-    m01_independent = BonusField('Cart was independent by the time it made the first track connection', value='true')
-    m01_crew = BonusField('Crew Payload', value='10')
-    m01_supply = BonusField('Supply payload', value='14')
-    m01_vehicle = BonusField('Vehicle payload', value='22')    
+    missions = class_factory.new_class('Missions', (Form,), {
+        'm01_complete': class_factory.new_class('M01', (Form, ScoredField), {
+            'title': 'M01 - Space Travel',
+            'label': 'Send Payload rockets (carts) down the Space Travel Ramp.',
+            'm01_independent': BonusField('Cart was independent by the time it made the first track connection',
+                                          value=99999),
+            'm01_crew': BonusField('Crew Payload', value=10),
+            'm01_supply': BonusField('Supply payload', value=14),
+            'm01_vehicle': BonusField('Vehicle payload', value=22)
+        }),
+        'm02_complete': class_factory.new_class('M02', (Form, ScoredField), {
+            'title': 'M02 - Solar Panel Array',
+            'solar_panels': RadioField('Solar Panels need to be angled toward or away from you, depending on strategy and conditions.',
+                                       choices=[(18, 'Your Solar Panel is Angled toward the other team’s field'),
+                                                (22, 'Both Solar Panels are angled towards the same field')],
+                                       default=0,
+                                       validators=[Optional()]
+                                       )
+        }),
+        'm03_complete': class_factory.new_class('M03', (Form, ScoredField), {
+            'title': 'M03 - 3D Printing',
+            'label': 'The Regolith Core must be placed into the 3D Printer, the ejected 2x4 Brick can be delivered for more points.',
+            'm03_ejected': BonusField('2x4 Brick completely ejected from the printer by placing a Regolith Core Sample into it', value=18),
+            'm03_planet_area': BonusField('Brick completely in Northeast Planet Area ', value=4)
+        }),
+        'm04_complete': class_factory.new_class('M04', (Form, ScoredField), {
+            'title': 'M04 - Crater Crossing',
+            'label': 'The Robot or whatever agent-craft it sends out needs to cross the Craters Model, by driving directly over it.',
+            'm04_crossed': BonusField('Robot or Agent crossed completely east to west between the towers', value=99999),
+            'm04_gate': BonusField('Gate completely flattened', value=20)
+        }),
+        'm05_complete': class_factory.new_class('M05', (Form, ScoredField), {
+            'title': 'M05 - Extraction',
+            'label': 'The Robot must get all the Core Samples out of the Core Site.',
+            'm05_all_samples': BonusField('All samples moved no longer touching Core Site Model Axis', value=16),
+            'm05_gas_core_touching': BonusField('Gas Core Sample touching the mat and completely in the Lander’s Target Circle', value=12),
+            'm05_gas_core_completely': BonusField('Gas Core Sample completely in Base', value=12),
+            'm05_water_core': BonusField('Water Core Sample supported only by the Food Growth Chamber', value=12)
+        }),
+        'm06_complete': class_factory.new_class('M06', (Form, ScoredField), {
+            'title': 'M06 - Space Station Modules',
+            'label': 'The Robot needs to remove and insert Modules among the Habitation Hub port holes.',
+            'm06_completely': BonusField('Cone Module completely in base', value=16),
+            'm06_tube': BonusField('Tube Module in Habitation Hub Port West Side, touching nothing but the Habitation Hub', value=16),
+            'm06_docking': BonusField('Docking Module in Habitation Hub Port East Side, touching nothing but the Habitation Hub', value=14),
+        }),
+        'm07_complete': class_factory.new_class('M07', (Form, ScoredField), {
+            'title': 'M07 - Space Walk Emergency',
+            'gerhard': RadioField('The Robot needs to get Gerhard’s body into the Airlock Chamber.',
+                                  choices=[(0, 'Gerhard’s body not in airlock chamber'),
+                                           (18, 'Gerhard’s body partially in airlock chamber'),
+                                           (22, 'Gerhard’s body completely in airlock chamber')],
+                                  default=0,
+                                  validators=[InputRequired('Please make a choice for M07')])
+        }),
+        'm08_complete': class_factory.new_class('M08', (Form, ScoredField), {
+            'title': 'M08 - Aerobic Exercise',
+            'exercise_machine': SelectField('The Robot needs to repeatedly move one or both of the Exercise Machine’s Handle Assemblies to make the Pointer advance.',
+                                            # TODO the first choice must be checked for the others to count
+                                            #  Make this a checkbox
+                                            choices=[(0,
+                                            'Exercise Machine Pointer advanced only by moving one or both of the Handle Assemblies'),
+                                                     # Make these an unlocked radio choice if above checkbox is ticked
+                                                     (18, 'Pointer completely in gray, or partly covering either of gray’s end-borders'),
+                                                     (20, 'Pointer completely in white'),
+                                                     (22, 'Pointer completely in orange, or partly covering either of orange’s end-borders')],
+                                            default=0,
+                                            validators=[Optional()])
+        }),
+        'm09_complete': class_factory.new_class('M09', (Form, ScoredField), {
+            'title': 'M09 - Strength Exercise',
+            'strength_bar': RadioField('The Robot lifted the Strength Bar to a scoring height so that the tooth-strip’s 4th hole comes at least partly into view?',
+                                      choices=[(16, 'Yes'),
+                                               (0, 'No')],
+                                      default=0,
+                                      validators=[InputRequired('Please make a choice for M09')])
+        }),
+        'm10_complete': class_factory.new_class('M10', (Form, ScoredField), {
+            'title': 'M10 - Food Production',
+            'growth_chamber': RadioField('Food Growth Chamber’s colors spun, by moving the Push Bar, so the gray weight is DROPPED after green, but before tan?',
+                                         choices=[(16, 'Yes'),
+                                                 (0, 'No')],
+                                         default=0,
+                                         validators=[InputRequired('Please make a choice for M10')])
+        }),
+        'm11_complete': class_factory.new_class('M11', (Form, ScoredField), {
+            'title': 'M11 - Escape Velocity',
+            'strike_pad': RadioField('The Robot hit the Strike Pad hard enough to keep the spacecraft from dropping back down?',
+                                     choices=[(24, 'Yes'),
+                                              (0, 'No')],
+                                     default=0,
+                                     validators=[InputRequired('Please make a choice for M11')])
+        }),
+        'm12_complete': class_factory.new_class('M12', (Form, ScoredField), {
+            'title': 'M12 - Satellite Orbits',
+            'satellites': RadioField('The Robot needs to move one or more Satellites to the Outer Orbit.',
+                                     choices=[(0, 'No satellites moved into orbit'),
+                                              (8, '1 moved between the two lines of the Outer Orbit'),
+                                              (16, '2 moved between the two lines of the Outer Orbit'),
+                                              (24, '3 moved between the two lines of the Outer Orbit')],
+                                     default=0,
+                                     validators=[InputRequired('Please make a choice for M12')])
+        }),
+        'm13_complete': class_factory.new_class('M13', (Form, ScoredField), {
+            'title': 'M13 - Observatory',
+            'observatory': RadioField('Rotate the Observatory to a precise direction.',
+                                      choices=[(0, 'Tip not in any coloured section'),
+                                               (16, 'Tip completely in gray, or partly covering either of gray’s end-borders'),
+                                               (18, 'Tip completely in white'),
+                                               (20, 'Tip completely in orange, or partly covering either of orange’s end-borders')],
+                                      default=0,
+                                      validators=[InputRequired('Please make a choice for M13')])
+        }),
+        'm14_complete': class_factory.new_class('M14', (Form, ScoredField), {
+            'title': 'M14 - Meteoroid Deflection',
+            'meteoroid': SelectField('Send Meteoroids over the Free-Line to touch the mat in the Meteoroid Catcher.',
+                                     # TODO this conditional
+                                     choices=[
+                                         (True, 'Meteoroids hit/released while clearly and completely west of free line'),
+                                         (True, 'Meteoroids clearly independent whilst west of the free-line'),
+                                         # TODO two dropdowns for side and center
+                                         #  validate with side + centre <= 2
+                                         (12, 'One meteoroid in the Center Section'),
+                                         (24, 'Two meteoroids in the Center Section'),
+                                         (8, 'One in Side section'),
+                                         (16, 'Both in Side section(s)'),
+                                         (20, 'Side and Center')],
+                                     default=0,
+                                     validators=[InputRequired('Please make a choice for M14')])
+        }),
+        'm15_complete': class_factory.new_class('M15', (Form, ScoredField), {
+            'title': 'M15 - Landing Touch-Down',
+            'lander': RadioField('Get the Lander to one of its targets intact, or at least get it to Base.',
+                                 choices=[(0, 'Failed to get lander to target or base'),
+                                          (16, 'Both parts of the Lander completely into Base'),
+                                          (20, 'Lander  intact, touching the Mat, and completely in the Northeast Planet Area'),
+                                          (22, 'Lander intact, touching the Mat, and completely in its Target Circle')],
+                                 default=0,
+                                 validators=[InputRequired('Please make a choice for M15')])
+        }),
+        'penalties_chosen': class_factory.new_class('P', (Form, ScoredField), {
+            'title': 'Penalties',
+            'penalties': SelectField('Number of penalties',
+                                    choices=[(0, '0'),
+                                             (3, '1 (-3 points)'),
+                                             (6, '2 (-6 points)'),
+                                             (9, '3 (-9 points)'),
+                                             (12, '4 (-12 points)'),
+                                             (15, '5 (-15 points)'),
+                                             (18, '6 (-18 points)')],
+                                    default=0,
+                                    validators=[Optional()])
+        })
+    })
 
-
-    m02_complete = SelectField('Solar Panels need to be angled toward or away from you, '
-                              'depending on strategy and conditions.',
-                              choices=[('18', 'Your Solar Panel is Angled toward the other team’s field'),
-                                       ('22', 'Both Solar Panels are angled towards the same field')],
-                               validators=[Optional()])
-
-    m03_complete = SelectField('The Regolith Core must be placed into the 3D Printer, '
-                              'the ejected 2x4 Brick can be delivered for more points.',
-                              choices=[('18', '2x4 Brick completely ejected from the printer by placing a Regolith Core Sample into it'),
-                                       ('4', 'Brick completely in Northeast Planet Area ')],
-                              validators=[Optional()])
-
-    m04_complete = SelectField('The Robot or whatever agent-craft it sends out needs to cross '
-                              'the Craters Model, by driving directly over it.',
-                              choices=[('0', 'Robot or Agent crossed completely east to west between the towers'),
-                                       ('20', 'Gate completely flattened')], # TODO both must be selected to score points
-                              validators=[Optional()])
-
-    m05_complete = SelectField('The Robot must get all the Core Samples out of the Core Site.',
-                              choices=[('16', 'All samples moved no longer touching Core Site Model Axis'),
-                                # TODO add logic so only one of the below choices are available
-                                       ('12', 'Gas Core Sample touching the mat and completely in the Lander’s Target Circle'), # Option 1
-                                       ('10', 'Gas Core Sample completely in Base'), # Option 2
-                                       ('12', 'Water Core Sample supported only by the Food Growth Chamber')
-                                       ],
-                              validators=[Optional()])
-
-    m06_complete = SelectField('The Robot needs to remove and insert Modules among the '
-                              'Habitation Hub port holes.',
-                              choices=[('16', 'Cone Module completely in base'),
-                                       ('16', 'Tube Module in Habitation Hub Port West Side, touching nothing but the Habitation Hub'),
-                                       ('14', 'Docking Module in Habitation Hub Port East Side, touching nothing but the Habitation Hub')],
-                              validators=[Optional()])
-
-    m07_complete = RadioField('The Robot needs to get Gerhard’s body into the Airlock Chamber.',
-                              choices=[('0', 'Gerhard’s body not in airlock chamber'),
-                                       ('18', 'Gerhard’s body partially in airlock chamber'),
-                                       ('22', 'Gerhard’s body completely in airlock chamber')],
-                              default='0',
-                              validators=[InputRequired('Please make a choice for M07')])
-
-    m08_complete = SelectField('The Robot needs to repeatedly move one or both of the '
-                               'Exercise Machine’s Handle Assemblies to make the Pointer advance.',
-                                        # TODO the first choice must be checked for the others to count
-                                        # Make this a checkbox
-                               choices=[('0', 'Exercise Machine Pointer advanced only by moving one or both of the Handle Assemblies'),
-                                        # Make these an unlocked radio choice if above checkbox is ticked
-                                        ('18', 'Pointer completely in gray, or partly covering either of gray’s end-borders'),
-                                        ('20', 'Pointer completely in white'),
-                                       ('22', 'Pointer completely in orange, or partly covering either of orange’s end-borders')],
-                               validators=[Optional()])
-
-    m09_complete = RadioField('The Robot lifted the Strength Bar to a scoring height so that the tooth-strip’s'
-                              ' 4th hole comes at least partly into view?',
-                               choices=[('16', 'Yes'),
-                                        ('0', 'No')],
-                               default='0',
-                               validators=[InputRequired('Please make a choice for M09')])
-
-    m10_complete = RadioField('Food Growth Chamber’s colors spun, by moving the Push Bar,'
-                              ' so the gray weight is DROPPED after green, but before tan?',
-                              choices=[('16', 'Yes'),
-                                       ('0', 'No')],
-                              default='0',
-                              validators=[InputRequired('Please make a choice for M10')])
-
-    m11_complete = RadioField('The Robot hit the Strike Pad hard enough to '
-                               'keep the spacecraft from dropping back down?',
-                               choices=[('24', 'Yes'),
-                                       ('0', 'No')],
-                               default='0',
-                               validators=[InputRequired('Please make a choice for M11')])
-
-    m12_complete = RadioField('The Robot needs to move one or more Satellites to the Outer Orbit.',
-                              choices=[('0', 'No satellites moved into orbit'),
-                                       ('8', '1 moved between the two lines of the Outer Orbit'),
-                                       ('16', '2 moved between the two lines of the Outer Orbit'),
-                                       ('24', '3 moved between the two lines of the Outer Orbit')],
-                              default='0',
-                              validators=[InputRequired('Please make a choice for M12')])
-
-    m13_complete = RadioField('Rotate the Observatory to a precise direction.',
-                              choices=[('0', 'Tip not in any coloured section'),
-                                       ('16', 'Tip completely in gray, or partly covering either of gray’s end-borders'),
-                                       ('18', 'Tip completely in white'),
-                                       ('20', 'Tip completely in orange, or partly covering either of orange’s end-borders')],
-                              default='0',
-                              validators=[InputRequired('Please make a choice for M13')])
-
-    m14_complete = SelectField('Send Meteoroids over the Free-Line to touch the mat in the Meteoroid Catcher.',
-                                        # TODO this conditional
-                               choices=[('True', 'Meteoroids hit/released while clearly and completely west of free line'),
-                                        ('True', 'Meteoroids clearly independent whilst west of the free-line'),
-                                        # TODO two dropdowns for side and center
-                                        # validate with side + centre <= 2
-                                        ('12', 'One meteoroid in the Center Section'),
-                                        ('24', 'Two meteoroids in the Center Section'),
-                                        ('8', 'One in Side section'),
-                                        ('16', 'Both in Side section(s)'),
-                                        ('20', 'Side and Center')],
-                               default='0',
-                               validators=[InputRequired('Please make a choice for M14')])
-
-    m15_complete = RadioField('Get the Lander to one of its targets intact, or at least '
-                              'get it to Base.',
-                              choices=[('0', 'Failed to get lander to target or base'),
-                                       ('16', 'Both parts of the Lander completely into Base'),
-                                       ('20', 'Lander  intact, touching the Mat, and completely in the Northeast Planet Area'),
-                                       ('22', 'Lander intact, touching the Mat, and completely in its Target Circle')],
-                              default='0',
-                              validators=[InputRequired('Please make a choice for M15')])
-
-
-    penalties_chosen = SelectField('Number of penalties',
-                             choices=[('0', '0'),
-                                      ('3', '1 (-3 points)'),
-                                      ('6', '2 (-6 points)'),
-                                      ('9', '3 (-9 points)'),
-                                      ('12', '4 (-12 points)'),
-                                      ('15', '5 (-15 points)'),
-                                      ('18', '6 (-18 points)')],
-                             validators=[Optional()])
 
     def points_scored(self) -> (int, str):
         """Calculate the points scored for this round."""
-       # self.m01_complete = CompleteField([self.m01_independent, self.m01_crew, self.m01_supply, self.m01_vehicle], 'Send greg rockets (carts) down the Space Travel Ramp.')
-        score_breakdown = {
-            #'m01_score': int(self.m01_complete.data),
-            'm02_score': int(self.m02_complete.data),
-            'm03_score': int(self.m03_complete.data),
-            'm04_score': int(self.m04_complete.data),
-            'm05_score': int(self.m05_complete.data),
-            'm06_score': int(self.m06_complete.data),
-            'm07_score': int(self.m07_complete.data),
-            'm08_score': int(self.m08_complete.data),
-            'm09_score': int(self.m09_complete.data),
-            'm10_score': int(self.m10_complete.data),
-            'm11_score': int(self.m11_complete.data),
-            'm12_score': int(self.m12_complete.data),
-            'm13_score': int(self.m13_complete.data),
-            'm14_score': int(self.m14_complete.data),
-            'm15_score': int(self.m15_complete.data),
-            'penalties': -int(self.penalties_chosen.data)
-        }
-        self.m01_crew.value
+        score_breakdown = {}
+        for mission_name, mission in self.missions._fields.items():
+            score_breakdown[mission_name] = mission.score()
 
         score = sum(score_breakdown.values()) if sum(score_breakdown.values()) else 0
         score_breakdown = str(score_breakdown)

@@ -42,21 +42,37 @@
             </div>
         </section>
 
-        {% for missions in form.missions %}
-            {% for mission in missions %}
-                <section>
-                    <h2>
-                        {{ mission.label }}
-                    </h2>
-                    {% for fields in mission %}
-                        {% for field in fields %}
-                            {{ field }}
-                            {{ field.label }}
-                            <br>
-                        {% endfor %}
-                    {% endfor %}
-                </section>
-            {% endfor %}
+
+        {% for mission in form.missions.entries[0] %}
+            <section>
+                <h2>
+                    {{ mission.label }}
+                </h2>
+                {% for field in mission.entries[0] %}
+                    {% if field.type == "BooleanField" or field.type == "BonusField" %}
+                        <!-- needs a check to throw an error if the field is -->
+                        {{ field(class_='input-checkbox error') }}
+                        {{ field.label }}
+                    {% endif %}
+                    {% if field.type == "RadioField" %}
+                        {{ field.label }}
+                        {% if field.errors %}
+                            {{ field(class_='input-radio input-error') }}
+                        {% else %}
+                            {{ field(class_='input-radio') }}
+                        {% endif %}
+                    {% endif %}
+                    {% if field.type == "SelectField" %}
+                        {{ field.label }}
+                        {% if field.errors %}
+                            {{ field(class_='input-select input-error') }}
+                        {% else %}
+                            {{ field(class_='input-select') }}
+                        {% endif %}
+                    {% endif %}
+                    <br>
+                {% endfor %}
+            </section>
         {% endfor %}
 
 

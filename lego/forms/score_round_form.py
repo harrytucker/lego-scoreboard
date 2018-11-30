@@ -58,13 +58,15 @@ class CompleteField():
         self.label = label
 
 
-class ScoredField:
+class ScoredForm(Form):
     def score(self):
         score = 0
 
         for _, task in self._fields.items():
-            if isinstance(task, BonusField):
+            if isinstance(task, BonusField):                
                 score += task.data * int(task.value)
+            elif isinstance(task, BooleanField) and task.data is False:
+                return 0
             else:
                 score += int(task.data)
 
@@ -92,15 +94,14 @@ class ScoreRoundForm(FlaskForm):
     score = IntegerField('Total score', validators=[Optional()])
 
     missions = form_manager.new_form('Missions', (Form,), {
-        'M01 - Space Travel': form_manager.new_form('M01', (Form, ScoredField), {
+        'M01 - Space Travel': form_manager.new_form('M01', (ScoredForm,), {
             'label': 'Send Payload rockets (carts) down the Space Travel Ramp.',
-            'm01_independent': BonusField('Cart was independent by the time it made the first track connection',
-                                          value='99999'),
+            'm01_independent': BooleanField('Cart was independent by the time it made the first track connection'),
             'm01_crew': BonusField('Crew Payload', value='10'),
             'm01_supply': BonusField('Supply payload', value='14'),
             'm01_vehicle': BonusField('Vehicle payload', value='22')
         }),
-        'M02 - Solar Panel Array': form_manager.new_form('M02', (Form, ScoredField), {
+        'M02 - Solar Panel Array': form_manager.new_form('M02', (ScoredForm,), {
             'label' : '1',
             'solar_panels': RadioField('Solar Panels need to be angled toward or away from you, depending on strategy and conditions.',
                                        choices=[('18', 'Your Solar Panel is Angled toward the other team’s field'),
@@ -109,30 +110,30 @@ class ScoreRoundForm(FlaskForm):
                                        validators=[Optional()]
                                        )
         }),
-        'M03 - 3D Printing': form_manager.new_form('M03', (Form, ScoredField), {
+        'M03 - 3D Printing': form_manager.new_form('M03', (ScoredForm,), {
             'label': 'The Regolith Core must be placed into the 3D Printer, the ejected 2x4 Brick can be delivered for more points.',
             'm03_ejected': BonusField('2x4 Brick completely ejected from the printer by placing a Regolith Core Sample into it', value='18'),
             'm03_planet_area': BonusField('Brick completely in Northeast Planet Area ', value='4')
         }),
-        'M04 - Crater Crossing': form_manager.new_form('M04', (Form, ScoredField), {
+        'M04 - Crater Crossing': form_manager.new_form('M04', (ScoredForm,), {
             'label': 'The Robot or whatever agent-craft it sends out needs to cross the Craters Model, by driving directly over it.',
-            'm04_crossed': BonusField('Robot or Agent crossed completely east to west between the towers', value='99999'),
+            'm04_crossed': BooleanField('Robot or Agent crossed completely east to west between the towers'),
             'm04_gate': BonusField('Gate completely flattened', value='20')
         }),
-        'M05 - Extraction': form_manager.new_form('M05', (Form, ScoredField), {
+        'M05 - Extraction': form_manager.new_form('M05', (ScoredForm,), {
             'label': 'The Robot must get all the Core Samples out of the Core Site.',
             'm05_all_samples': BonusField('All samples moved no longer touching Core Site Model Axis', value='16'),
             'm05_gas_core_touching': BonusField('Gas Core Sample touching the mat and completely in the Lander’s Target Circle', value='12'),
             'm05_gas_core_completely': BonusField('Gas Core Sample completely in Base', value='12'),
             'm05_water_core': BonusField('Water Core Sample supported only by the Food Growth Chamber', value='12')
         }),
-        'M06 - Space Station Modules': form_manager.new_form('M06', (Form, ScoredField), {
+        'M06 - Space Station Modules': form_manager.new_form('M06', (ScoredForm,), {
             'label': 'The Robot needs to remove and insert Modules among the Habitation Hub port holes.',
             'm06_completely': BonusField('Cone Module completely in base', value='16'),
             'm06_tube': BonusField('Tube Module in Habitation Hub Port West Side, touching nothing but the Habitation Hub', value='16'),
             'm06_docking': BonusField('Docking Module in Habitation Hub Port East Side, touching nothing but the Habitation Hub', value='14'),
         }),
-        'M07 - Space Walk Emergency': form_manager.new_form('M07', (Form, ScoredField), {
+        'M07 - Space Walk Emergency': form_manager.new_form('M07', (ScoredForm,), {
             'label': '2',
             'gerhard': RadioField('The Robot needs to get Gerhard’s body into the Airlock Chamber.',
                                   choices=[('0', 'Gerhard’s body not in airlock chamber'),
@@ -140,7 +141,7 @@ class ScoreRoundForm(FlaskForm):
                                            ('22', 'Gerhard’s body completely in airlock chamber')],
                                   validators=[InputRequired('Please make a choice for M07')])
         }),
-        'M08 - Aerobic Exercise': form_manager.new_form('M08', (Form, ScoredField), {
+        'M08 - Aerobic Exercise': form_manager.new_form('M08', (ScoredForm,), {
             'label': '3',
             'exercise_machine': SelectField('The Robot needs to repeatedly move one or both of the Exercise Machine’s Handle Assemblies to make the Pointer advance.',
                                             # TODO the first choice must be checked for the others to count
@@ -153,7 +154,7 @@ class ScoreRoundForm(FlaskForm):
                                             default=0,
                                             validators=[Optional()])
         }),
-        'M09 - Strength Exercise': form_manager.new_form('M09', (Form, ScoredField), {
+        'M09 - Strength Exercise': form_manager.new_form('M09', (ScoredForm,), {
             'label': '4',
             'strength_bar': RadioField('The Robot lifted the Strength Bar to a scoring height so that the tooth-strip’s 4th hole comes at least partly into view?',
                                       choices=[('16', 'Yes'),
@@ -161,7 +162,7 @@ class ScoreRoundForm(FlaskForm):
                                       default=0,
                                       validators=[InputRequired('Please make a choice for M09')])
         }),
-        'M10 - Food Production': form_manager.new_form('M10', (Form, ScoredField), {
+        'M10 - Food Production': form_manager.new_form('M10', (ScoredForm,), {
             'label': '5',
             'growth_chamber': RadioField('Food Growth Chamber’s colors spun, by moving the Push Bar, so the gray weight is DROPPED after green, but before tan?',
                                          choices=[('16', 'Yes'),
@@ -169,7 +170,7 @@ class ScoreRoundForm(FlaskForm):
                                          default=0,
                                          validators=[InputRequired('Please make a choice for M10')])
         }),
-        'M11 - Escape Velocity': form_manager.new_form('M11', (Form, ScoredField), {
+        'M11 - Escape Velocity': form_manager.new_form('M11', (ScoredForm,), {
             'label': '6',
             'strike_pad': RadioField('The Robot hit the Strike Pad hard enough to keep the spacecraft from dropping back down?',
                                      choices=[('24', 'Yes'),
@@ -177,7 +178,7 @@ class ScoreRoundForm(FlaskForm):
                                      default=0,
                                      validators=[InputRequired('Please make a choice for M11')])
         }),
-        'M12 - Satellite Orbits': form_manager.new_form('M12', (Form, ScoredField), {
+        'M12 - Satellite Orbits': form_manager.new_form('M12', (ScoredForm,), {
             'label': '7',
             'satellites': RadioField('The Robot needs to move one or more Satellites to the Outer Orbit.',
                                      choices=[('0', 'No satellites moved into orbit'),
@@ -187,7 +188,7 @@ class ScoreRoundForm(FlaskForm):
                                      default=0,
                                      validators=[InputRequired('Please make a choice for M12')])
         }),
-        'M13 - Observatory': form_manager.new_form('M13', (Form, ScoredField), {
+        'M13 - Observatory': form_manager.new_form('M13', (ScoredForm,), {
             'label': '8',
             'observatory': RadioField('Rotate the Observatory to a precise direction.',
                                       choices=[('0', 'Tip not in any coloured section'),
@@ -197,7 +198,7 @@ class ScoreRoundForm(FlaskForm):
                                       default=0,
                                       validators=[InputRequired('Please make a choice for M13')])
         }),
-        'M14 - Meteoroid Deflection': form_manager.new_form('M14', (Form, ScoredField), {
+        'M14 - Meteoroid Deflection': form_manager.new_form('M14', (ScoredForm,), {
             'label': '9',
             'meteoroid': SelectField('Send Meteoroids over the Free-Line to touch the mat in the Meteoroid Catcher.',
                                      # TODO this conditional
@@ -212,9 +213,9 @@ class ScoreRoundForm(FlaskForm):
                                          ('16', 'Both in Side section(s)'),
                                          ('20', 'Side and Center')],
                                      default=0,
-                                     validators=[InputRequired('Please make a choice for M14')])
+                                     validators=[Optional()])
         }),
-        'M15 - Landing Touch-Down': form_manager.new_form('M15', (Form, ScoredField), {
+        'M15 - Landing Touch-Down': form_manager.new_form('M15', (ScoredForm,), {
             'label': '10',
             'lander': RadioField('Get the Lander to one of its targets intact, or at least get it to Base.',
                                  choices=[('0', 'Failed to get lander to target or base'),
@@ -224,7 +225,7 @@ class ScoreRoundForm(FlaskForm):
                                  default=0,
                                  validators=[InputRequired('Please make a choice for M15')])
         }),
-        'Penalties': form_manager.new_form('P', (Form, ScoredField), {
+        'Penalties': form_manager.new_form('P', (ScoredForm,), {
             'label': '11',
             'penalties': SelectField('Number of penalties',
                                     choices=[('0', '0'),

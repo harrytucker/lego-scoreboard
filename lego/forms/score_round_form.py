@@ -139,18 +139,17 @@ class ScoreRoundForm(FlaskForm):
                                   choices=[('0', 'Gerhard’s body not in airlock chamber'),
                                            ('18', 'Gerhard’s body partially in airlock chamber'),
                                            ('22', 'Gerhard’s body completely in airlock chamber')],
+                                  default=0,
                                   validators=[InputRequired('Please make a choice for M07')])
         }),
         'M08 - Aerobic Exercise': form_manager.new_form('M08', (ScoredForm,), {
             'label': '3',
-            'exercise_machine': SelectField('The Robot needs to repeatedly move one or both of the Exercise Machine’s Handle Assemblies to make the Pointer advance.',
-                                            # TODO the first choice must be checked for the others to count
-                                            #  Make this a checkbox
-                                            choices=[('0', 'Exercise Machine Pointer advanced only by moving one or both of the Handle Assemblies'),
-                                                     # Make these an unlocked radio choice if above checkbox is ticked
-                                                     ('18', 'Pointer completely in gray, or partly covering either of gray’s end-borders'),
-                                                     ('20', 'Pointer completely in white'),
-                                                     ('22', 'Pointer completely in orange, or partly covering either of orange’s end-borders')],
+            'm08_handle': BooleanField('Exercise Machine Pointer advanced only by moving one or both of the Handle Assemblies'),
+            'm08_exercise_machine': SelectField('Pointer tip: ',
+                                            choices=[
+                                                     ('18', 'completely in gray, or partly covering either of gray’s end-borders'),
+                                                     ('20', 'completely in white'),
+                                                     ('22', 'completely in orange, or partly covering either of orange’s end-borders')],
                                             default=0,
                                             validators=[Optional()])
         }),
@@ -200,21 +199,27 @@ class ScoreRoundForm(FlaskForm):
         }),
         'M14 - Meteoroid Deflection': form_manager.new_form('M14', (ScoredForm,), {
             'label': '9',
-            'meteoroid': SelectField('Send Meteoroids over the Free-Line to touch the mat in the Meteoroid Catcher.',
-                                     # TODO this conditional
-                                     choices=[
-                                         (True, 'Meteoroids hit/released while clearly and completely west of free line'),
-                                         (True, 'Meteoroids clearly independent whilst west of the free-line'),
-                                         # TODO two dropdowns for side and center
-                                         #  validate with side + centre <= 2
-                                         ('12', 'One meteoroid in the Center Section'),
-                                         ('24', 'Two meteoroids in the Center Section'),
-                                         ('8', 'One in Side section'),
-                                         ('16', 'Both in Side section(s)'),
-                                         ('20', 'Side and Center')],
-                                     default=0,
-                                     validators=[Optional()])
+            'm14_independent': BooleanField('Meteoroids clearly independent whilst west of the free-line'),
+            'm14_free_line': BooleanField('Meteoroids hit/released while clearly and completely west of free line'),
+            'm14_centre': SelectField('Meteoriods in Center Section: ',
+                choices=[
+                    ('0', '0'),
+                    ('12', '1'),
+                    ('24','2')
+                ],
+                default=0,
+                validators=[Optional()]),
+            'm14_sides': SelectField('Meteoriods in either Side Sections: ',
+                choices=[
+                    ('0', '0'),
+                    ('8', '1'),
+                    ('16','2')
+                ],
+                default=0,
+                validators=[Optional()]
+                )
         }),
+
         'M15 - Landing Touch-Down': form_manager.new_form('M15', (ScoredForm,), {
             'label': '10',
             'lander': RadioField('Get the Lander to one of its targets intact, or at least get it to Base.',

@@ -9,6 +9,7 @@ from wtforms import RadioField, BooleanField, SelectField, IntegerField, HiddenF
 from wtforms.compat import text_type
 from wtforms.validators import InputRequired, Optional
 import json
+import os
 from collections import OrderedDict
 
 
@@ -90,7 +91,7 @@ class ScoreRoundForm(FlaskForm):
     score = IntegerField('Total score', validators=[Optional()])
 
     # parses json into FieldList
-    missions = parse_json('missions.json')
+    missions = parse_json(os.path.abspath('.') + '/missions.json')
 
     def points_scored(self) -> (int, str):
         """Calculate the points scored for this round."""

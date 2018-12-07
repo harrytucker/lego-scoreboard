@@ -91,7 +91,7 @@ class ScoreRoundForm(FlaskForm):
     score = IntegerField('Total score', validators=[Optional()])
 
     # parses json into FieldList
-    missions = parse_json(os.path.abspath('.') + '/missions.json')
+    missions = parse_json(os.path.dirname(__file__) + '/../missions.json')
 
     def points_scored(self) -> (int, str):
         """Calculate the points scored for this round."""

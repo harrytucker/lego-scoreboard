@@ -1,0 +1,317 @@
+{
+    "M01 - Space Travel": [
+        {
+            "type": "BooleanField",
+            "string": "Cart was independent by the time it made the first track connection"
+        },
+        {
+            "type": "BonusField",
+            "string": "Crew Payload",
+            "value": "10"
+        },
+        {
+            "type": "BonusField",
+            "string": "Supply Payload",
+            "value": "14"
+        },
+        {
+            "type": "BonusField",
+            "string": "Vehicle Payload",
+            "value": "22"
+        }
+    ],
+    "M02 - Solar Panel Array": [
+        {
+            "type": "RadioField",
+            "string": "Solar Panels need to be angled toward or away from you, depending on strategy and conditions.",
+            "choices": [
+                {
+                    "string": "Your Solar Panel is Angled toward the other team's field",
+                    "value": "18"
+                }, {
+                    "string": "Both Solar Panels are angled towards the same field",
+                    "value": "22"
+                }
+            ]
+        }
+    ],
+    "M03 - 3D Printing": [
+        {
+            "type": "BonusField",
+            "string": "2x4 Brick completely ejected from the printer by placing a Regolith Core Sample into it",
+            "value": "18"
+        },
+        {
+            "type": "BonusField",
+            "string": "Brick completely in Northeast Planet Area",
+            "value": "4"
+        }
+    ],
+    "M04 - Crater Crossing": [
+        {
+            "type": "BooleanField",
+            "string": "Robot or Agent crossed completely east to west between the towers"
+        },
+        {
+            "type": "BonusField",
+            "string": "Gate completely flattened",
+            "value": "20"
+        }
+    ],
+    "M05 - Extraction": [
+        {
+            "type": "BonusField",
+            "string": "All samples moved no longer touching Core Site Model Axis",
+            "value": "16"
+        },
+        {
+            "type": "BonusField",
+            "string": "Gas Core Sample touching the mat and completely in the Lander’s Target Circle",
+            "value": "12"
+        },
+        {
+            "type": "BonusField",
+            "string": "Gas Core Sample completely in Base",
+            "value": "12"
+        },
+        {
+            "type": "BonusField",
+            "string": "Water Core Sample supported only by the Food Growth Chamber",
+            "value": "12"
+        }
+    ],
+    "M06 - Space Station Modules": [
+        {
+            "type": "BonusField",
+            "string": "Cone Module completely in base",
+            "value": "16"
+        },
+        {
+            "type": "BonusField",
+            "string": "Tube Module in Habitation Hub Port West Side, touching nothing but the Habitation Hub",
+            "value": "16"
+        },
+        {
+            "type": "BonusField",
+            "string": "Docking Module in Habitation Hub Port East Side, touching nothing but the Habitation Hub",
+            "value": "14"
+        }
+    ],
+    "M07 - Space Walk Emergency": [
+        {
+            "type": "RadioField",
+            "string": "The Robot needs to get Gerhard’s body into the Airlock Chamber.",
+            "choices": [
+                {
+                    "string": "Gerhard’s body not in airlock chamber",
+                    "value": "0"
+                }, {
+                    "string": "Gerhard’s body partially in airlock chamber",
+                    "value": "18"
+                }, {
+                    "string": "Gerhard’s body completely in airlock chamber",
+                    "value": "22"
+                }
+            ]
+        }
+    ],
+    "M08 - Aerobic Exercise": [
+        {
+            "type": "BooleanField",
+            "string": "Exercise Machine Pointer advanced only by moving one or both of the Handle Assemblies"
+        },
+        {
+            "type": "SelectField",
+            "string": "Pointer tip:",
+            "choices": [
+                {
+                    "string": "Completely in gray, or partly covering either of gray’s end-borders",
+                    "value": "18"
+                }, {
+                    "string": "Completely in white",
+                    "value": "20"
+                }, {
+                    "string": "Completely in orange, or partly covering either of orange’s end-borders",
+                    "value": "22"
+                }
+            ]
+        }
+    ],
+    "M09 - Strength Exercise": [
+        {
+            "type": "RadioField",
+            "string": "The Robot lifted the Strength Bar to a scoring height so that the tooth-strip’s 4th hole comes at least partly into view?",
+            "choices": [
+                {
+                    "string": "No",
+                    "value": "0"
+                }, {
+                    "string": "Yes",
+                    "value": "16"
+                }
+            ]
+        }
+    ],
+    "M10 - Food Production": [
+        {
+            "type": "RadioField",
+            "string": "Food Growth Chamber’s colors spun, by moving the Push Bar, so the gray weight is DROPPED after green, but before tan?",
+            "choices": [
+                {
+                    "string": "No",
+                    "value": "0"
+                }, {
+                    "string": "Yes",
+                    "value": "16"
+                }
+            ]
+        }
+    ],
+    "M11 - Escape Velocity": [
+        {
+            "type": "RadioField",
+            "string": "The Robot hit the Strike Pad hard enough to keep the spacecraft from dropping back down?",
+            "choices": [
+                {
+                    "string": "No",
+                    "value": "0"
+                }, {
+                    "string": "Yes",
+                    "value": "24"
+                }
+            ]
+        }
+    ],
+    "M12 - Satellite Orbits": [
+        {
+            "type": "RadioField",
+            "string": "The Robot needs to move one or more Satellites to the Outer Orbit.",
+            "choices": [
+                {
+                    "string": "No satellites moved into orbit",
+                    "value": "0"
+                }, {
+                    "string": "1 moved between the two lines of the Outer Orbit",
+                    "value": "8"
+                }, {
+                    "string": "2 moved between the two lines of the Outer Orbit",
+                    "value": "16"
+                }, {
+                    "string": "3 moved between the two lines of the Outer Orbit",
+                    "value": "24"
+                }
+            ]
+        }
+    ],
+    "M13 - Observatory": [
+        {
+            "type": "RadioField",
+            "string": "Rotate the Observatory to a precise direction.",
+            "choices": [
+                {
+                    "string": "Tip not in any coloured section",
+                    "value": "0"
+                }, {
+                    "string": "Tip completely in gray, or partly covering either of gray’s end-borders",
+                    "value": "16"
+                }, {
+                    "string": "Tip completely in white",
+                    "value": "18"
+                }, {
+                    "string": "Tip completely in orange, or partly covering either of orange’s end-borders",
+                    "value": "20"
+                }
+            ]
+        }
+    ],
+    "M14 - Meteoroid Deflection": [
+        {
+            "type": "BooleanField",
+            "string": "Meteoroids clearly independent whilst west of the free-line"
+        }, {
+            "type": "BooleanField",
+            "string": "Meteoroids hit/released while clearly and completely west of free line"
+        }, {
+            "type": "SelectField",
+            "string": "Meteoroids in Center Section:",
+            "choices": [
+                {
+                    "string": "0",
+                    "value": "0"
+                }, {
+                    "string": "1",
+                    "value": "12"
+                }, {
+                    "string": "2",
+                    "value": "24"
+                }
+            ]
+        }, {
+            "type": "SelectField",
+            "string": "Meteoroids in either Side Sections:",
+            "choices": [
+                {
+                    "string": "0",
+                    "value": "0"
+                }, {
+                    "string": "1",
+                    "value": "8"
+                }, {
+                    "string": "2",
+                    "value": "16"
+                }
+            ]
+        }
+    ],
+    "M15 - Landing Touch-Down": [
+        {
+            "type": "RadioField",
+            "string": "Get the Lander to one of its targets intact, or at least get it to Base.",
+            "choices": [
+                {
+                    "string": "Failed to get lander to target or base",
+                    "value": "0"
+                }, {
+                    "string": "Both parts of the Lander completely into Base",
+                    "value": "16"
+                }, {
+                    "string": "Lander  intact, touching the Mat, and completely in the Northeast Planet Area",
+                    "value": "20"
+                }, {
+                    "string": "Lander intact, touching the Mat, and completely in its Target Circle",
+                    "value": "22"
+                }
+            ]
+        }
+    ],
+    "Penalties": [
+        {
+            "type": "SelectField",
+            "string": "Number of penalties",
+            "choices": [
+                {
+                    "string": "0",
+                    "value": "0"
+                }, {
+                    "string": "1 (-3 points)",
+                    "value": "-3"
+                }, {
+                    "string": "2 (-6 points)",
+                    "value": "-6"
+                }, {
+                    "string": "3 (-9 points)",
+                    "value": "-9"
+                }, {
+                    "string": "4 (-12 points)",
+                    "value": "-12"
+                }, {
+                    "string": "5 (-15 points)",
+                    "value": "-15"
+                }, {
+                    "string": "6 (-18 points)",
+                    "value": "-18"
+                }
+            ]
+        }
+    ]
+}

@@ -48,7 +48,7 @@ def parse_json(path):
 
 class BonusField(BooleanField):
     def __init__(self, label=None, validators=None, false_values=None, value=None, **kwargs):
-        super(BonusField, self).__init__(label, validators, false_values, **kwargs)
+        super().__init__(label, validators, false_values, **kwargs)
         self.value = value
 
     def _value(self):

@@ -72,12 +72,12 @@
         {
             "type": "BonusField",
             "string": "Gas Core Sample completely in Base",
-            "value": "12"
+            "value": "10"
         },
         {
             "type": "BonusField",
             "string": "Water Core Sample supported only by the Food Growth Chamber",
-            "value": "12"
+            "value": "8"
         }
     ],
     "M06 - Space Station Modules": [

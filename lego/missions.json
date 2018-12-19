@@ -5,17 +5,17 @@
             "string": "Cart was independent by the time it made the first track connection"
         },
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "Crew Payload",
             "value": "10"
         },
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "Supply Payload",
             "value": "14"
         },
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "Vehicle Payload",
             "value": "22"
         }
@@ -26,24 +26,24 @@
             "string": "Solar Panels need to be angled toward or away from you, depending on strategy and conditions."
         },
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "Your Solar Panel is Angled toward the other team's field",
             "value": "18"
         },
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "Both Solar Panels are angled towards the same field",
             "value": "22"
         }
     ],
     "M03 - 3D Printing": [
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "2x4 Brick completely ejected from the printer by placing a Regolith Core Sample into it",
             "value": "18"
         },
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "Brick completely in Northeast Planet Area",
             "value": "4"
         }
@@ -54,46 +54,46 @@
             "string": "Robot or Agent crossed completely east to west between the towers"
         },
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "Gate completely flattened",
             "value": "20"
         }
     ],
     "M05 - Extraction": [
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "All samples moved no longer touching Core Site Model Axis",
             "value": "16"
         },
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "Gas Core Sample touching the mat and completely in the Lander’s Target Circle",
             "value": "12"
         },
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "Gas Core Sample completely in Base",
             "value": "10"
         },
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "Water Core Sample supported only by the Food Growth Chamber",
             "value": "8"
         }
     ],
     "M06 - Space Station Modules": [
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "Cone Module completely in base",
             "value": "16"
         },
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "Tube Module in Habitation Hub Port West Side, touching nothing but the Habitation Hub",
             "value": "16"
         },
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "Docking Module in Habitation Hub Port East Side, touching nothing but the Habitation Hub",
             "value": "14"
         }

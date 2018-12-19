@@ -5,61 +5,75 @@
 # -----------------------------------------------------------------------------
 
 from flask_wtf import FlaskForm
-from wtforms import RadioField, BooleanField, SelectField, IntegerField, StringField, HiddenField, Form, FormField, FieldList
-from wtforms.compat import text_type
+from wtforms import BooleanField, SelectField, IntegerField, StringField, HiddenField, RadioField, Field
+from wtforms import Form, FormField, FieldList
 from wtforms.validators import InputRequired, Optional
+from wtforms.widgets import CheckboxInput
 import json
 import os
 from collections import OrderedDict
 
 
+class CheckboxField(Field):
+
+    widget = CheckboxInput()
+
+    def __init__(self, *args, value=None, **kwargs):
+        super(CheckboxField, self).__init__(*args, **kwargs)
+        self.data = False
+        self.value = value
+
+    def _value(self):
+        if self.data:
+            return self.value
+        else:
+            return '0'
+
+    def process_formdata(self, valuelist):
+        super(CheckboxField, self).process_formdata(valuelist)
+        if valuelist:
+            self.data = self.value
+        else:
+            self.data = False
+
+
+fields = {
+    'BooleanField': BooleanField,
+    'SelectField': SelectField,
+    'StringField': StringField,
+    'RadioField': RadioField,
+    'CheckboxField': CheckboxField
+}
+
+
 # parses json file and generates a FieldList full of FieldLists for all the missions
 def parse_json(path):
     json_data = json.load(open(path))
-    # ordered dict to ensure that missions are displayed in the correct order
     missions = OrderedDict()
     # sorts the json return based on the mission name as json libraries do not preserve order
     for key, mission_data in sorted(json_data.items()):
-        # ordered dict to ensure that objectives for the mission are displayed in the correct order
         mission = OrderedDict()
-        # enumerates the missions so that each field will be given a unique name
         for task_no, data in enumerate(mission_data):
             # converts the task_no to a string to avoid a crash
             task_no = str(task_no)
-            # checks the data type and instantiates the fields based on the data type
-            if data['type'] == 'StringField':
-                mission['label'] = globals()[data['type']](data['string'])
-            elif data['type'] == 'BooleanField':
-                mission[task_no] = globals()[data['type']](data['string'])
-            elif data['type'] == 'BonusField':
-                mission[task_no] = globals()[data['type']](data['string'],
-                                                           value=data['value'])
+            class_ = fields[data['type']]
+            if class_ in (StringField, BooleanField):
+                mission[task_no] = class_(data['string'])
+            elif class_ == CheckboxField:
+                mission[task_no] = class_(data['string'],
+                                          value=data['value'])
+            elif class_ in (RadioField, SelectField):
+                mission[task_no] = class_(data['string'],
+                                          choices=[(choice['value'], choice['string'])
+                                                   for choice in data['choices']],
+                                          default=0,
+                                          validators=[Optional()])
             else:
-                mission[task_no] = globals()[data['type']](data['string'],
-                                                           choices=[(choice['value'], choice['string'])
-                                                                    for choice in data['choices']],
-                                                           default=0,
-                                                           validators=[Optional()])
-        # generates the mission specific FieldList and adds it to the dict to be used for creating the full list
+                raise TypeError('The class with the name {} is not defined in the JSON parser'.format(data['type']))
         missions[key] = FieldList(FormField(type(str(task_no), (ScoredForm,), mission)), min_entries=1)
 
     # generates FiledList containing each missions FieldList
     return FieldList(FormField(type('Missions', (Form,), missions)), min_entries=1)
-
-
-class BonusField(BooleanField):
-    def __init__(self, label=None, validators=None, false_values=None, value=None, **kwargs):
-        super().__init__(label, validators, false_values, **kwargs)
-        self.value = value
-
-    def _value(self):
-        if self.raw_data:
-            return text_type(self.raw_data[0])
-
-        if self.value:
-            return self.value
-
-        return 'y'
 
 
 # extension to the Form class to allow the form to generate a score based on the fields it contains
@@ -67,15 +81,11 @@ class ScoredForm(Form):
     def score(self):
         score = 0
 
-        # gets the score for every type of field and returns the result for the mission
         for _, task in self._fields.items():
             if isinstance(task, StringField):
                 # strings do not carry any score
                 continue
-            elif isinstance(task, BonusField):
-                score += task.data * int(task.value)
             elif isinstance(task, BooleanField):
-                # boolean fields used when score is conditional on a factor occurring
                 if task.data is False:
                     return 0
             else:
@@ -88,7 +98,7 @@ class ScoreRoundForm(FlaskForm):
     # fields
     team = SelectField('Team:', validators=[InputRequired(message='Please select a team.')])
     yellow_card = BooleanField('Yellow card')
-    confirm = HiddenField(default=0)
+    confirm = HiddenField(default='0')
     score = IntegerField('Total score', validators=[Optional()])
 
     # parses json into FieldList
@@ -98,14 +108,12 @@ class ScoreRoundForm(FlaskForm):
         """Calculate the points scored for this round."""
         # keeps individual mission scores saved separately for score disputes
         score_breakdown = {}
-        # loops through every mission and adds the score to the score breakdown dictionary
+        # protected field '_fields' used due to dynamic generation defining the field names at runtime
         for mission_name, mission in self.missions.entries[0].form._fields.items():
             score_breakdown[mission_name] = mission.entries[0].form.score()
 
-        if sum(score_breakdown.values()):
-            score = sum(score_breakdown.values())
-        else:
-            score = 0
+        score = sum(score_breakdown.values())
+
         # ensure score is not less than 0    
         if score < 0:
             score = 0

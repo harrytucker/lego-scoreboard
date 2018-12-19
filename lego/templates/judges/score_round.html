@@ -49,30 +49,35 @@
                     {{ mission.label }}
                 </h2>
                 {% for field in mission.entries[0] %}
-                    {% if field.type == "StringField" %}
-                        {{ field.label }}
-                    {% endif %}
-                    {% if field.type == "BooleanField" or field.type == "BonusField" %}
-                        {{ field(class_='input-checkbox error') }}
-                        {{ field.label }}
-                    {% endif %}
-                    {% if field.type == "RadioField" %}
-                        {{ field.label }}
-                        {% if field.errors %}
-                            {{ field(class_='input-radio input-error') }}
-                        {% else %}
-                            {{ field(class_='input-radio') }}
+                    <div>
+                        {% if field.type == "StringField" %}
+                            {{ field.label }}
                         {% endif %}
-                    {% endif %}
-                    {% if field.type == "SelectField" %}
-                        {{ field.label }}
-                        {% if field.errors %}
-                            {{ field(class_='input-select input-error') }}
-                        {% else %}
-                            {{ field(class_='input-select') }}
+                        {% if field.type == "BooleanField" or field.type == "CheckboxField" %}
+                            {% if field.errors %}
+                                {{ field(class_='input-checkbox error') }}
+                            {% else %}
+                                {{ field(class_='input-checkbox') }}
+                            {% endif %}
+                            {{ field.label }}
                         {% endif %}
-                    {% endif %}
-                    <br>
+                        {% if field.type == "RadioField" %}
+                            {{ field.label }}
+                            {% if field.errors %}
+                                {{ field(class_='input-radio input-error') }}
+                            {% else %}
+                                {{ field(class_='input-radio') }}
+                            {% endif %}
+                        {% endif %}
+                        {% if field.type == "SelectField" %}
+                            {{ field.label }}
+                            {% if field.errors %}
+                                {{ field(class_='input-select input-error') }}
+                            {% else %}
+                                {{ field(class_='input-select') }}
+                            {% endif %}
+                        {% endif %}
+                    </div>
                 {% endfor %}
             </section>
         {% endfor %}

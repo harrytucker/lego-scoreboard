@@ -46,8 +46,8 @@ fields = {
 }
 
 
-# parses json file and generates a FieldList full of FieldLists for all the missions
 def parse_json(path):
+    """ parses json file and generates a FieldList full of FieldLists for all the missions """
     json_data = json.load(open(path))
     missions = OrderedDict()
     # sorts the json return based on the mission name as json libraries do not preserve order
@@ -76,8 +76,8 @@ def parse_json(path):
     return FieldList(FormField(type('Missions', (Form,), missions)), min_entries=1)
 
 
-# extension to the Form class to allow the form to generate a score based on the fields it contains
 class ScoredForm(Form):
+    """ extension to the Form class to allow the form to generate a score based on the fields it contains """
     def score(self):
         score = 0
 
@@ -95,18 +95,15 @@ class ScoredForm(Form):
 
 
 class ScoreRoundForm(FlaskForm):
-    # fields
     team = SelectField('Team:', validators=[InputRequired(message='Please select a team.')])
     yellow_card = BooleanField('Yellow card')
     confirm = HiddenField(default='0')
     score = IntegerField('Total score', validators=[Optional()])
 
-    # parses json into FieldList
     missions = parse_json(os.path.dirname(__file__) + '/../missions.json')
 
     def points_scored(self) -> (int, str):
         """Calculate the points scored for this round."""
-        # keeps individual mission scores saved separately for score disputes
         score_breakdown = {}
         # protected field '_fields' used due to dynamic generation defining the field names at runtime
         for mission_name, mission in self.missions.entries[0].form._fields.items():

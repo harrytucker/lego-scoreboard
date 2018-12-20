@@ -43,12 +43,12 @@
         </section>
 
 
-        {% for mission in form.missions.entries[0] %}
+        {% for mission in form.missions %}
             <section>
                 <h2>
                     {{ mission.label }}
                 </h2>
-                {% for field in mission.entries[0] %}
+                {% for field in mission %}
                     <div>
                         {% if field.type == "StringField" %}
                             {{ field.label }}

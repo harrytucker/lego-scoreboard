@@ -70,10 +70,10 @@ def parse_json(path):
                                           validators=[Optional()])
             else:
                 raise TypeError('The class with the name {} is not defined in the JSON parser'.format(data['type']))
-        missions[key] = FieldList(FormField(type(str(task_no), (ScoredForm,), mission)), min_entries=1)
+        missions[key] = FormField(type(str(task_no), (ScoredForm,), mission))
 
     # generates FiledList containing each missions FieldList
-    return FieldList(FormField(type('Missions', (Form,), missions)), min_entries=1)
+    return FormField(type('Missions', (Form,), missions))
 
 
 class ScoredForm(Form):
@@ -106,12 +106,12 @@ class ScoreRoundForm(FlaskForm):
         """Calculate the points scored for this round."""
         score_breakdown = {}
         # protected field '_fields' used due to dynamic generation defining the field names at runtime
-        for mission_name, mission in self.missions.entries[0].form._fields.items():
-            score_breakdown[mission_name] = mission.entries[0].form.score()
+        for mission_name, mission in self.missions.form._fields.items():
+            score_breakdown[mission_name] = mission.form.score()
 
         score = sum(score_breakdown.values())
 
-        # ensure score is not less than 0    
+        # ensure score is not less than 0
         if score < 0:
             score = 0
         score_breakdown = str(score_breakdown)

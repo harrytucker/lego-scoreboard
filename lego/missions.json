@@ -67,7 +67,7 @@
         },
         {
             "type": "CheckboxField",
-            "string": "Gas Core Sample touching the mat and completely in the Lander’s Target Circle",
+            "string": "Gas Core Sample touching the mat and completely in the Lander's Target Circle",
             "value": "12"
         },
         {
@@ -101,16 +101,16 @@
     "M07 - Space Walk Emergency": [
         {
             "type": "RadioField",
-            "string": "The Robot needs to get Gerhard’s body into the Airlock Chamber.",
+            "string": "The Robot needs to get Gerhard's body into the Airlock Chamber.",
             "choices": [
                 {
-                    "string": "Gerhard’s body not in airlock chamber",
+                    "string": "Gerhard's body not in airlock chamber",
                     "value": "0"
                 }, {
-                    "string": "Gerhard’s body partially in airlock chamber",
+                    "string": "Gerhard's body partially in airlock chamber",
                     "value": "18"
                 }, {
-                    "string": "Gerhard’s body completely in airlock chamber",
+                    "string": "Gerhard's body completely in airlock chamber",
                     "value": "22"
                 }
             ]
@@ -126,13 +126,13 @@
             "string": "Pointer tip:",
             "choices": [
                 {
-                    "string": "Completely in gray, or partly covering either of gray’s end-borders",
+                    "string": "Completely in gray, or partly covering either of gray's end-borders",
                     "value": "18"
                 }, {
                     "string": "Completely in white",
                     "value": "20"
                 }, {
-                    "string": "Completely in orange, or partly covering either of orange’s end-borders",
+                    "string": "Completely in orange, or partly covering either of orange's end-borders",
                     "value": "22"
                 }
             ]
@@ -141,7 +141,7 @@
     "M09 - Strength Exercise": [
         {
             "type": "RadioField",
-            "string": "The Robot lifted the Strength Bar to a scoring height so that the tooth-strip’s 4th hole comes at least partly into view?",
+            "string": "The Robot lifted the Strength Bar to a scoring height so that the tooth-strip's 4th hole comes at least partly into view?",
             "choices": [
                 {
                     "string": "No",
@@ -156,7 +156,7 @@
     "M10 - Food Production": [
         {
             "type": "RadioField",
-            "string": "Food Growth Chamber’s colors spun, by moving the Push Bar, so the gray weight is DROPPED after green, but before tan?",
+            "string": "Food Growth Chamber's colors spun, by moving the Push Bar, so the gray weight is DROPPED after green, but before tan?",
             "choices": [
                 {
                     "string": "No",
@@ -213,13 +213,13 @@
                     "string": "Tip not in any coloured section",
                     "value": "0"
                 }, {
-                    "string": "Tip completely in gray, or partly covering either of gray’s end-borders",
+                    "string": "Tip completely in gray, or partly covering either of gray's end-borders",
                     "value": "16"
                 }, {
                     "string": "Tip completely in white",
                     "value": "18"
                 }, {
-                    "string": "Tip completely in orange, or partly covering either of orange’s end-borders",
+                    "string": "Tip completely in orange, or partly covering either of orange's end-borders",
                     "value": "20"
                 }
             ]

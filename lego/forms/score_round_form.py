@@ -6,7 +6,7 @@
 
 from flask_wtf import FlaskForm
 from wtforms import BooleanField, SelectField, IntegerField, StringField, HiddenField, RadioField, Field
-from wtforms import Form, FormField, FieldList
+from wtforms import Form, FormField
 from wtforms.validators import InputRequired, Optional
 from wtforms.widgets import CheckboxInput
 import json
@@ -70,14 +70,14 @@ def parse_json(path):
                                           validators=[Optional()])
             else:
                 raise TypeError('The class with the name {} is not defined in the JSON parser'.format(data['type']))
-        missions[key] = FormField(type(str(task_no), (ScoredForm,), mission))
+        missions[key] = ScoredFormField(type(str(task_no), (Form,), mission))
 
     # generates FiledList containing each missions FieldList
     return FormField(type('Missions', (Form,), missions))
 
 
-class ScoredForm(Form):
-    """ extension to the Form class to allow the form to generate a score based on the fields it contains """
+class ScoredFormField(FormField):
+    """ extension to the FormField class to allow the form to generate a score based on the fields it contains """
     def score(self):
         score = 0
 
@@ -88,6 +88,8 @@ class ScoredForm(Form):
             elif isinstance(task, BooleanField):
                 if task.data is False:
                     return 0
+            elif isinstance(task, ScoredFormField):
+                score += task.score()
             else:
                 score += int(task.data)
 
@@ -104,10 +106,10 @@ class ScoreRoundForm(FlaskForm):
 
     def points_scored(self) -> (int, str):
         """Calculate the points scored for this round."""
-        score_breakdown = {}
+        score_breakdown = OrderedDict()
         # protected field '_fields' used due to dynamic generation defining the field names at runtime
         for mission_name, mission in self.missions.form._fields.items():
-            score_breakdown[mission_name] = mission.form.score()
+            score_breakdown[mission_name] = mission.score()
 
         score = sum(score_breakdown.values())
 

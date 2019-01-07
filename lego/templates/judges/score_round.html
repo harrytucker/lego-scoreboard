@@ -57,7 +57,7 @@
                             {% if field.errors %}
                                 {{ field(class_='input-checkbox error') }}
                             {% else %}
-                                {{ field(class_='input-checkbox') }}
+                                {{ field(oninput='validateCheckbox()', class_='input-checkbox') }}
                             {% endif %}
                             {{ field.label }}
                         {% endif %}
@@ -74,7 +74,7 @@
                             {% if field.errors %}
                                 {{ field(class_='input-select input-error') }}
                             {% else %}
-                                {{ field(class_='input-select') }}
+                                {{ field(onchange='validateSelect(this)', class_='input-select') }}
                             {% endif %}
                         {% endif %}
                     </div>
@@ -125,4 +125,5 @@
     $(init)
 }(jQuery))
 </script>
+<script src="../../static/main.js"></script>
 {% endblock %}

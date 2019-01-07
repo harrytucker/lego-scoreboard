@@ -48,7 +48,7 @@ def init_app():
 
     practice_team = Team(number=-1, name='Practice', is_practice=True)
     db.session.add(practice_team)
-
+    
     db.session.commit()
     click.echo('Default users created.')
     click.echo('Practice team created.')
@@ -111,10 +111,10 @@ def _add_teams(file: str):
         click.echo('Adding team: {!s} (number: {!s}).'.format(name, number))
 
         team = Team(number=number, name=name)
-
+        
         db.session.add(team)
         try:
-    db.session.commit()
+            db.session.commit()
         except:
             click.echo('ERROR: ONE OR MORE TEAMS/TEAM_NUM ALREADY EXIST')
             click.echo(' ')

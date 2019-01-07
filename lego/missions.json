@@ -233,33 +233,39 @@
             "type": "BooleanField",
             "string": "Meteoroids hit/released while clearly and completely west of free line"
         }, {
-            "type": "SelectField",
-            "string": "Meteoroids in Center Section:",
-            "choices": [
+            "type": "MultiField",
+            "max_selection": "2",
+            "fields": [
                 {
-                    "string": "0",
-                    "value": "0"
+                    "type": "SelectField",
+                    "string": "Meteoroids in Center Section:",
+                    "choices": [
+                        {
+                            "string": "0",
+                            "value": "0"
+                        }, {
+                            "string": "1",
+                            "value": "12"
+                        }, {
+                            "string": "2",
+                            "value": "24"
+                        }
+                    ]
                 }, {
-                    "string": "1",
-                    "value": "12"
-                }, {
-                    "string": "2",
-                    "value": "24"
-                }
-            ]
-        }, {
-            "type": "SelectField",
-            "string": "Meteoroids in either Side Sections:",
-            "choices": [
-                {
-                    "string": "0",
-                    "value": "0"
-                }, {
-                    "string": "1",
-                    "value": "8"
-                }, {
-                    "string": "2",
-                    "value": "16"
+                    "type": "SelectField",
+                    "string": "Meteoroids in either Side Sections:",
+                    "choices": [
+                        {
+                            "string": "0",
+                            "value": "0"
+                        }, {
+                            "string": "1",
+                            "value": "8"
+                        }, {
+                            "string": "2",
+                            "value": "16"
+                        }
+                    ]
                 }
             ]
         }

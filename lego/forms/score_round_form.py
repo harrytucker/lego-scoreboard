@@ -14,6 +14,26 @@ import os
 from collections import OrderedDict
 
 
+class ScoredFormField(FormField):
+    """ extension to the FormField class to allow the form to generate a score based on the fields it contains """
+    def score(self):
+        score = 0
+
+        for _, task in self._fields.items():
+            if isinstance(task, StringField):
+                # strings do not carry any score
+                continue
+            elif isinstance(task, BooleanField):
+                if task.data is False:
+                    return 0
+            elif isinstance(task, ScoredFormField):
+                score += task.score()
+            else:
+                score += int(task.data)
+
+        return score
+
+
 class CheckboxField(Field):
 
     widget = CheckboxInput()
@@ -37,7 +57,7 @@ class CheckboxField(Field):
             self.data = False
 
 
-fields = {
+field_classes = {
     'BooleanField': BooleanField,
     'SelectField': SelectField,
     'StringField': StringField,
@@ -56,7 +76,7 @@ def parse_json(path):
         for task_no, data in enumerate(mission_data):
             # converts the task_no to a string to avoid a crash
             task_no = str(task_no)
-            class_ = fields[data['type']]
+            class_ = field_classes[data['type']]
             if class_ in (StringField, BooleanField):
                 mission[task_no] = class_(data['string'])
             elif class_ == CheckboxField:
@@ -70,30 +90,10 @@ def parse_json(path):
                                           validators=[Optional()])
             else:
                 raise TypeError('The class with the name {} is not defined in the JSON parser'.format(data['type']))
-        missions[key] = ScoredFormField(type(str(task_no), (Form,), mission))
+        missions[key] = ScoredFormField(type(key, (Form,), mission))
 
-    # generates FiledList containing each missions FieldList
+    # generates FormField containing each missions FormField
     return FormField(type('Missions', (Form,), missions))
-
-
-class ScoredFormField(FormField):
-    """ extension to the FormField class to allow the form to generate a score based on the fields it contains """
-    def score(self):
-        score = 0
-
-        for _, task in self._fields.items():
-            if isinstance(task, StringField):
-                # strings do not carry any score
-                continue
-            elif isinstance(task, BooleanField):
-                if task.data is False:
-                    return 0
-            elif isinstance(task, ScoredFormField):
-                score += task.score()
-            else:
-                score += int(task.data)
-
-        return score
 
 
 class ScoreRoundForm(FlaskForm):

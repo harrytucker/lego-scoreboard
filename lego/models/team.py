@@ -197,53 +197,55 @@ class Team(db.Model):
         stage = app.load_stage()
         app.logger.debug('Stage: %s', stage)
         app.logger.debug('Team: %s', str(self.__dict__))
+        # score is a tuple holding the total score and a breakdown of all previous scores
+        score_total, score_breakdown = score
 
         # first round
         if stage == 0:
             if self.attempt_1 is None:
-                self.attempt_1 = score[0]
-                self.attempt_1_breakdown = score[1]
+                self.attempt_1 = score_total
+                self.attempt_1_breakdown = score_breakdown
             elif self.attempt_2 is None:
-                self.attempt_2 = score[0]
-                self.attempt_2_breakdown = score[1]
+                self.attempt_2 = score_total
+                self.attempt_2_breakdown = score_breakdown
             elif self.attempt_3 is None:
-                self.attempt_3 = score[0]
-                self.attempt_3_breakdown = score[1]
+                self.attempt_3 = score_total
+                self.attempt_3_breakdown = score_breakdown
             else:
                 raise Exception('All attempts have been made for this stage.')
 
         # second round
         elif stage == 1:
             if self.round_2 is None:
-                self.round_2 = score[0]
-                self.round_2_breakdown = score[1]
+                self.round_2 = score_total
+                self.round_2_breakdown = score_breakdown
             else:
                 raise Exception('All attempts have been made for this stage.')
 
         # quarter finals
         elif stage == 2:
             if self.quarter is None:
-                self.quarter = score[0]
-                self.quarter_breakdown = score[1]
+                self.quarter = score_total
+                self.quarter_breakdown = score_breakdown
             else:
                 raise Exception('All attempts have been made for this stage.')
 
         # semi finals
         elif stage == 3:
             if self.semi is None:
-                self.semi = score[0]
-                self.semi_breakdown = score[1]
+                self.semi = score_total
+                self.semi_breakdown = score_breakdown
             else:
                 raise Exception('All attempts have been made for this stage.')
 
         # finals
         elif stage == 4:
             if self.final_1 is None:
-                self.final_1 = score[0]
-                self.final_1_breakdown = score[1]
+                self.final_1 = score_total
+                self.final_1_breakdown = score_breakdown
             elif self.final_2 is None:
-                self.final_2 = score[0]
-                self.final_2_breakdown = score[1]
+                self.final_2 = score_total
+                self.final_2_breakdown = score_breakdown
             else:
                 raise Exception('All attempts have been made for this stage.')
 

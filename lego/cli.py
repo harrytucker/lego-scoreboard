@@ -111,10 +111,17 @@ def _add_teams(file: str):
         click.echo('Adding team: {!s} (number: {!s}).'.format(name, number))
 
         team = Team(number=number, name=name)
-        db.session.add(team)
 
+        db.session.add(team)
+        try:
     db.session.commit()
-    click.echo('Teams successfully added.')
+        except:
+            click.echo('ERROR: ONE OR MORE TEAMS/TEAM_NUM ALREADY EXIST')
+            click.echo(' ')
+            click.echo('Have you tried \'flask reset-teams\'? ')
+            return
+        else:
+            click.echo('Team successfully added.')
 
 
 @app.cli.command('reset-teams',

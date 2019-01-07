@@ -5,17 +5,17 @@
             "string": "Cart was independent by the time it made the first track connection"
         },
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "Crew Payload",
             "value": "10"
         },
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "Supply Payload",
             "value": "14"
         },
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "Vehicle Payload",
             "value": "22"
         }
@@ -26,24 +26,24 @@
             "string": "Solar Panels need to be angled toward or away from you, depending on strategy and conditions."
         },
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "Your Solar Panel is Angled toward the other team's field",
             "value": "18"
         },
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "Both Solar Panels are angled towards the same field",
             "value": "22"
         }
     ],
     "M03 - 3D Printing": [
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "2x4 Brick completely ejected from the printer by placing a Regolith Core Sample into it",
             "value": "18"
         },
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "Brick completely in Northeast Planet Area",
             "value": "4"
         }
@@ -54,46 +54,46 @@
             "string": "Robot or Agent crossed completely east to west between the towers"
         },
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "Gate completely flattened",
             "value": "20"
         }
     ],
     "M05 - Extraction": [
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "All samples moved no longer touching Core Site Model Axis",
             "value": "16"
         },
         {
-            "type": "BonusField",
-            "string": "Gas Core Sample touching the mat and completely in the Lander’s Target Circle",
+            "type": "CheckboxField",
+            "string": "Gas Core Sample touching the mat and completely in the Lander's Target Circle",
             "value": "12"
         },
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "Gas Core Sample completely in Base",
             "value": "10"
         },
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "Water Core Sample supported only by the Food Growth Chamber",
             "value": "8"
         }
     ],
     "M06 - Space Station Modules": [
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "Cone Module completely in base",
             "value": "16"
         },
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "Tube Module in Habitation Hub Port West Side, touching nothing but the Habitation Hub",
             "value": "16"
         },
         {
-            "type": "BonusField",
+            "type": "CheckboxField",
             "string": "Docking Module in Habitation Hub Port East Side, touching nothing but the Habitation Hub",
             "value": "14"
         }
@@ -101,16 +101,16 @@
     "M07 - Space Walk Emergency": [
         {
             "type": "RadioField",
-            "string": "The Robot needs to get Gerhard’s body into the Airlock Chamber.",
+            "string": "The Robot needs to get Gerhard's body into the Airlock Chamber.",
             "choices": [
                 {
-                    "string": "Gerhard’s body not in airlock chamber",
+                    "string": "Gerhard's body not in airlock chamber",
                     "value": "0"
                 }, {
-                    "string": "Gerhard’s body partially in airlock chamber",
+                    "string": "Gerhard's body partially in airlock chamber",
                     "value": "18"
                 }, {
-                    "string": "Gerhard’s body completely in airlock chamber",
+                    "string": "Gerhard's body completely in airlock chamber",
                     "value": "22"
                 }
             ]
@@ -126,13 +126,13 @@
             "string": "Pointer tip:",
             "choices": [
                 {
-                    "string": "Completely in gray, or partly covering either of gray’s end-borders",
+                    "string": "Completely in gray, or partly covering either of gray's end-borders",
                     "value": "18"
                 }, {
                     "string": "Completely in white",
                     "value": "20"
                 }, {
-                    "string": "Completely in orange, or partly covering either of orange’s end-borders",
+                    "string": "Completely in orange, or partly covering either of orange's end-borders",
                     "value": "22"
                 }
             ]
@@ -141,7 +141,7 @@
     "M09 - Strength Exercise": [
         {
             "type": "RadioField",
-            "string": "The Robot lifted the Strength Bar to a scoring height so that the tooth-strip’s 4th hole comes at least partly into view?",
+            "string": "The Robot lifted the Strength Bar to a scoring height so that the tooth-strip's 4th hole comes at least partly into view?",
             "choices": [
                 {
                     "string": "No",
@@ -156,7 +156,7 @@
     "M10 - Food Production": [
         {
             "type": "RadioField",
-            "string": "Food Growth Chamber’s colors spun, by moving the Push Bar, so the gray weight is DROPPED after green, but before tan?",
+            "string": "Food Growth Chamber's colors spun, by moving the Push Bar, so the gray weight is DROPPED after green, but before tan?",
             "choices": [
                 {
                     "string": "No",
@@ -213,13 +213,13 @@
                     "string": "Tip not in any coloured section",
                     "value": "0"
                 }, {
-                    "string": "Tip completely in gray, or partly covering either of gray’s end-borders",
+                    "string": "Tip completely in gray, or partly covering either of gray's end-borders",
                     "value": "16"
                 }, {
                     "string": "Tip completely in white",
                     "value": "18"
                 }, {
-                    "string": "Tip completely in orange, or partly covering either of orange’s end-borders",
+                    "string": "Tip completely in orange, or partly covering either of orange's end-borders",
                     "value": "20"
                 }
             ]

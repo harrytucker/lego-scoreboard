@@ -197,6 +197,7 @@ class Team(db.Model):
         stage = app.load_stage()
         app.logger.debug('Stage: %s', stage)
         app.logger.debug('Team: %s', str(self.__dict__))
+        # score is a tuple holding the total score and a breakdown of all previous scores
         score_total, score_breakdown = score
 
         # first round

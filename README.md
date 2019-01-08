@@ -10,13 +10,11 @@ package. Check your distibution for more details. For windows installations, it 
 There have been reports that Python 3.6 has a problem that breaks the use of Sqlite. This hasn't been verified, but if you do see a problem in this area, it is suggested to use Python 3.4 instead.
 
 ## Browsers
-The application has been tested on the latest version of the following browsers (as of Feb 2018):
-- Internet Explorer 11
-- Edge
+The application has been tested on the latest version of the following browsers (as of Jan 2019):
 - Chrome
 - Firefox
 
-Older browsers may have issues in the layout and styling of the application. If this does occur, please ensure your browser is up to date. Alternatively, try another tested browser.
+Older browsers may have issues in the layout and styling of the application. If this does occur, please ensure your browser is up to date. Alternatively, try another tested browser. There is also a known issue with Microsoft Edge so it is highly recommended you avoid this browser.
 
 ## Setup
 ### Linux
@@ -37,11 +35,6 @@ Once you have installed the dependencies, copy `<path\to\repository>\lego\config
 # create database and default users
 # you will be prompted for user passwords here
 $ flask init
-```
-
-If you are running code for the UK final you will also need to change the value of `LEGO_APP_TYPE` to `uk`, i.e.:
-```python
-LEGO_APP_TYPE = 'uk'
 ```
 
 ### Adding Teams

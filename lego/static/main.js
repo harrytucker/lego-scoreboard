@@ -6,43 +6,60 @@ $( document ).ready(function() {
 
 var x,y
 
+var questions = [
+    // Question name given on html. M03 = questions[0][x] | M05 = questions[1][x]
+    [document.getElementById('missions-M03 - 3D Printing-0'), document.getElementById('missions-M03 - 3D Printing-1')],
+    [document.getElementById('missions-M05 - Extraction-0'), document.getElementById('missions-M05 - Extraction-1'),
+    document.getElementById('missions-M05 - Extraction-2'), document.getElementById('missions-M05 - Extraction-3')],
+  ];
+
 // Blanks out checkbox for M03.
 function disableM03(){
     // Checks in place to handle page refreshing when calculating score.
-    if (!document.getElementById('missions-M03 - 3D Printing-0').checked && !document.getElementById('missions-M03 - 3D Printing-1').checked){
+    if (!questions[0][0].checked && !questions[0][1].checked){
         // Enable buttons
-        document.getElementById("missions-M03 - 3D Printing-1").disabled = true;
+        questions[0][1].disabled = true;
     }
 }
 
 // Blanks out checkboxes for M05.
 function disableM05(){
     // Checks in place to handle page refreshing when calculating score.
-    if (!document.getElementById('missions-M05 - Extraction-0').checked && !document.getElementById('missions-M05 - Extraction-1').checked
-    && !document.getElementById('missions-M05 - Extraction-2').checked && !document.getElementById('missions-M05 - Extraction-3').checked){
+    if (!questions[1][0].checked && !questions[1][1].checked && !questions[1][2].checked && !questions[1][3].checked){
         // Enable buttons
-        document.getElementById("missions-M05 - Extraction-1").disabled = true;
-        document.getElementById("missions-M05 - Extraction-2").disabled = true;
-        document.getElementById("missions-M05 - Extraction-3").disabled = true;
+        questions[1][1].disabled = true;
+        questions[1][2].disabled = true;
+        questions[1][3].disabled = true;
     }
 }
 
 // Validatating checkboxes
 function validateCheckbox(){
     // If the first checkbox is checked then enable other checkboxes.
-    if (document.getElementById('missions-M05 - Extraction-0').checked) {
-        document.getElementById("missions-M05 - Extraction-1").disabled = false;
-        document.getElementById("missions-M05 - Extraction-2").disabled = false;
-        document.getElementById("missions-M05 - Extraction-3").disabled = false;
+    if (questions[1][0].checked) {
+        questions[1][1].disabled = false;
+        questions[1][2].disabled = false;
+        questions[1][3].disabled = false;
+        // 2 / 3 independant from each other
+        if (questions[1][1].checked){
+            questions[1][2].disabled = true;
+        }
+        if (questions[1][2].checked){
+            questions[1][1].disabled = true;
+        }
     } 
     // If the first checkbox is uchecked then disable other checkboxes.
-    else if (!document.getElementById('missions-M05 - Extraction-0').checked){
+    else if (!questions[1][0].checked){
+        questions[1][1].checked = false;
+        questions[1][2].checked = false;
+        questions[1][3].checked = false;
         disableM05();
     }
-    if (document.getElementById('missions-M03 - 3D Printing-0').checked) {
-        document.getElementById("missions-M03 - 3D Printing-1").disabled = false;
+    if (questions[0][0].checked) {
+        questions[0][1].disabled = false;
     } 
-    else if (!document.getElementById('missions-M03 - 3D Printing-0').checked){
+    else if (!questions[0][0].checked){
+        questions[0][1].checked = false;
         disableM03();
     }
 }

@@ -230,7 +230,7 @@ def simulate():
     # round 1
     for _ in range(3):
         for t in teams:
-            t.set_score(randint(0, 20) * 10)
+            t.set_score((randint(0, 20) * 10,""))
 
         db.session.commit()
         click.pause()
@@ -242,7 +242,7 @@ def simulate():
         teams = Team.query.filter_by(is_practice=False, active=True).all()
 
         for t in teams:
-            t.set_score(randint(0, 20) * 10)
+            t.set_score((randint(0, 20) * 10,""))
 
         db.session.commit()
         click.pause()
@@ -254,7 +254,7 @@ def simulate():
     # quarter + semi
     for i in range(2):
         for t in teams:
-            t.set_score(randint(0, 20) * 10)
+            t.set_score((randint(0, 20) * 10,""))
 
         db.session.commit()
         click.pause()
@@ -266,7 +266,7 @@ def simulate():
     # final
     for i in range(2):
         for t in teams:
-            t.set_score(randint(0, 20) * 10)
+            t.set_score((randint(0, 20) * 10,""))
 
         db.session.commit()
         click.pause()

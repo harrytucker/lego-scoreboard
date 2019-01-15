@@ -57,10 +57,11 @@ $ flask run
 This will run the application on port 5000 of localhost, e.g. `http://localhost:5000`.
 
 There are a number of options to customise the running of the application further:
-- `--host=<ip address>` - Alters the IP address the appication runs on. This is essential for usage outside of the standard localhost. The most common usage will be `--host=0.0.0.0` which connects the application to all network interfaces allowing it to be accessed from other computers. With this active, all oanother computer needs to connect is your IP address and the port the application is running on, e.g. `1.2.3.4:5000`.
+- `--host=<ip address>` - Alters the IP address the appication runs on. This is essential for usage outside of the standard localhost. The most common usage will be `--host=0.0.0.0` which connects the application to all network interfaces allowing it to be accessed from other computers. With this active, all another computer needs to connect is your IP address and the port the application is running on, e.g. `1.2.3.4:5000`.
 - `--port=<port>` - Configures the port the application runs on. Useful for setting the port to `80` to allow the port to be left off the address as `80` is the standard port for HTTP.
+- `--with-threads` / `--without-threads` - By default multithreading is not enabled so you will have to add this handle or use the `run.sh` script. It is vital that this is enabled on the event days to handle many users. 
 
-More options can be found by usng `flask run --help`. Alternatively a script to start the application with common options pre-set can be found at `run.sh`:
+More options can be found by using `flask run --help`. Alternatively a script to start the application with common options pre-set can be found at `run.sh`:
 
 ```
 $ ./run.sh &

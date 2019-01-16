@@ -22,17 +22,6 @@ function disableM03(){
     }
 }
 
-// Blanks out checkboxes for M05.
-function disableM05(){
-    // Checks in place to handle page refreshing when calculating score.
-    if (!questions[1][0].checked && !questions[1][1].checked && !questions[1][2].checked && !questions[1][3].checked){
-        // Enable buttons
-        questions[1][1].disabled = true;
-        questions[1][2].disabled = true;
-        questions[1][3].disabled = true;
-    }
-}
-
 // Validatating checkboxes
 function validateCheckbox(){
     // If the first checkbox is checked then enable other checkboxes.

@@ -22,27 +22,22 @@ function disableM03(){
     }
 }
 
+
 // Validatating checkboxes
 function validateCheckbox(){
     // If the first checkbox is checked then enable other checkboxes.
-    if (questions[1][0].checked) {
-        questions[1][1].disabled = false;
-        questions[1][2].disabled = false;
-        questions[1][3].disabled = false;
-        // 2 / 3 independant from each other
         if (questions[1][1].checked){
             questions[1][2].disabled = true;
         }
         if (questions[1][2].checked){
             questions[1][1].disabled = true;
         }
-    } 
     // If the first checkbox is uchecked then disable other checkboxes.
-    else if (!questions[1][0].checked){
-        questions[1][1].checked = false;
-        questions[1][2].checked = false;
-        questions[1][3].checked = false;
-        disableM05();
+    if (!questions[1][1].checked){
+        questions[1][2].disabled = false;
+    }
+    if (!questions[1][2].checked){
+        questions[1][1].disabled = false;
     }
     if (questions[0][0].checked) {
         questions[0][1].disabled = false;

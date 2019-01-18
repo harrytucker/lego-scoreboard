@@ -87,4 +87,5 @@ export FLASK_DEBUG=0
     - `flask team add [--number NUMBER --name NAME | --file PATH_TO_FILE]`
     - `flask team list [--no-practice] [--active]`
     - `flask team reset [-y]`
-- [ ] Assess common code between Bristol and UK finals
+- [ ] Assess common code between Bristol and UK finals:
+    - `Make Bristol use UK html template`

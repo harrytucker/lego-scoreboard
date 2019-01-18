@@ -499,7 +499,7 @@ def admin_stage():
             flash('Unable to go back a stage.')
 
         if app.config['LEGO_APP_TYPE'] == 'bristol' and new_stage == 1:
-            flask('Round 2 only available during UK Final.')
+            flash('Round 2 only available during UK Final.')
         else:
             set_active_teams(new_stage)
 

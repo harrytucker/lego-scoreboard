@@ -484,7 +484,7 @@ def admin_stage():
     if not current_user.is_admin:
         return abort(403)
 
-    stages = ('First Round', 'Second Round', 'Quarter Final', 'Semi Final', 'Final')
+    stages = ('First Round', 'Second Round (UK Final only)', 'Quarter Final', 'Semi Final', 'Final')
 
     stage = app.load_stage()
     current_stage = stages[stage]
@@ -498,7 +498,7 @@ def admin_stage():
         if new_stage <= stage:
             flash('Unable to go back a stage.')
 
-        if app.config['LEGO_APP_TYPE'] == 'bristol' and new_stage == 1:
+        elif app.config['LEGO_APP_TYPE'] == 'bristol' and new_stage == 1:
             flash('Round 2 only available during UK Final.')
         else:
             set_active_teams(new_stage)

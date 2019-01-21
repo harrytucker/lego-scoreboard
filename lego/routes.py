@@ -161,8 +161,9 @@ def home():
 
 @app.route('/top_ten')
 def top_ten():
-    teams = Team.query.filter_by(active=True, is_practice=False).limit(10).all()
+    teams = Team.query.filter_by(is_practice=False).all()
     teams = sorted(teams, key=cmp_to_key(util.compare_teams))
+    teams = teams[0:10]
     stage = app.load_stage()
     params = {
         'title': 'Scoreboard',

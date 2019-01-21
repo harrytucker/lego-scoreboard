@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='uk_final.css') }}">
+<meta http-equiv="refresh" content="5">
+{% endblock %}
+
+{% block main %}
+<div class="top-images">
+    <img src="{{ url_for('static', filename='iet_education_logo.jpg')}}">
+    <img src="{{ url_for('static', filename='first_lego_logo.jpg')}}">
+</div>
+
+<div class="table-wrapper">
+
+    <table class="center">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Number</th>
+                <th>Team</th>
+
+                {% if round_1 %}
+                    <th>R1-1</th>
+                    <th>R1-2</th>
+                    <th>R1-3</th>
+
+                    {% if stage == 0 %}
+                        <th>R1-Best</th>
+                    {% endif %}
+                {% endif %}
+
+                {% if round_2 %}
+                    <th>R2</th>
+                {% endif %}
+
+                {% if quarter_final %}
+                    <th>Quarter</th>
+                {% endif %}
+
+                {% if semi_final %}
+                    <th>Semi</th>
+                {% endif %}
+
+                {% if final %}
+                    <th>Final 1</th>
+                    <th>Final 2</th>
+                    <th>Total</th>
+                {% endif %}
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for team in teams %}
+                    <tr>
+                       <td>{{ loop.index }}</td>
+                       <td>{{ team.number }}</td>
+                       <td>{{ team.name }}</td>
+
+                       {% for attempt in team.attempts %}
+                           {% if attempt is none %}
+                               <td>-</td>
+                           {% else %}
+                               <td>{{ attempt }}</td>
+                           {% endif %}
+                       {% endfor %}
+
+                       {% if stage == 0 %}
+                           {% if team.attempt_1 is none %}
+                               <td>-</td>
+                           {% else %}
+                               <td>{{ team.highest_score }}</td>
+                           {% endif %}
+                       {% endif %}
+
+                       {% if round_2 %}
+                           {% if team.round_2 is none %}
+                               <td>-</td>
+                           {% else %}
+                               <td>{{ team.round_2 }}</td>
+                           {% endif %}
+                       {% endif %}
+
+                       {% if quarter_final %}
+                           {% if team.quarter is none %}
+                               <td>-</td>
+                           {% else %}
+                               <td>{{ team.quarter }}</td>
+                           {% endif %}
+                       {% endif %}
+
+                       {% if semi_final %}
+                           {% if team.semi is none %}
+                               <td>-</td>
+                           {% else %}
+                               <td>{{ team.semi }}</td>
+                           {% endif %}
+                       {% endif %}
+
+                       {% if final %}
+                           {% for attempt in team.finals %}
+                               {% if attempt is none %}
+                                   <td>-</td>
+                               {% else %}
+                                   <td>{{ attempt }}</td>
+                               {% endif %}
+                           {% endfor %}
+
+                           <td>{{ team.final_total }}</td>
+                       {% endif %}
+                    </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

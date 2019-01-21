@@ -159,6 +159,24 @@ def home():
     teams = Team.query.filter_by(is_practice=False).order_by(asc('number')).all()
     return render_template('home.html', title='Home', teams=teams)
 
+@app.route('/top_ten')
+def top_ten():
+    teams = Team.query.filter_by(active=True, is_practice=False).limit(10).all()
+    teams = sorted(teams, key=cmp_to_key(util.compare_teams))
+    stage = app.load_stage()
+    params = {
+        'title': 'Scoreboard',
+        'stage': stage,
+        'teams': teams,
+    }
+
+    template = 'top_ten.html'
+    stages = ('round_1', 'round_2', 'quarter_final', 'semi_final', 'final')
+    for i, s in enumerate(stages):
+        if stage >= i:
+            params[s] = True
+
+    return render_template(template, **params)
 
 @app.route('/scoreboard/', defaults={'offset': 0})
 @app.route('/scoreboard/<int:offset>')

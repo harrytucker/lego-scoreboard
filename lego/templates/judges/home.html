@@ -21,9 +21,7 @@
 
             <th>Quarter Final</th>
             <th>Semi Final</th>
-            <th>Final 1</th>
-            <th>Final 2</th>
-            <th>Final Total</th>
+            <th>Final</th>
         </tr>
     </thead>
 
@@ -45,9 +43,7 @@
 
                 <td>{% if team.quarter is none %} - {% else %} {{ team.quarter }} {% endif %}</td>
                 <td>{% if team.semi is none %} - {% else %} {{ team.semi }} {% endif %}</td>
-                <td>{% if team.final_1 is none %} - {% else %} {{ team.final_1 }} {% endif %}</td>
-                <td>{% if team.final_2 is none %} - {% else %} {{ team.final_2 }} {% endif %}</td>
-                <td>{% if team.final_total is none %} - {% else %} {{ team.final_total }} {% endif %}</td>
+                <td>{% if team.final is none %} - {% else %} {{ team.final }} {% endif %}</td>
             </tr>
         {% endfor %}
     </tbody>

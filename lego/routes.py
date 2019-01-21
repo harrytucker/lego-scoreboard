@@ -269,9 +269,9 @@ def judges_export():
 
     headers = ['Rank', 'Number', 'Name', 'Round 1 - Attempt 1', 'Round 1 - Attempt 2',
                'Round 1 - Attempt 3', 'Round 1 - Best', 'Round 2', 'Quarter Final', 'Semi Final',
-               'Final 1', 'Final 2', 'Final Total']
+               'Final']
     columns = ['number', 'name', 'attempt_1', 'attempt_2', 'attempt_3', 'best_attempt', 'round_2',
-               'quarter', 'semi', 'final_1', 'final_2', 'final_total']
+               'quarter', 'semi', 'final']
 
     csv_parts = []
     csv_parts.append(','.join(headers))

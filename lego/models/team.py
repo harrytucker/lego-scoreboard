@@ -30,10 +30,9 @@ class Team(db.Model):
     quarter_breakdown = db.Column(db.String, nullable=True)
     semi = db.Column(db.Integer, nullable=True)
     semi_breakdown = db.Column(db.String, nullable=True)
-    final_1 = db.Column(db.Integer, nullable=True)
-    final_1_breakdown = db.Column(db.String, nullable=True)
-    final_2 = db.Column(db.Integer, nullable=True)
-    final_2_breakdown = db.Column(db.String, nullable=True)
+    final = db.Column(db.Integer, nullable=True)
+    final_breakdown = db.Column(db.String, nullable=True)
+
 
     def __repr__(self):
         name = self.__class__.__name__
@@ -47,13 +46,12 @@ class Team(db.Model):
         stage = app.load_stage()
 
         if stage == 4:
-            if self.final_total is not None and other.final_total is not None:
-                if self.final_total < other.final_total:
-                    return True
+            if (self.final or -1) < (other.final or -1):
+                return True
 
-                if self.final_total > other.final_total:
-                    return False
-
+            if (self.final or -1) > (other.final or -1):
+                return False
+            
         if stage >= 3:
             if (self.semi or -1) < (other.semi or -1):
                 return True
@@ -100,12 +98,11 @@ class Team(db.Model):
         stage = app.load_stage()
 
         if stage == 4:
-            if self.final_total is not None and other.final_total is not None:
-                if self.final_total > other.final_total:
-                    return True
+            if (self.final or -1) > (other.final or -1):
+                return True
 
-                if self.final_total < other.final_total:
-                    return False
+            if (self.final or -1) < (other.final or -1):
+                return False
 
         if stage >= 3:
             if (self.semi or -1) > (other.semi or -1):
@@ -165,17 +162,6 @@ class Team(db.Model):
         return sum([a or 0 for a in self.attempts])
 
     @hybrid_property
-    def finals(self):
-        return [self.final_1, self.final_2]
-
-    @hybrid_property
-    def final_total(self):
-        if self.final_1 is None and self.final_2 is None:
-            return None
-
-        return sum([self.final_1 or 0, self.final_2 or 0])
-
-    @hybrid_property
     def highest_score(self):
         stage = app.load_stage()
         if stage == 0:
@@ -190,8 +176,8 @@ class Team(db.Model):
         if stage == 3:
             return self.semi or 0
 
-        return max(self.final_1 or 0, self.final_2 or 0)
-
+        if stage == 4:
+            return self.final or 0
 
     def set_score(self, score):
         stage = app.load_stage()
@@ -240,12 +226,9 @@ class Team(db.Model):
 
         # finals
         elif stage == 4:
-            if self.final_1 is None:
-                self.final_1 = score_total
-                self.final_1_breakdown = score_breakdown
-            elif self.final_2 is None:
-                self.final_2 = score_total
-                self.final_2_breakdown = score_breakdown
+            if self.final is None:
+                self.final = score_total
+                self.final_breakdown = score_breakdown
             else:
                 raise Exception('All attempts have been made for this stage.')
 

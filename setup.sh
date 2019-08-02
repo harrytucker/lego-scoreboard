@@ -2,6 +2,10 @@
 # -------------------------------------------------------------------------------------------------
 # Setup script for Lego Challenge site.
 # -------------------------------------------------------------------------------------------------
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+export FLASK_APP="`pwd`/lego/__init__.py"
+export FLASK_DEBUG=1
 
 if [[ ! -f "./lego/config.py" ]]; then
     echo "Creating config file"

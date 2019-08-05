@@ -25,6 +25,15 @@ sup {
     vertical-align: super;
 }
 
+span {
+    font-style: italic;
+    color: #ed2939;
+}
+
+b {
+    font-weight: bold;
+}
+
 .header {
     height: 60px;
     margin: 0 auto 20px;

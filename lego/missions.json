@@ -1,255 +1,180 @@
 {
-    "M01 - Space Travel": [
+    "M01 - Elevated Places": [
         {
-            "type": "BooleanField",
-            "string": "Cart was independent by the time it made the first track connection"
+            "type": "RadioField",
+            "string": "<span>The Robot needs to be <b>Supported</b> by the bridge:</span>",
+            "choices": [
+                {
+                    "string": "Robot is not <b>Supported</b> by the bridge",
+                    "value": "0"
+                }, {
+                    "string": "Robot is <b>Supported</b> by bridge",
+                    "value": "20"
+                }
+            ]
+        },
+        {
+            "type": "StringField",
+            "string": "</br><span>Flag points only available if bridge portion is successful!</span>"
         },
         {
             "type": "CheckboxField",
-            "string": "Crew Payload",
+            "string": "Flag 1 Raised",
+            "value": "15"
+        },
+        {
+            "type": "CheckboxField",
+            "string": "Flag 2 Raised",
+            "value": "15"
+        },
+        {
+            "type": "CheckboxField",
+            "string": "Flag 3 Raised",
+            "value": "15"
+        },
+        {
+            "type": "StringField",
+            "string": "</br><span>It is okay and expected for Robots to collide while trying to earn Flag points.</span></br> When clearly only one robot holds a raised flag, only that Robot scores for that flag."
+        }
+    ],
+    "M02 - Crane (score all that apply)":  [
+        {
+            "type": "StringField",
+            "string": "<span>If the Hooked Blue Unit is:</span>"
+        },
+        {
+            "type": "CheckboxField",
+            "string": "Clearly lowered any distance from the Guide Hole",
+            "value": "20"
+        },
+        {
+            "type": "CheckboxField",
+            "string": "<b>Independent</b> and <b>Supported</b> by another Blue Unit",
+            "value": "15"
+        },
+        {
+            "type": "CheckboxField",
+            "string": "<span>and</span> Level 1 is completely in the Blue Circle",
+            "value": "15"
+        }
+    ],
+    "M03 - Inspection Drone": [
+        {
+            "type": "CheckboxField",
+            "string": "If the Inspection Drone is <b>Supported</b> by the axle (A) on the Bridge",
+            "value": "10"
+        }
+    ],
+    "M04 - Design for wildlife": [
+        {
+            "type": "CheckboxField",
+            "string": "If the Bat is <b>Supported</b> by branch (B) on the Tree",
+            "value": "10"
+        }
+    ],
+    "M05 - Treehouse (score all that apply)": [
+        {
+            "type": "StringField",
+            "string": "<span>If a Unit is <b>Independent</b> and <b>Supported</b> by the Tree's:</span>"
+        },
+        {
+            "type": "CheckboxField",
+            "string": "Large Branch 1",
             "value": "10"
         },
         {
             "type": "CheckboxField",
-            "string": "Supply Payload",
-            "value": "14"
-        },
-        {
-            "type": "CheckboxField",
-            "string": "Vehicle Payload",
-            "value": "22"
+            "string": "Small Branch 1",
+            "value": "15"
         }
     ],
-    "M02 - Solar Panel Array":  [
-        {
-            "type": "StringField",
-            "string": "Solar Panels need to be angled toward or away from you, depending on strategy and conditions."
-        },
+    "M06 - Traffic Jam": [
         {
             "type": "CheckboxField",
-            "string": "Your Solar Panel is Angled toward the other team's field",
-            "value": "18"
-        },
-        {
-            "type": "CheckboxField",
-            "string": "Both Solar Panels are angled towards the same field",
-            "value": "22"
+            "string": "If the Traffic Jam is lifted, its moving part is <b>Independent,</b> and it is <b>Supported</b> only by its hinges",
+            "value": "10"
         }
     ],
-    "M03 - 3D Printing": [
+    "M07 - Swing": [
         {
             "type": "CheckboxField",
-            "string": "2x4 Brick completely ejected from the printer by placing a Regolith Core Sample into it",
-            "value": "18"
-        },
-        {
-            "type": "CheckboxField",
-            "string": "Brick completely in Northeast Planet Area",
-            "value": "4"
-        }
-    ],
-    "M04 - Crater Crossing": [
-        {
-            "type": "BooleanField",
-            "string": "Robot or Agent crossed completely east to west between the towers"
-        },
-        {
-            "type": "CheckboxField",
-            "string": "Gate completely flattened",
+            "string": "If the Swing is released",
             "value": "20"
         }
     ],
-    "M05 - Extraction": [
-        {
-            "type": "CheckboxField",
-            "string": "All samples moved no longer touching Core Site Model Axis",
-            "value": "16"
-        },
-        {
-            "type": "CheckboxField",
-            "string": "Gas Core Sample touching the mat and completely in the Lander's Target Circle",
-            "value": "12"
-        },
-        {
-            "type": "CheckboxField",
-            "string": "Gas Core Sample completely in Base",
-            "value": "10"
-        },
-        {
-            "type": "CheckboxField",
-            "string": "Water Core Sample supported only by the Food Growth Chamber",
-            "value": "8"
-        }
-    ],
-    "M06 - Space Station Modules": [
-        {
-            "type": "CheckboxField",
-            "string": "Cone Module completely in base",
-            "value": "16"
-        },
-        {
-            "type": "CheckboxField",
-            "string": "Tube Module in Habitation Hub Port West Side, touching nothing but the Habitation Hub",
-            "value": "16"
-        },
-        {
-            "type": "CheckboxField",
-            "string": "Docking Module in Habitation Hub Port East Side, touching nothing but the Habitation Hub",
-            "value": "14"
-        }
-    ],
-    "M07 - Space Walk Emergency": [
+    "M08 - Elevator (score one or the other)": [
         {
             "type": "RadioField",
-            "string": "The Robot needs to get Gerhard's body into the Airlock Chamber.",
+            "string": "<span>If the Elevator's moving parts are <b>Independent,</b> and <b>Supported</b> only by its hinges in the position:</span>",
             "choices": [
                 {
-                    "string": "Gerhard's body not in airlock chamber",
-                    "value": "0"
+                    "string": "Blue Car Down",
+                    "value": "15"
                 }, {
-                    "string": "Gerhard's body partially in airlock chamber",
-                    "value": "18"
-                }, {
-                    "string": "Gerhard's body completely in airlock chamber",
-                    "value": "22"
-                }
-            ]
-        }
-    ],
-    "M08 - Aerobic Exercise": [
-        {
-            "type": "BooleanField",
-            "string": "Exercise Machine Pointer advanced only by moving one or both of the Handle Assemblies"
-        },
-        {
-            "type": "SelectField",
-            "string": "Pointer tip:",
-            "choices": [
-                {
-                    "string": "Completely in gray, or partly covering either of gray's end-borders",
-                    "value": "18"
-                }, {
-                    "string": "Completely in white",
-                    "value": "20"
-                }, {
-                    "string": "Completely in orange, or partly covering either of orange's end-borders",
-                    "value": "22"
-                }
-            ]
-        }
-    ],
-    "M09 - Strength Exercise": [
-        {
-            "type": "RadioField",
-            "string": "The Robot lifted the Strength Bar to a scoring height so that the tooth-strip's 4th hole comes at least partly into view?",
-            "choices": [
-                {
-                    "string": "No",
-                    "value": "0"
-                }, {
-                    "string": "Yes",
-                    "value": "16"
-                }
-            ]
-        }
-    ],
-    "M10 - Food Production": [
-        {
-            "type": "RadioField",
-            "string": "Food Growth Chamber's colors spun, by moving the Push Bar, so the gray weight is DROPPED after green, but before tan?",
-            "choices": [
-                {
-                    "string": "No",
-                    "value": "0"
-                }, {
-                    "string": "Yes",
-                    "value": "16"
-                }
-            ]
-        }
-    ],
-    "M11 - Escape Velocity": [
-        {
-            "type": "RadioField",
-            "string": "The Robot hit the Strike Pad hard enough to keep the spacecraft from dropping back down?",
-            "choices": [
-                {
-                    "string": "No",
-                    "value": "0"
-                }, {
-                    "string": "Yes",
-                    "value": "24"
-                }
-            ]
-        }
-    ],
-    "M12 - Satellite Orbits": [
-        {
-            "type": "RadioField",
-            "string": "The Robot needs to move one or more Satellites to the Outer Orbit.",
-            "choices": [
-                {
-                    "string": "No satellites moved into orbit",
-                    "value": "0"
-                }, {
-                    "string": "1 moved between the two lines of the Outer Orbit",
-                    "value": "8"
-                }, {
-                    "string": "2 moved between the two lines of the Outer Orbit",
-                    "value": "16"
-                }, {
-                    "string": "3 moved between the two lines of the Outer Orbit",
-                    "value": "24"
-                }
-            ]
-        }
-    ],
-    "M13 - Observatory": [
-        {
-            "type": "RadioField",
-            "string": "Rotate the Observatory to a precise direction.",
-            "choices": [
-                {
-                    "string": "Tip not in any coloured section",
-                    "value": "0"
-                }, {
-                    "string": "Tip completely in gray, or partly covering either of gray's end-borders",
-                    "value": "16"
-                }, {
-                    "string": "Tip completely in white",
-                    "value": "18"
-                }, {
-                    "string": "Tip completely in orange, or partly covering either of orange's end-borders",
+                    "string": "Balanced",
                     "value": "20"
                 }
             ]
         }
     ],
-    "M14 - Meteoroid Deflection": [
+    "M09 - Safety Factor": [
         {
-            "type": "BooleanField",
-            "string": "Meteoroids clearly independent whilst west of the free-line"
-        }, {
-            "type": "BooleanField",
-            "string": "Meteoroids hit/released while clearly and completely west of free line"
-        }, {
-            "type": "SelectField",
-            "string": "Meteoroids in Center Section:",
+            "type": "StringField",
+            "string": "<span>If the Test Building is <b>Independent</b> and <b>Supported</b> only by the blue beams, and some beams have been knocked out at least half of the way:</span>"
+        },
+        {
+            "type": "RadioField",
+            "string": "Number of Beams Moved:",
             "choices": [
                 {
-                    "string": "0",
+                    "string": "None",
                     "value": "0"
                 }, {
                     "string": "1",
-                    "value": "12"
+                    "value": "10"
                 }, {
                     "string": "2",
-                    "value": "24"
+                    "value": "20"
+                }, {
+                    "string": "3",
+                    "value": "30"
                 }
             ]
-        }, {
+        }
+    ],
+    "M10 - Steel Construction": [
+        {
+            "type": "CheckboxField",
+            "string": "If the Steel Structure is standing, and is <b>Independent,</b> and <b>Supported</b> only by its hinges",
+            "value": "20"
+        }
+    ],
+    "M11 - Innovative Architecture (score one or the other)": [
+        {
+            "type": "RadioField",
+            "string": "<span>If there is a team-designed <b>Structure</b> clearly bigger than a Blue Building Unit, built only from your white LEGO bricks:</span>",
+            "choices": [
+                {
+                    "string": "Not Applicable",
+                    "value": "0"
+                }, {
+                    "string": "Partly in any Circle",
+                    "value": "10"
+                }, {
+                    "string": "Completely in any Circle",
+                    "value": "15"
+                }
+            ]
+        },
+        {
+            "type": "StringField",
+            "string": "</br>Mission 11 Structure must be built from Bag 10 elements only. It can include the red and grey elements. Not all of Bag 10 must be used."
+        }
+    ],
+    "M12 - Design & Build": [
+        {
             "type": "SelectField",
-            "string": "Meteoroids in either Side Sections:",
+            "string": "<span>How many circles have at least one colour matching Unit Completely in, and flat down on the mat:</span>",
             "choices": [
                 {
                     "string": "0",
@@ -260,27 +185,84 @@
                 }, {
                     "string": "2",
                     "value": "16"
+                }, {
+                    "string": "3",
+                    "value": "24"
+                }
+            ]
+        }, {
+            "type": "SelectField",
+            "string": "Add the heights together of <b>Independent</b> Stacks at least partly in any Circles:",
+            "choices": [
+                {
+                    "string": "Not Applicable",
+                    "value": "0"
+                }, {
+                    "string": "1 Level",
+                    "value": "5"
+                }, {
+                    "string": "2 Levels",
+                    "value": "10"
+                }, {
+                    "string": "3 Levels",
+                    "value": "15"
+                }, {
+                    "string": "4 Levels",
+                    "value": "20"
+                }, {
+                    "string": "5 Levels",
+                    "value": "25"
                 }
             ]
         }
     ],
-    "M15 - Landing Touch-Down": [
+    "M13 - Sustainability Upgrades": [
         {
             "type": "RadioField",
-            "string": "Get the Lander to one of its targets intact, or at least get it to Base.",
+            "string": "<span>Is an Upgrade (solar panels, roof garden, insulation) <b>Independent,</b> and <b>Supported</b> only by a Stack which is at least partly in any Circle:</span>",
             "choices": [
                 {
-                    "string": "Failed to get lander to target or base",
+                    "string": "No Upgrades",
                     "value": "0"
                 }, {
-                    "string": "Both parts of the Lander completely into Base",
-                    "value": "16"
+                    "string": "1 Upgrade",
+                    "value": "10"
                 }, {
-                    "string": "Lander  intact, touching the Mat, and completely in the Northeast Planet Area",
+                    "string": "2 Upgrades",
                     "value": "20"
                 }, {
-                    "string": "Lander intact, touching the Mat, and completely in its Target Circle",
-                    "value": "22"
+                    "string": "3 Upgrades",
+                    "value": "30"
+                }
+            ]
+        }
+    ],
+    "M14 - Precision": [
+        {
+            "type": "SelectField",
+            "string": "<span>Number of Precision Tokens left on the Field:</span>",
+            "choices": [
+                {
+                    "string": "0",
+                    "value": "0"
+                }, {
+                    "string": "1",
+                    "value": "5"
+                }, {
+                    "string": "2",
+                    "value": "10"
+                }, {
+                    "string": "3",
+                    "value": "20"
+                }, {
+                    "string": "4",
+                    "value": "30"
+                }, {
+                    "string": "5",
+                    "value": "45"
+                }, {
+                    "string": "6",
+                    "value": "60"
                 }
             ]
         }

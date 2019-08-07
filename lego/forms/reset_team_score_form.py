@@ -18,7 +18,6 @@ class ResetTeamScoreForm(FlaskForm):
                                  ('round_2', 'Round 2'),
                                  ('quarter', 'Quarter Final'),
                                  ('semi', 'Semi Final'),
-                                 ('final_1', 'Final 1'),
-                                 ('final_2', 'Final 2')],
+                                 ('final', 'Final')],
                         default='attempt_1',
                         validators=[DataRequired()])

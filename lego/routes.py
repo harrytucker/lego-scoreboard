@@ -159,6 +159,25 @@ def home():
     teams = Team.query.filter_by(is_practice=False).order_by(asc('number')).all()
     return render_template('home.html', title='Home', teams=teams)
 
+@app.route('/top_ten')
+def top_ten():
+    teams = Team.query.filter_by(is_practice=False).all()
+    teams = sorted(teams, key=cmp_to_key(util.compare_teams))
+    teams = teams[0:10]
+    stage = app.load_stage()
+    params = {
+        'title': 'Scoreboard',
+        'stage': stage,
+        'teams': teams,
+    }
+
+    template = 'top_ten.html'
+    stages = ('round_1', 'round_2', 'quarter_final', 'semi_final', 'final')
+    for i, s in enumerate(stages):
+        if stage >= i:
+            params[s] = True
+
+    return render_template(template, **params)
 
 @app.route('/scoreboard/', defaults={'offset': 0})
 @app.route('/scoreboard/<int:offset>')
@@ -251,9 +270,9 @@ def judges_export():
 
     headers = ['Rank', 'Number', 'Name', 'Round 1 - Attempt 1', 'Round 1 - Attempt 2',
                'Round 1 - Attempt 3', 'Round 1 - Best', 'Round 2', 'Quarter Final', 'Semi Final',
-               'Final 1', 'Final 2', 'Final Total']
+               'Final']
     columns = ['number', 'name', 'attempt_1', 'attempt_2', 'attempt_3', 'best_attempt', 'round_2',
-               'quarter', 'semi', 'final_1', 'final_2', 'final_total']
+               'quarter', 'semi', 'final']
 
     csv_parts = []
     csv_parts.append(','.join(headers))
@@ -316,7 +335,7 @@ def judges_score_round():
                 db.session.commit()
 
                 flash('Submitted for team: {!s}, score: {!s}.' \
-                      .format(team.name, score))
+                      .format(team.name, score[0]))
 
                 return redirect(url_for('judges_score_round'))
 
@@ -326,15 +345,15 @@ def judges_score_round():
         else:
             form.confirm.data = '1'
 
-        flash('Score: {!s}'.format(score))
+        flash('Score: {!s}'.format(score[0]))
 
         # data submitted to the form overrides whatever we set as data here
         # so we have to override that if something changed after the
         # initial confirmation
         if form.score.raw_data:
-            form.score.raw_data[0] = score
+            form.score.raw_data[0] = score[0]
         else:
-            form.score.data = score
+            form.score.data = score[0]
 
         return render_template('judges/score_round.html', title='Score Round',
                                form=form, confirm=True)
@@ -484,7 +503,7 @@ def admin_stage():
     if not current_user.is_admin:
         return abort(403)
 
-    stages = ('First Round', 'Second Round', 'Quarter Final', 'Semi Final', 'Final')
+    stages = ('First Round', 'Second Round (UK Final only)', 'Quarter Final', 'Semi Final', 'Final')
 
     stage = app.load_stage()
     current_stage = stages[stage]
@@ -498,8 +517,8 @@ def admin_stage():
         if new_stage <= stage:
             flash('Unable to go back a stage.')
 
-        if app.config['LEGO_APP_TYPE'] == 'bristol' and new_stage == 1:
-            flask('Round 2 only available during UK Final.')
+        elif app.config['LEGO_APP_TYPE'] == 'bristol' and new_stage == 1:
+            flash('Round 2 only available during UK Final.')
         else:
             set_active_teams(new_stage)
 

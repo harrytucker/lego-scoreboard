@@ -46,9 +46,7 @@
                 {% endif %}
 
                 {% if final %}
-                    <th>Final 1</th>
-                    <th>Final 2</th>
-                    <th>Total</th>
+                    <th>Final</th>
                 {% endif %}
             </tr>
         </thead>
@@ -101,15 +99,11 @@
                     {% endif %}
 
                     {% if final %}
-                        {% for attempt in team.finals %}
-                            {% if attempt is none %}
-                                <td>-</td>
-                            {% else %}
-                                <td>{{ attempt }}</td>
-                            {% endif %}
-                        {% endfor %}
-
-                        <td>{{ team.final_total }}</td>
+                        {% if team.final is none %}
+                            <td>-</td>
+                        {% else %}
+                            <td>{{ team.final }}</td>
+                        {% endif %}
                     {% endif %}
                 </tr>
             {% endfor %}
@@ -135,9 +129,10 @@
         </div>
     {% endif %}
 </div>
+
 <div class="bottom-images">
-    <img src="{{ url_for('static', filename='hydro_logo.jpg')}}">
-</div>
+        <img src="{{ url_for('static', filename='into_orbit.jpg')}}">
+    </div>
 {% endblock %}
 
 {% block scripts %}
@@ -178,7 +173,7 @@
         setTimeout(function () {
             var $links = $('.pagination');
 
-            if ((offset + step) > end) {
+		if ((offset + step) >=  end) {
                 $links.find('.first').click();
             } else {
                 $links.find('.next').click();

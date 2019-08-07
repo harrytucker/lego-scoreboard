@@ -19,13 +19,20 @@ class Team(db.Model):
     active = db.Column(db.Boolean, default=True, nullable=False)
     is_practice = db.Column(db.Boolean, default=False, nullable=False)
     attempt_1 = db.Column(db.Integer, nullable=True)
+    attempt_1_breakdown = db.Column(db.String, nullable=True)
     attempt_2 = db.Column(db.Integer, nullable=True)
+    attempt_2_breakdown = db.Column(db.String, nullable=True)
     attempt_3 = db.Column(db.Integer, nullable=True)
+    attempt_3_breakdown = db.Column(db.String, nullable=True)
     round_2 = db.Column(db.Integer, nullable=True)
+    round_2_breakdown = db.Column(db.String, nullable=True)
     quarter = db.Column(db.Integer, nullable=True)
+    quarter_breakdown = db.Column(db.String, nullable=True)
     semi = db.Column(db.Integer, nullable=True)
-    final_1 = db.Column(db.Integer, nullable=True)
-    final_2 = db.Column(db.Integer, nullable=True)
+    semi_breakdown = db.Column(db.String, nullable=True)
+    final = db.Column(db.Integer, nullable=True)
+    final_breakdown = db.Column(db.String, nullable=True)
+
 
     def __repr__(self):
         name = self.__class__.__name__
@@ -39,13 +46,12 @@ class Team(db.Model):
         stage = app.load_stage()
 
         if stage == 4:
-            if self.final_total is not None and other.final_total is not None:
-                if self.final_total < other.final_total:
-                    return True
+            if (self.final or -1) < (other.final or -1):
+                return True
 
-                if self.final_total > other.final_total:
-                    return False
-
+            if (self.final or -1) > (other.final or -1):
+                return False
+            
         if stage >= 3:
             if (self.semi or -1) < (other.semi or -1):
                 return True
@@ -92,12 +98,11 @@ class Team(db.Model):
         stage = app.load_stage()
 
         if stage == 4:
-            if self.final_total is not None and other.final_total is not None:
-                if self.final_total > other.final_total:
-                    return True
+            if (self.final or -1) > (other.final or -1):
+                return True
 
-                if self.final_total < other.final_total:
-                    return False
+            if (self.final or -1) < (other.final or -1):
+                return False
 
         if stage >= 3:
             if (self.semi or -1) > (other.semi or -1):
@@ -157,17 +162,6 @@ class Team(db.Model):
         return sum([a or 0 for a in self.attempts])
 
     @hybrid_property
-    def finals(self):
-        return [self.final_1, self.final_2]
-
-    @hybrid_property
-    def final_total(self):
-        if self.final_1 is None and self.final_2 is None:
-            return None
-
-        return sum([self.final_1 or 0, self.final_2 or 0])
-
-    @hybrid_property
     def highest_score(self):
         stage = app.load_stage()
         if stage == 0:
@@ -182,52 +176,59 @@ class Team(db.Model):
         if stage == 3:
             return self.semi or 0
 
-        return max(self.final_1 or 0, self.final_2 or 0)
-
+        if stage == 4:
+            return self.final or 0
 
     def set_score(self, score):
         stage = app.load_stage()
         app.logger.debug('Stage: %s', stage)
         app.logger.debug('Team: %s', str(self.__dict__))
+        # score is a tuple holding the total score and a breakdown of all previous scores
+        score_total, score_breakdown = score
 
         # first round
         if stage == 0:
             if self.attempt_1 is None:
-                self.attempt_1 = score
+                self.attempt_1 = score_total
+                self.attempt_1_breakdown = score_breakdown
             elif self.attempt_2 is None:
-                self.attempt_2 = score
+                self.attempt_2 = score_total
+                self.attempt_2_breakdown = score_breakdown
             elif self.attempt_3 is None:
-                self.attempt_3 = score
+                self.attempt_3 = score_total
+                self.attempt_3_breakdown = score_breakdown
             else:
                 raise Exception('All attempts have been made for this stage.')
 
         # second round
         elif stage == 1:
             if self.round_2 is None:
-                self.round_2 = score
+                self.round_2 = score_total
+                self.round_2_breakdown = score_breakdown
             else:
                 raise Exception('All attempts have been made for this stage.')
 
         # quarter finals
         elif stage == 2:
             if self.quarter is None:
-                self.quarter = score
+                self.quarter = score_total
+                self.quarter_breakdown = score_breakdown
             else:
                 raise Exception('All attempts have been made for this stage.')
 
         # semi finals
         elif stage == 3:
             if self.semi is None:
-                self.semi = score
+                self.semi = score_total
+                self.semi_breakdown = score_breakdown
             else:
                 raise Exception('All attempts have been made for this stage.')
 
         # finals
         elif stage == 4:
-            if self.final_1 is None:
-                self.final_1 = score
-            elif self.final_2 is None:
-                self.final_2 = score
+            if self.final is None:
+                self.final = score_total
+                self.final_breakdown = score_breakdown
             else:
                 raise Exception('All attempts have been made for this stage.')
 

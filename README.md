@@ -10,13 +10,11 @@ package. Check your distibution for more details. For windows installations, it 
 There have been reports that Python 3.6 has a problem that breaks the use of Sqlite. This hasn't been verified, but if you do see a problem in this area, it is suggested to use Python 3.4 instead.
 
 ## Browsers
-The application has been tested on the latest version of the following browsers (as of Feb 2018):
-- Internet Explorer 11
-- Edge
+The application has been tested on the latest version of the following browsers (as of Jan 2019):
 - Chrome
 - Firefox
 
-Older browsers may have issues in the layout and styling of the application. If this does occur, please ensure your browser is up to date. Alternatively, try another tested browser.
+Older browsers may have issues in the layout and styling of the application. If this does occur, please ensure your browser is up to date. Alternatively, try another tested browser. There is also a known issue with Microsoft Edge so it is highly recommended you avoid this browser.
 
 ## Setup
 ### Linux
@@ -39,11 +37,6 @@ Once you have installed the dependencies, copy `<path\to\repository>\lego\config
 $ flask init
 ```
 
-If you are running code for the UK final you will also need to change the value of `LEGO_APP_TYPE` to `uk`, i.e.:
-```python
-LEGO_APP_TYPE = 'uk'
-```
-
 ### Adding Teams
 To add the teams for the day to the database, run:
 ```bash
@@ -64,10 +57,11 @@ $ flask run
 This will run the application on port 5000 of localhost, e.g. `http://localhost:5000`.
 
 There are a number of options to customise the running of the application further:
-- `--host=<ip address>` - Alters the IP address the appication runs on. This is essential for usage outside of the standard localhost. The most common usage will be `--host=0.0.0.0` which connects the application to all network interfaces allowing it to be accessed from other computers. With this active, all oanother computer needs to connect is your IP address and the port the application is running on, e.g. `1.2.3.4:5000`.
+- `--host=<ip address>` - Alters the IP address the appication runs on. This is essential for usage outside of the standard localhost. The most common usage will be `--host=0.0.0.0` which connects the application to all network interfaces allowing it to be accessed from other computers. With this active, all another computer needs to connect is your IP address and the port the application is running on, e.g. `1.2.3.4:5000`.
 - `--port=<port>` - Configures the port the application runs on. Useful for setting the port to `80` to allow the port to be left off the address as `80` is the standard port for HTTP.
+- `--with-threads` / `--without-threads` - By default multithreading is not enabled so you will have to add this handle or use the `run.sh` script. It is vital that this is enabled on the event days to handle many users. 
 
-More options can be found by usng `flask run --help`. Alternatively a script to start the application with common options pre-set can be found at `run.sh`:
+More options can be found by using `flask run --help`. Alternatively a script to start the application with common options pre-set can be found at `run.sh`:
 
 ```
 $ ./run.sh &
@@ -93,7 +87,5 @@ export FLASK_DEBUG=0
     - `flask team add [--number NUMBER --name NAME | --file PATH_TO_FILE]`
     - `flask team list [--no-practice] [--active]`
     - `flask team reset [-y]`
-- [ ] Assess common code between Bristol and UK finals, i.e. merge bristol & uk scoreboards
-- [ ] Fontawesome need to be local
-- [ ] Test on python3.5/3.6
-- [ ] Update for next years competition
+- [ ] Assess common code between Bristol and UK finals:
+    - `Make Bristol use UK html template`

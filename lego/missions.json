@@ -99,7 +99,7 @@
                         "value": "50"
                     }
                 ]
-            }
+        },
         {
             "type": "SelectField",
             "string": "Units supported by small branches",

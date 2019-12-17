@@ -14,10 +14,6 @@
             ]
         },
         {
-            "type": "StringField",
-            "string": "</br><span>Flag points only available if bridge portion is successful!</span>"
-        },
-        {
             "type": "RadioField",
             "string": "<span>Flag points only available if bridge portion is successful!</span>",
             "choices": [
@@ -262,7 +258,31 @@
                 }, {
                     "string": "7 Levels",
                     "value": "35"
-                }
+                }, {
+                    "string": "8 Levels",
+                    "value": "40"
+                }, {
+                    "string": "9 Levels",
+                    "value": "45"
+                }, {
+                    "string": "10 Levels",
+                    "value": "50"
+                }, {
+                    "string": "11 Levels",
+                    "value": "55"
+                }, {
+                    "string": "12 Levels",
+                    "value": "60"
+                }, {
+                    "string": "13 Levels",
+                    "value": "65"
+                }, {
+                    "string": "14 Levels",
+                    "value": "70"
+                }, {
+                    "string": "15 Levels",
+                    "value": "75"
+                } 
             ]
         }
     ],

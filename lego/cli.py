@@ -36,10 +36,12 @@ def init_app():
     click.echo('Database created.')
 
     admin = 'Admin'
-    admin_pword = _request_password(admin, default='admin')
+    admin_pword = 'admin'
+    # admin_pword = _request_password(admin, default='admin')
 
     judge = 'Judge'
-    judge_pword = _request_password(judge, default='judge')
+    judge_pword = 'judge'
+    # judge_pword = _request_password(judge, default='judge')
 
     admin_user = User(username=admin, password=admin_pword, is_admin=True)
     db.session.add(admin_user)

@@ -5,6 +5,8 @@ ENV http_proxy 'http://16.46.41.11:8080'
 ENV https_proxy 'http://16.46.41.11:8080'
 ENV no_proxy '*.uk.rdlabs.hpecorp.net,localhost,127.0.0.1,0.0.0.0'
 
+EXPOSE 5000
+
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 ENV FLASK_APP="/code/lego/__init__.py"

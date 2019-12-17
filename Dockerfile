@@ -17,7 +17,9 @@ COPY requirements.txt /code/
 RUN pip install -r requirements.txt
 COPY . /code/
 
-# RUN /bin/bash -c "flask init" - does not work as can't do input in build
-# RUN flask add-teams /code/teams_example.txt - would work but database won't exist until init is run
+# Create database and add teams specified in teams_prod.txt
+RUN /bin/bash -c "flask init"
+RUN flask add-teams /code/teams_prod.txt
 
+# Run lego-app
 CMD flask run --host=0.0.0.0 --port=5000 --no-debugger --with-threads --no-reload

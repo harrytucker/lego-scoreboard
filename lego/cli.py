@@ -174,38 +174,41 @@ def _set_stage(stage: int=None, no_confirm: bool=False):
     '''
     Helper for setting the stage.
     '''
-    stage_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tmp', '.stage')
 
-    while True:
-        if stage is None:
-            stage = click.prompt('Enter stage (0-4)', default='0')
+    stage = 0
+    return
+    # stage_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tmp', '.stage')
 
-        try:
-            stage = int(stage)
-        except ValueError:
-            click.echo('Invalid value for stage: {!s}'.format(stage))
-            continue
+    # while True:
+    #     if stage is None:
+    #         stage = click.prompt('Enter stage (0-4)', default='0')
 
-        stages = ('round_1', 'round_2', 'quarter_final', 'semi_final', 'final')
-        stage_txt = stages[stage]
+    #     try:
+    #         stage = int(stage)
+    #     except ValueError:
+    #         click.echo('Invalid value for stage: {!s}'.format(stage))
+    #         continue
 
-        if app.config['LEGO_APP_TYPE'] == 'bristol' and stage == 1:
-            click.echo('Round 2 is only available during UK final.\n'
-                       'If this is not an error, please change your config.py and try again.')
-            raise click.Abort()
+    #     stages = ('round_1', 'round_2', 'quarter_final', 'semi_final', 'final')
+    #     stage_txt = stages[stage]
 
-        click.echo('You have chosen {!s} ({!s}).'.format(stage_txt, stage))
+    #     if app.config['LEGO_APP_TYPE'] == 'bristol' and stage == 1:
+    #         click.echo('Round 2 is only available during UK final.\n'
+    #                    'If this is not an error, please change your config.py and try again.')
+    #         raise click.Abort()
 
-        if no_confirm or click.confirm('Is this correct?'):
-            try:
-                with open(stage_file_path, 'w') as fh:
-                    fh.write(str(stage))
-            except IOError as e:
-                click.echo('Could not save stage to file. ({!s})'.format(e))
-                raise click.Abort()
+    #     click.echo('You have chosen {!s} ({!s}).'.format(stage_txt, stage))
 
-            click.echo('Successfully set stage.')
-            return
+    #     if no_confirm or click.confirm('Is this correct?'):
+    #         try:
+    #             with open(stage_file_path, 'w') as fh:
+    #                 fh.write(str(stage))
+    #         except IOError as e:
+    #             click.echo('Could not save stage to file. ({!s})'.format(e))
+    #             raise click.Abort()
+
+    #         click.echo('Successfully set stage.')
+    #         return
 
 
 @app.cli.command('simulate', short_help='Simulate a run through the comptition.',

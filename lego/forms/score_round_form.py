@@ -98,6 +98,7 @@ def parse_json(path):
 
 class ScoreRoundForm(FlaskForm):
     team = SelectField('Team:', validators=[InputRequired(message='Please select a team.')])
+    small_home_zone = BooleanField('Does the robot fit in the small home zone?')
     yellow_card = BooleanField('Yellow card')
     confirm = HiddenField(default='0')
     score = IntegerField('Total score', validators=[Optional()])
@@ -107,11 +108,17 @@ class ScoreRoundForm(FlaskForm):
     def points_scored(self) -> (int, str):
         """Calculate the points scored for this round."""
         score_breakdown = OrderedDict()
+        bonus = 0
         # protected field '_fields' used due to dynamic generation defining the field names at runtime
         for mission_name, mission in self.missions.form._fields.items():
             score_breakdown[mission_name] = mission.score()
+            # successful mission bonus
+            if (mission.id != 'missions-M14 - Precision' and mission.score() > 0 and self.small_home_zone.data is True):
+                bonus += 5
 
-        score = sum(score_breakdown.values())
+        # score is the sum of all mission values, with 5 bonus points per successful mission
+        # bonus points are only allocated if the robot fits in the smaller maintenance zone
+        score = sum(score_breakdown.values()) + bonus
 
         # ensure score is not less than 0
         if score < 0:

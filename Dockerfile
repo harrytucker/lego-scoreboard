@@ -18,7 +18,7 @@ RUN pip install -r requirements.txt
 COPY . /code/
 
 # Create database and add teams specified in teams_prod.txt
-RUN /bin/bash -c "flask init"
+RUN flask init
 RUN flask add-teams /code/teams_prod.txt
 
 # Run lego-app

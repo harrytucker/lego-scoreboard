@@ -76,12 +76,55 @@ def parse_json(path):
         for task_no, data in enumerate(mission_data):
             # converts the task_no to a string to avoid a crash
             task_no = str(task_no)
+ 
             class_ = field_classes[data['type']]
             if class_ in (StringField, BooleanField):
                 mission[task_no] = class_(data['string'])
             elif class_ == CheckboxField:
                 mission[task_no] = class_(data['string'],
                                           value=data['value'])
+            # abandon all hope ye who enter
+            # this little manual exemption here sets the default option for this mission as 6
+            # as tokens are taken off the field, not added
+            # some browsers would pick the first select option (correct) but some would just
+            # select the lowest value as default which caused some issues.
+            elif data['string'] == "<span>Number of Precision Tokens left on the Field:</span>":
+                mission[task_no] = class_(data['string'],
+                                          choices=[(choice['value'], choice['string'])
+                                                  for choice in data['choices']],
+                                          default=6,
+                                          validators=[Optional()])                
+#                                -"           ^""**$$$e.
+#                              ."                   '$$$c
+#                             /                      "4$$b
+#                            d  3                      $$$$
+#                            $  *                   .$$$$$$
+#                           .$  ^c           $$$$$e$$$$$$$$.
+#                           d$L  4.         4$$$$$$$$$$$$$$b
+#                           $$$$b ^ceeeee.  4$$ECL.F*$$$$$$$
+#               e$""=.      $$$$P d$$$$F $ $$$$$$$$$- $$$$$$
+#              z$$b. ^c     3$$$F "$$$$b   $"$$$$$$$  $$$$*"      .=""$c
+#             4$$$$L        $$P"  "$$b   .$ $$$$$...e$$        .=  e$$$.
+#             ^*$$$$$c  %..   *c    ..    $$ 3$$$$$$$$$$eF     zP  d$$$$$
+#               "**$$$ec   "   %ce""    $$$  $$$$$$$$$$*    .r" =$$$$P""
+#                     "*$b.  "c  *$e.    *** d$$$$$"L$$    .d"  e$$***"
+#                       ^*$$c ^$c $$$      4J$$$$$% $$$ .e*".eeP"
+#                          "$$$$$$"'$=e....$*$$**$cz$$" "..d$*"
+#                            "*$$$  *=%4.$ L L$ P3$$$F $$$P"
+#                               "$   "%*ebJLzb$e$$$$$b $P"
+#                                 %..      4$$$$$$$$$$ "
+#                                  $$$e   z$$$$$$$$$$%
+#                                   "*$c  "$$$$$$$P"
+#                                    ."""*$$$$$$$$bc
+#                                 .-"    .$***$$$"""*e.
+#                              .-"    .e$"     "*$c  ^*b.
+#                       .=*""""    .e$*"          "*bc  "*$e..
+#                     .$"        .z*"               ^*$e.   "*****e.
+#                     $$ee$c   .d"                     "*$.        3.
+#                     ^*$E")$..$"                         *   .ee==d%
+#                        $.d$$$*                           *  J$$$e*
+#                         """""                              "$$$"
+
             elif class_ in (RadioField, SelectField):
                 mission[task_no] = class_(data['string'],
                                           choices=[(choice['value'], choice['string'])

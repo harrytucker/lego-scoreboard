@@ -18,6 +18,10 @@
             "string": "<span>Flag points only available if bridge portion is successful!</span>",
             "choices": [
                 {
+                    "string": "No flags raised",
+                    "value": 0
+                },
+                {
                     "string": "1 Flag Raised",
                     "value": "15"
                 }, {
@@ -282,7 +286,52 @@
                 }, {
                     "string": "15 Levels",
                     "value": "75"
-                } 
+                } , {
+                    "string": "16 Levels",
+                    "value": "80"
+                }, {
+                    "string": "17 Levels",
+                    "value": "85"
+                }, {
+                    "string": "18 Levels",
+                    "value": "90"
+                }, {
+                    "string": "19 Levels",
+                    "value": "95"
+                }, {
+                    "string": "20 Levels",
+                    "value": "100"
+                }, {
+                    "string": "21 Levels",
+                    "value": "105"
+                }, {
+                    "string": "22 Levels",
+                    "value": "110"
+                }, {
+                    "string": "23 Levels",
+                    "value": "115"
+                }, {
+                    "string": "24 Levels",
+                    "value": "120"
+                }, {
+                    "string": "25 Levels",
+                    "value": "125"
+                }, {
+                    "string": "26 Levels",
+                    "value": "130"
+                }, {
+                    "string": "27 Levels",
+                    "value": "135"
+                }, {
+                    "string": "28 Levels",
+                    "value": "140"
+                }, {
+                    "string": "29 Levels",
+                    "value": "145"
+                }, {
+                    "string": "30 Levels",
+                    "value": "150"
+                }
             ]
         }
     ],
@@ -314,16 +363,16 @@
             "choices": [
                  {
                     "string": "6",
-                    "value": "30"
+                    "value": "60"
                 }, {
                     "string": "5",
-                    "value": "25"
+                    "value": "45"
                 }, {
                     "string": "4",
-                    "value": "20"
+                    "value": "30"
                 }, {
                     "string": "3",
-                    "value": "15"
+                    "value": "20"
                 }, {
                     "string": "2",
                     "value": "10"

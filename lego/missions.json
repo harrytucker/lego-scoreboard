@@ -225,13 +225,13 @@
                     "value": "0"
                 }, {
                     "string": "1",
-                    "value": "8"
+                    "value": "10"
                 }, {
                     "string": "2",
-                    "value": "16"
+                    "value": "20"
                 }, {
                     "string": "3",
-                    "value": "24"
+                    "value": "30"
                 }
             ]
         }, {

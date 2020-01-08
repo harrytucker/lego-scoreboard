@@ -19,7 +19,7 @@
             "choices": [
                 {
                     "string": "No flags raised",
-                    "value": 0
+                    "value": "0"
                 },
                 {
                     "string": "1 Flag Raised",

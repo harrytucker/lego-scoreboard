@@ -1,17 +1,9 @@
 {
     "M01 - Elevated Places": [
         {
-            "type": "RadioField",
+            "type": "CheckboxField",
             "string": "<span>The Robot needs to be <b>Supported</b> by the bridge:</span>",
-            "choices": [
-                {
-                    "string": "Robot is not <b>Supported</b> by the bridge",
-                    "value": "0"
-                }, {
-                    "string": "Robot is <b>Supported</b> by bridge",
-                    "value": "20"
-                }
-            ]
+            "value": "20"
         },
         {
             "type": "RadioField",

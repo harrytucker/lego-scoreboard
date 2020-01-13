@@ -19,7 +19,7 @@ COPY . /code/
 
 # Create database and add teams specified in teams_prod.txt
 RUN flask init
-RUN flask add-teams /code/teams_prod.txt
+RUN flask add-teams /code/teams.txt
 
 # Run lego-app
 CMD flask run --host=0.0.0.0 --port=5000 --no-debugger --with-threads --no-reload

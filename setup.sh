@@ -17,3 +17,17 @@ if [[ ! -f "./lego/config.py" ]]; then
     sed -i "s|your-secret-key|$SECRET_KEY|" ./lego/config.py
 fi
 
+# Create the database file if it does not exist, else the application will panic
+if [[ ! -f "./lego/tmp/app.db" ]]; then
+    echo "Creating application database..."
+    flask init 
+fi
+
+# Create stage file if it is missing
+if [[ ! -f "./lego/tmp/.stage" ]]; then
+    echo "Creating stage file..."
+    echo 0 > ./lego/tmp/.stage
+fi
+
+# Add teams
+flask add-teams ./teams.txt

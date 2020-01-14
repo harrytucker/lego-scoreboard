@@ -16,6 +16,24 @@ The application has been tested on the latest version of the following browsers 
 
 Older browsers may have issues in the layout and styling of the application. If this does occur, please ensure your browser is up to date. Alternatively, try another tested browser. There is also a known issue with Microsoft Edge so it is highly recommended you avoid this browser.
 
+## 2020 Setup
+All the below information is still relevant, this is a shorthand cover of some
+of the new deployment information this year. There are 3 shell scripts available
+to help set up the software:
+
+1. `restart.sh` - *WARNING* This will delete all current data stored in the app
+   database, use this if you need a clean slate
+2. `setup.sh` - This script sets up flask and your team layout, when you want to
+   run this make sure that `teams.txt` in the project root reflects your team
+   layout. If you need to reset teams you can run restart.sh or change names
+   manually through the web interface.
+3. `run.sh` - Use this script to run the app. The web interface will be
+   broadcast on the current LAN. To access it from another machine, type in your
+   (host) machine's IP address followed by `:5000` to reach the correct port.
+
+Logins are Admin/admin and Judge/judge by default and can be modified in the
+init function stored in `cli.py`.
+
 ## Setup
 ### Linux
 A script has been provided to set up the required environment for Linux distributions:

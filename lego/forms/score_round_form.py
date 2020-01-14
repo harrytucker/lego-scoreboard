@@ -76,7 +76,7 @@ def parse_json(path):
         for task_no, data in enumerate(mission_data):
             # converts the task_no to a string to avoid a crash
             task_no = str(task_no)
- 
+
             class_ = field_classes[data['type']]
             if class_ in (StringField, BooleanField):
                 mission[task_no] = class_(data['string'])
@@ -93,7 +93,7 @@ def parse_json(path):
                                           choices=[(choice['value'], choice['string'])
                                                   for choice in data['choices']],
                                           default=6,
-                                          validators=[Optional()])                
+                                          validators=[Optional()])
 #                                -"           ^""**$$$e.
 #                              ."                   '$$$c
 #                             /                      "4$$b
@@ -157,6 +157,8 @@ class ScoreRoundForm(FlaskForm):
             score_breakdown[mission_name] = mission.score()
             # successful mission bonus
             if (mission.id != 'missions-M14 - Precision' and mission.score() > 0 and self.small_home_zone.data is True):
+                bonus += 5
+            elif (mission.id == 'missions-M02 - Crane (Score All That Apply)' and self.small_home_zone.data is True):
                 bonus += 5
 
         # score is the sum of all mission values, with 5 bonus points per successful mission

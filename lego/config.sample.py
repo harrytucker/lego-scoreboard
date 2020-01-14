@@ -10,19 +10,20 @@ from os import path
 # Helper functions
 # ----------------
 def db_uri() -> str:
-    '''
+    """
     Generate the path for the database file.
-    '''
+    """
     cur_dir = path.dirname(path.abspath(__file__))
-    db_dir = path.join(cur_dir, 'tmp')
+    db_dir = path.join(cur_dir, "tmp")
 
     # TODO: make this configurable via env vars
     if True:
-        db_file = 'app.db'
+        db_file = "app.db"
     else:
-        db_file = 'test.db'
+        db_file = "test.db"
 
-    return 'sqlite:///' + path.join(db_dir, db_file)
+    return "sqlite:///" + path.join(db_dir, db_file)
+
 
 # ----------------
 # Default settings
@@ -34,5 +35,5 @@ SQLALCHEMY_DATABASE_URI = db_uri()
 # ---------------------
 # Customisable settings
 # ---------------------
-SECRET_KEY = 'your-secret-key'
-LEGO_APP_TYPE = 'bristol'
+SECRET_KEY = "your-secret-key"
+LEGO_APP_TYPE = "uk"

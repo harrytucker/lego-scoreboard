@@ -1,9 +1,6 @@
 FROM python:3.7.4-alpine3.10
 
 ENV PYTHONUNBUFFERED 1
-ENV http_proxy 'http://16.46.41.11:8080'
-ENV https_proxy 'http://16.46.41.11:8080'
-ENV no_proxy '*.uk.rdlabs.hpecorp.net,localhost,127.0.0.1,0.0.0.0'
 
 EXPOSE 5000
 

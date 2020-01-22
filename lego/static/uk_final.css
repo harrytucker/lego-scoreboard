@@ -123,6 +123,10 @@
     height: 80px;
 }
 
+.scoreboard .bottom-images img {
+    height: 160px;
+}
+
 .scoreboard .top-images {
     margin-bottom: 20px;
 }

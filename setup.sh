@@ -7,6 +7,8 @@ export LC_ALL=en_US.UTF-8
 export FLASK_APP="`pwd`/lego/__init__.py"
 export FLASK_DEBUG=1
 
+pip install -r requirements.txt
+
 if [[ ! -f "./lego/config.py" ]]; then
     echo "Creating config file"
     cp ./lego/config.sample.py ./lego/config.py

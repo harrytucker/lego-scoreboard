@@ -42,9 +42,10 @@ $ git clone <repository>
 $ cd ./<repository>
 $ . ./setup.sh
 ```
-Note that the first `.` before running `setup.sh` is required otherwise the virtual environment won't activate properly. If you miss it, run `source ./venv/bin/activate` afterwards.
-
-The setup script will skip installing python dependencies if it thinks they are installed already. Note that this is a very basic check and may not be entirely correct. If the dependencies are not installed or are out of date, simply delete the `venv` directory and try again.
+The setup script will install the dependencies listed in the requirements.txt
+file. If you wish to use a virtual environment you may do so by activating it
+before running `setup.sh`, but otherwise you may run setup.sh as is and the
+requirements will be installed for your Python 3 installation.
 
 ## Using the Appication
 ### Initialisation
